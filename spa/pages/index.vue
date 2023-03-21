@@ -27,7 +27,7 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field label="Password" v-model="password"></v-text-field>
+            <v-text-field label="Password" v-model="password" type="password"></v-text-field>
           </v-col>
         </v-row>
         <v-row>
