@@ -1,83 +1,71 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-app>
+    <v-form>
+      <v-container>
+        <v-card>
+          <v-card-title>
+            Login
+            <v-spacer />
+          </v-card-title>
+        </v-card>
+        <v-row>
+          <v-col>
+            <v-select v-model="role" :items="roles" label="Role"></v-select>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-text-field label="UserName" v-model="userName"></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-text-field label="Password" v-model="password"></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn color="primary"
+                   :disabled="!this.userName || !this.password || !this.role"
+                   @click="login()">
+              Submit
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-form>
+  </v-app>
 </template>
 
 <script>
+
 export default {
-  name: 'IndexPage'
+  layout: "index",
+  data() {
+    return {
+      role: '',
+      roles: ["admin", "user"],
+      userName: '',
+      password: '',
+    }
+  },
+
+  methods: {
+    // login() {
+    //   this.$router.push('/top')
+    // },
+    async login(e) {
+      await axios.post('/userLogin', {
+        "userName": this.userName,
+        "password": this.password,
+        "role": this.role == "admin" ? 1 : 2,
+      }).then((response) => {
+        console.log("response.data: ", response.data)
+      }).catch((error) => {
+        console.log('There is error:' + error.response)
+      })
+    }
+  },
 }
+
 </script>
