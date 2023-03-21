@@ -97,7 +97,7 @@ class IndexControllerTests {
 	//p
 	//Test12
 	public void testEditProfile() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.put("/put").content("{userName:\"new Email\"}")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.put("/user").content("{userName:\"new Email\"}")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test
