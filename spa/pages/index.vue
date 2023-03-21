@@ -10,7 +10,7 @@
         </v-card>
         <v-row>
           <v-col>
-            <v-select v-model="role" :items="roles" label="Role"></v-select>
+            <v-select v-model="role" :items="roles" label="Roles"></v-select>
           </v-col>
         </v-row>
         <v-row>
@@ -55,15 +55,25 @@ export default {
     //   this.$router.push('/top')
     // },
     async login(e) {
-      await axios.post('/userLogin', {
-        "userName": this.userName,
-        "password": this.password,
-        "role": this.role == "admin" ? 1 : 2,
-      }).then((response) => {
-        console.log("response.data: ", response.data)
-      }).catch((error) => {
-        console.log('There is error:' + error.response)
-      })
+      if (this.role == "admin") {
+        await axios.post('/adminLogin', {
+          "userName": this.userName,
+          "password": this.password,
+        }).then((response) => {
+          console.log("response.data: ", response.data)
+        }).catch((error) => {
+          console.log('There is error:' + error.response)
+        })
+      } else {
+        await axios.post('/userLogin', {
+          "userName": this.userName,
+          "password": this.password,
+        }).then((response) => {
+          console.log("response.data: ", response.data)
+        }).catch((error) => {
+          console.log('There is error:' + error.response)
+        })
+      }
     }
   },
 }
