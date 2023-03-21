@@ -4,7 +4,7 @@
       <v-container>
         <v-card>
           <v-card-title>
-            Register Usr
+            Register User
             <v-spacer/>
           </v-card-title>
         </v-card>

@@ -10,13 +10,6 @@
         </v-card>
         <v-row>
           <v-col>
-            <v-btn color="primary" @click="goRegisterUser()">
-              Register User
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
             <v-select v-model="role" :items="roles" label="Roles"></v-select>
           </v-col>
         </v-row>
@@ -35,7 +28,10 @@
             <v-btn color="primary"
                    :disabled="!this.userName || !this.password || !this.role"
                    @click="login()">
-              Submit
+              Login
+            </v-btn>
+            <v-btn color="primary" @click="goRegisterUser()">
+              Register User
             </v-btn>
           </v-col>
         </v-row>
