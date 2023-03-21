@@ -87,21 +87,25 @@ class IndexControllerTests {
 		mockMvc.perform(MockMvcRequestBuilders.get("/removeAccess/remove?pageName=Communication&userName=test2@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	@Test
 	//Test12
 	public void testEditProfile() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.post("/updateProfile?userName=test@gmail.com").content("{userName:\"new Email\"}")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	@Test
 	//Test13
 	public void testDeletePage() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.delete("/deletePage?pageName=Communication")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	@Test
 	//Test14
 	public void testUsersList() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.get("/getUsersList")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	@Test
 	//Test15
 	public void testGetUser() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.get("/getUser?userName=test@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
@@ -141,6 +145,7 @@ class IndexControllerTests {
 
 	//Test18
 	//Test15
+	@Test
 	public void testGetUserInvalidName() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.get("/getUser?userName=Test@gmail.com")).andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
