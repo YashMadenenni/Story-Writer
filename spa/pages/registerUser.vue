@@ -4,8 +4,8 @@
       <v-container>
         <v-card>
           <v-card-title>
-            Login
-            <v-spacer />
+            Register User
+            <v-spacer/>
           </v-card-title>
         </v-card>
         <v-row>
@@ -27,11 +27,8 @@
           <v-col>
             <v-btn color="primary"
                    :disabled="!this.userName || !this.password || !this.role"
-                   @click="login()">
-              Login
-            </v-btn>
-            <v-btn color="primary" @click="goRegisterUser()">
-              Register User
+                   @click="register()">
+              Submit
             </v-btn>
           </v-col>
         </v-row>
@@ -54,32 +51,19 @@ export default {
   },
 
   methods: {
-    // login() {
-    //   this.$router.push('/top')
+    // register() {
+    //   this.$router.go(-1)
     // },
-    goRegisterUser() {
-      this.$router.push('/registerUser')
-    },
-    async login(e) {
-      if (this.role == "admin") {
-        await axios.post('/adminLogin', {
-          "userName": this.userName,
-          "password": this.password,
-        }).then((response) => {
-          console.log("response.data: ", response.data)
-        }).catch((error) => {
-          console.log('There is error:' + error.response)
-        })
-      } else {
-        await axios.post('/userLogin', {
-          "userName": this.userName,
-          "password": this.password,
-        }).then((response) => {
-          console.log("response.data: ", response.data)
-        }).catch((error) => {
-          console.log('There is error:' + error.response)
-        })
-      }
+    async register(e) {
+      await axios.post('/user', {
+        "userName": this.userName,
+        "password": this.password,
+        "role": this.role == "admin" ? 1 : 2,
+      }).then((response) => {
+        console.log("response.data: ", response.data)
+      }).catch((error) => {
+        console.log('There is error:' + error.response)
+      })
     }
   },
 }

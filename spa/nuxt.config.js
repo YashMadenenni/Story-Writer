@@ -39,11 +39,25 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
   ],
+
+  axios: {
+    proxy: true,
+  },
+  proxy: {
+    '/user/': 'http://localhost:8080',
+    '/users/': 'http://localhost:8080',
+    '/admin/': 'http://localhost:8080',
+    '/page/': 'http://localhost:8080',
+    '/userLogin/': 'http://localhost:8080',
+    '/adminLogin/': 'http://localhost:8080',
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

@@ -39,11 +39,15 @@ https://$USER.host.cs.st-andrews.ac.uk/
 You need to fix codes to avoid CORS problrem between SPA and server.
 Please fix nux.config.js based on your server host and port number.
 ```
-nuxt.config.js: L:51-56
+nuxt.config.js: L:53-60
 Please fix target URL based on the server you use.
 
 proxy: {
-    '/stop/': 'http://localhost:8080',
-    '/route/': 'http://localhost:8080',
+    '/user/': 'http://localhost:8080',
+    '/users/': 'http://localhost:8080',
+    '/admin/': 'http://localhost:8080',
+    '/page/': 'http://localhost:8080',
+    '/userLogin/': 'http://localhost:8080',
+    '/adminLogin/': 'http://localhost:8080',
 },
 ```
