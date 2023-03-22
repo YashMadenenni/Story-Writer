@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@SpringBootTest
+@SpringBootTest (classes = IndexControllerTests.class)
 @AutoConfigureMockMvc
 class IndexControllerTests { 
 
@@ -83,7 +83,7 @@ class IndexControllerTests {
 	//Test10
 	@Test
 	public void testReadUserAccessAdd() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.put("/access?pageName=Communication&userName=test2@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post("/access?pageName=Communication&userName=test2@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 	
 	//p
