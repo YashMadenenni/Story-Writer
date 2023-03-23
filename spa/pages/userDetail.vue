@@ -20,6 +20,11 @@
         </v-row>
         <v-row>
           <v-col>
+            <v-text-field label="Password" v-model="password" type="password"></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
             <v-btn color="primary"
                    :disabled="!this.userName || !this.role" @click="updateUser()">
               Update
@@ -54,6 +59,7 @@ export default {
   },
   mounted() {
     this.userName = this.$route.query.userName
+    this.password = this.$route.query.password
     this.role = this.$route.query.role
     // axios.get('/user', {
     //   "userName": this.userName,

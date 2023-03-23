@@ -40,11 +40,13 @@ export default {
         {
           userName: "hoge1",
           email: "hoge1@email.com",
+          password: "password1",
           role: "admin",
         },
         {
           userName: "hoge2",
           email: "hoge2@email.com",
+          password: "password2",
           role: "user",
         }
       ],
@@ -68,6 +70,7 @@ export default {
       this.$router.push({
         path: '/userDetail', query: {
           userName: row.userName,
+          password: row.password,
           role: row.role
         }
       });
