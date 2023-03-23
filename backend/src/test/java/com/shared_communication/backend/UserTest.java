@@ -234,4 +234,23 @@ class UserTest {
         assertEquals(userA.getMyPages().size(), 0);
 
     }
+
+    @Test
+    public void testGetMyPagesSuccessfulTwoPages(){
+
+        InformationPage page1 = new InformationPage("title 1",userA);
+        assertEquals(userA.getMyPages().size(),1);
+
+
+    }
+
+    @Test
+    public void testMyPagesSuccessfulTwoPages(){
+
+        InformationPage page1 = new InformationPage("title 1",userA);
+        InformationPage page2 = new InformationPage("title 1",userA);
+        assertEquals(userA.getMyPages().size(),2);
+
+
+    }
 }
