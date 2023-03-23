@@ -106,6 +106,11 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'User List',
           to: '/userList'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Page List',
+          to: '/pageList'
         }
       ],
       miniVariant: false,
