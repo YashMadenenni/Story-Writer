@@ -179,14 +179,56 @@ class UserTest{
     }
 
     @Test
-    public void testCorrentEnumStdUser() {
+    public void testCorrectEnumStdUser() {
 
         assertEquals(userA.getRole(),Roles.StandardUser);
     }
 
     @Test
-    public void testCorrentEnumAdmin() throws JSONException, IOException {
+    public void testCorrectEnumAdmin() throws JSONException, IOException {
 
         User admin = new User("admin@example.com","admin","admin",Roles.SystemAdmin,"./src/main/resources/static/test.json");
         assertEquals(admin.getRole(),Roles.SystemAdmin);
+    }
+
+    @Test
+    public void testSettingRole()  {
+
+        userA.setRole(Roles.SystemAdmin);
+        assertEquals(userA.getRole(),Roles.SystemAdmin);
+    }
+
+
+    @Test
+    public void testUserEmailFetching()  {
+
+
+        assertEquals(userA.getEmail(),"emailA@example.com");
+    }
+
+
+    @Test
+    public void testUserEqual()  {
+
+
+        assertTrue(userA.userEquals(userA));
+    }
+
+    @Test
+    public void testUserNotEqual()  {
+
+
+        assertFalse(userA.userEquals(userB));
+    }
+
+    @Test
+    public void testGetPages(){
+
+        assertEquals(userA.getMyPages(), new ArrayList<InformationPage>());
+    }
+    @Test
+    public void testMyPagesInitialZero(){
+
+        assertEquals(userA.getMyPages().size(),0);
+
     }
