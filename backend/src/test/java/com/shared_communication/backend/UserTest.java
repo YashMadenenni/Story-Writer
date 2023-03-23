@@ -117,3 +117,76 @@ class UserTest{
         String uName = "usrB";
         assertNotEquals(userA.getEmail(),uName);
     }
+
+    /**
+     * Test case to validate how to write credentials to a JSON file
+     */
+    @Test
+    public void writeCredentialSuccessfullyEmail() throws JSONException, IOException {
+
+
+        User userC = new User("userC@example.com","passC","usrC",Roles.StandardUser,"./src/main/resources/static/test.json");
+        String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/test.json")));
+        JSONObject testCreds = new JSONObject(jsonBody);
+        assertTrue(testCreds.has("userC@example.com"));
+
+
+    }
+
+    @Test
+    public void writeCredentialSuccessfullyUserName() throws JSONException, IOException {
+
+
+        User userC = new User("userC@example.com","passC","usrC",Roles.StandardUser,"./src/main/resources/static/test.json");
+        String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/test.json")));
+        JSONObject testCreds = new JSONObject(jsonBody);
+        assertTrue(testCreds.getJSONObject("userC@example.com").has("usrC"));
+
+
+    }
+
+
+    @Test
+    public void testCredentialNotAdded() throws JSONException, IOException {
+
+        User userC = new User("userC@example.com","passC","usrC",Roles.StandardUser,"./src/main/resources/static/test.json");
+        String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/test.json")));
+        JSONObject testCreds = new JSONObject(jsonBody);
+        assertFalse(testCreds.has("userD@example.com"));
+
+
+    }
+
+    @Test
+    public void testCredentialMultipleAdd() throws JSONException, IOException {
+
+        User userC = new User("userC@example.com","passC","usrC",Roles.StandardUser,"./src/main/resources/static/test.json");
+        User userE = new User("userE@example.com","passE","usrE",Roles.StandardUser,"./src/main/resources/static/test.json");
+        String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/test.json")));
+        JSONObject testCreds = new JSONObject(jsonBody);
+        assertTrue(testCreds.has("userC@example.com"));
+        assertTrue(testCreds.has("userE@example.com"));
+
+
+    }
+
+    @Test
+    public void shouldNotOpenJson() {
+        IllegalArgumentException thrown =
+                assertThrowsExactly(IllegalArgumentException.class, () -> {
+                    new User("userC@example.com","passC","usrC",Roles.StandardUser,"./src/main/resources/static/invalidpath.json");;
+                });
+    }
+
+    @Test
+    public void testCorrentEnumStdUser() {
+
+        assertEquals(userA.getRole(),Roles.StandardUser);
+    }
+
+    @Test
+    public void testCorrentEnumAdmin() throws JSONException, IOException {
+
+        User admin = new User("admin@example.com","admin","admin",Roles.SystemAdmin,"./src/main/resources/static/test.json");
+        assertEquals(admin.getRole(),Roles.SystemAdmin);
+    }
