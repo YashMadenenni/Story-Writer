@@ -1,1 +1,1 @@
-{"test@example.com":{"test":"test"}}
+{"nallowed@example.com":{"na":"na"},"abcB@example.com":{"userB":"passB"},"author@example.com":{"author":"author"},"test@example.com":{"test":"test"},"admin@example.com":{"admin":"admin"},"abc@example.com":{"userA":"passA"}}

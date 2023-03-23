@@ -10,8 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class InformationPageTest {
 
 
-    InformationPage pageExample = new InformationPage("Title", null);
+
     User userA = new User("abc@example.com", "passA", "userA", Roles.StandardUser, "./src/main/resources/static/test.json");
+    User userB = new User("abcB@example.com", "passB", "userB", Roles.StandardUser, "./src/main/resources/static/test.json");
+
+    InformationPage pageExample = new InformationPage("Title", userB);
     User admin = new User("admin@example.com", "admin", "admin", Roles.SystemAdmin, "./src/main/resources/static/test.json");
     User pageAuthor = new User("author@example.com", "author", "author", Roles.StandardUser, "./src/main/resources/static/test.json");
     User notAllowedUser = new User("nallowed@example.com", "na", "na", Roles.StandardUser, "./src/main/resources/static/test.json");
@@ -21,11 +24,6 @@ class InformationPageTest {
     InformationPageTest() throws JSONException, IOException {
     }
 
-    @Test
-    public void testUserRegistrationNull() {
-
-        assertEquals(pageExample.getAuthor(), null);
-    }
 
     @Test
     public void testUserRegistrationnotNull() {
@@ -40,12 +38,6 @@ class InformationPageTest {
 
     }
 
-    @Test
-    public void testGetAuthorNull() {
-
-        assertEquals(pageExample.getAuthor(), null);
-
-    }
 
     @Test
     public void testPageUsersZeroInitially() {
@@ -123,7 +115,7 @@ class InformationPageTest {
 
         assertEquals(pageUser.getPosts().size(), 0);
         pageUser.addPost(userA, "Post by author");
-        assertEquals(pageExample.getPosts().size(), 1);
+        assertEquals(pageUser.getPosts().size(), 1);
 
 
     }

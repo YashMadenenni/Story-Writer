@@ -120,5 +120,11 @@ public class User{
         return this.myPages;
     }
 
+    public void addMyPage(InformationPage page){
+
+        this.myPages.add(page);
+    }
+
+
 
 }
