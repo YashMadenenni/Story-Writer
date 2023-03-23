@@ -4,7 +4,7 @@
       <v-container>
         <v-card>
           <v-card-title>
-            Register User
+            User Detail
             <v-spacer/>
           </v-card-title>
         </v-card>
@@ -26,9 +26,15 @@
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.userName || !this.password || !this.role"
-                   @click="register()">
-              Submit
+                   :disabled="!this.userName || !this.role" @click="updateUser()">
+              Update
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn color="primary" @click="deleteUser()">
+              Delete
             </v-btn>
           </v-col>
         </v-row>
@@ -39,6 +45,7 @@
 
 <script>
 import axios from 'axios'
+
 export default {
   layout: "index",
   data() {
@@ -47,18 +54,40 @@ export default {
       roles: ["admin", "user"],
       userName: '',
       password: '',
+      error: "",
     }
   },
-
+  mounted() {
+    this.userName = this.$route.query.userName
+    this.password = this.$route.query.password
+    this.role = this.$route.query.role
+    // axios.get('/user', {
+    //   "userName": this.userName,
+    // }).then((response) => {
+    //   this.userName = response.data.userName
+    //   this.password = response.data.password
+    //   this.role = response.data.role
+    //   console.log("response.data: ", response.data)
+    //   // this.error = response.data.length == 0 ? "No Bus Route found" : "";
+    // }).catch((error) => {
+    //   console.log('There is error:' + error.response)
+    // })
+  },
   methods: {
-    // register() {
-    //   this.$router.go(-1)
-    // },
-    async register(e) {
-      await axios.post('/user', {
+    async updateUser() {
+      await axios.put('/user', {
         "userName": this.userName,
-        "password": this.password,
         "role": this.role == "admin" ? 1 : 2,
+      }).then((response) => {
+        console.log("response.data: ", response.data)
+        this.$router.go(-1)
+      }).catch((error) => {
+        console.log('There is error:' + error.response)
+      })
+    },
+    async deleteUser() {
+      await axios.delete('/user', {
+        "userName": this.userName,
       }).then((response) => {
         console.log("response.data: ", response.data)
         this.$router.go(-1)

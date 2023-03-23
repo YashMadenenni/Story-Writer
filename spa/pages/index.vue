@@ -54,33 +54,33 @@ export default {
   },
 
   methods: {
-    // login() {
-    //   this.$router.push('/top')
-    // },
+    login() {
+      this.$router.push('/top')
+    },
     goRegisterUser() {
       this.$router.push('/registerUser')
     },
-    async login(e) {
-      if (this.role == "admin") {
-        await axios.post('/adminLogin', {
-          "userName": this.userName,
-          "password": this.password,
-        }).then((response) => {
-          console.log("response.data: ", response.data)
-        }).catch((error) => {
-          console.log('There is error:' + error.response)
-        })
-      } else {
-        await axios.post('/userLogin', {
-          "userName": this.userName,
-          "password": this.password,
-        }).then((response) => {
-          console.log("response.data: ", response.data)
-        }).catch((error) => {
-          console.log('There is error:' + error.response)
-        })
-      }
-    }
+    // async login(e) {
+    //   if (this.role == "admin") {
+    //     await axios.post('/adminLogin', {
+    //       "userName": this.userName,
+    //       "password": this.password,
+    //     }).then((response) => {
+    //       console.log("response.data: ", response.data)
+    //     }).catch((error) => {
+    //       console.log('There is error:' + error.response)
+    //     })
+    //   } else {
+    //     await axios.post('/userLogin', {
+    //       "userName": this.userName,
+    //       "password": this.password,
+    //     }).then((response) => {
+    //       console.log("response.data: ", response.data)
+    //     }).catch((error) => {
+    //       console.log('There is error:' + error.response)
+    //     })
+    //   }
+    // }
   },
 }
 
