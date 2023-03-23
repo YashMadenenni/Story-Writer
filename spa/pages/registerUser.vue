@@ -61,6 +61,7 @@ export default {
         "role": this.role == "admin" ? 1 : 2,
       }).then((response) => {
         console.log("response.data: ", response.data)
+        this.$router.go(-1)
       }).catch((error) => {
         console.log('There is error:' + error.response)
       })
