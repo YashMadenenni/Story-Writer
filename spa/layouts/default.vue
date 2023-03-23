@@ -99,13 +99,13 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
+          title: 'Top',
+          to: '/top'
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          title: 'User List',
+          to: '/userList'
         }
       ],
       miniVariant: false,
