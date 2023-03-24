@@ -130,4 +130,47 @@ class InformationPageTest {
         assertEquals(pageUser.getPosts().size(), 1);
 
     }
+
+    @Test
+    public void testNotAllowedDuplicatePostsBySameUser() {
+
+
+        assertEquals(pageUser.getPosts().size(), 0);
+
+        pageUser.addPost(userA, "Post by page user");
+
+        IllegalArgumentException thrown =
+                assertThrowsExactly(IllegalArgumentException.class, () -> {
+                    pageUser.addPost(userA, "Post by page user");
+                    ;
+                });
+
+
+
+    }
+
+    @Test
+    public void testNotAllowedDuplicatePostsByOtherUser() {
+
+
+        assertEquals(pageUser.getPosts().size(), 0);
+
+        pageUser.addPost(userA, "Post by page user");
+        pageUser.addUser(userB);
+        IllegalArgumentException thrown =
+                assertThrowsExactly(IllegalArgumentException.class, () -> {
+                    pageUser.addPost(userB, "Post by page user");
+                    ;
+                });
+
+    }
+
+    @Test
+    public void testTimeAddedToPost() {
+
+        assertEquals(pageUser.getPosts().size(), 0);
+        pageUser.addPost(userA, "Post by page user");
+        assertEquals(pageUser.getPosts().get(userA).size(),2);
+
+    }
 }
