@@ -2,16 +2,16 @@
   <v-container>
     <v-card>
       <v-card-title>
-        User List
+        Page List
         <v-spacer/>
       </v-card-title>
     </v-card>
     <v-row>
       <v-col>
-        <v-card v-if="users.length > 0">
+        <v-card v-if="pages.length > 0">
           <v-data-table
             :headers="headers"
-            :items="users"
+            :items="pages"
             :items-per-page="10"
             sort-by="id"
             :sort-desc="true"
@@ -32,33 +32,28 @@ export default {
   data() {
     return {
       headers: [
-        {text: 'User name', value: 'userName'},
-        {text: 'Email', value: 'email'},
-        {text: 'Role', value: 'role'},
+        {text: 'Title', value: 'title'},
+        {text: 'Content', value: 'content'},
       ],
-      users: [
+      pages: [
         {
-          userName: "hoge1",
-          email: "hoge1@email.com",
-          password: "password1",
-          role: "admin",
+          title: "hoge1",
+          content: "hogehogehogehogehogehogehogehoge",
         },
         {
-          userName: "hoge2",
-          email: "hoge2@email.com",
-          password: "password2",
-          role: "user",
+          title: "hoge2",
+          content: "hogehogehogehogehogehogehogehoge",
         }
       ],
-      user: "",
+      page: "",
       error: "",
     }
   },
   mounted() {
-    // axios.get('/users')
+    // axios.get('/pages')
     // .then((response) => {
     //   console.log("response.data: ", response.data)
-    //   this.users = response.data
+    //   this.pages = response.data
     // })
     // .catch((error) => {
     //   console.log('There is error:' + error.response)
@@ -67,10 +62,9 @@ export default {
   methods: {
     handleClick(row) {
       this.$router.push({
-        path: '/userDetail', query: {
-          userName: row.userName,
-          password: row.password,
-          role: row.role
+        path: '/pageDetail', query: {
+          title: row.title,
+          content: row.content,
         }
       });
     },
