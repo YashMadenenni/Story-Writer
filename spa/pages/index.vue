@@ -55,7 +55,7 @@ export default {
 
   methods: {
     login() {
-      this.$router.push('/top')
+      this.$router.push('/createPage')
     },
     goRegisterUser() {
       this.$router.push('/registerUser')

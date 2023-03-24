@@ -4,7 +4,7 @@
       <v-container>
         <v-card>
           <v-card-title>
-            Page Detail
+            Create Page
             <v-spacer/>
           </v-card-title>
         </v-card>
@@ -14,20 +14,16 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-textarea v-model="content" outlined></v-textarea>
-        </v-row>
-        <v-row>
           <v-col>
-            <v-btn color="primary"
-                   :disabled="!this.title || !this.content" @click="updatePage()">
-              Update
-            </v-btn>
+            <v-textarea placeholder="Content" v-model="content" outlined></v-textarea>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <v-btn color="primary" @click="deletePage()">
-              Delete
+            <v-btn color="primary"
+                   :disabled="!this.title || !this.content"
+                   @click="register()">
+              Submit
             </v-btn>
           </v-col>
         </v-row>
@@ -38,9 +34,8 @@
 
 <script>
 import axios from 'axios'
-
 export default {
-  layout: "index",
+  layout: "default",
   data() {
     return {
       title: '',
@@ -49,8 +44,8 @@ export default {
     }
   },
   mounted() {
-    this.title = this.$route.query.title
-    this.content = this.$route.query.content
+    // this.title = this.$route.query.title
+    // this.content = this.$route.query.content
     // axios.get('/page', {
     //   "title": this.title,
     // }).then((response) => {
@@ -63,23 +58,12 @@ export default {
     // })
   },
   methods: {
-    async updatePage() {
-      await axios.put('/page', {
+    async register(e) {
+      await axios.post('/page', {
         "title": this.title,
         "content": this.content,
       }).then((response) => {
         console.log("response.data: ", response.data)
-        this.$router.go(-1)
-      }).catch((error) => {
-        console.log('There is error:' + error.response)
-      })
-    },
-    async deletePage() {
-      await axios.delete('/page', {
-        "title": this.title,
-      }).then((response) => {
-        console.log("response.data: ", response.data)
-        this.$router.go(-1)
       }).catch((error) => {
         console.log('There is error:' + error.response)
       })
