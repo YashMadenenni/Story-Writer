@@ -125,9 +125,9 @@ class InformationPageTest {
 
 
         assertEquals(pageUser.getPosts().size(), 0);
-        pageExample.addUser(userA);
+
         pageUser.addPost(userA, "Post by page user");
-        assertEquals(pageExample.getPosts().size(), 1);
+        assertEquals(pageUser.getPosts().size(), 1);
 
     }
 }
