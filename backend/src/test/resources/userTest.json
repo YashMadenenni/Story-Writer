@@ -1,0 +1,26 @@
+{
+    "users": [
+      {
+        "password": "test",
+        "pages": {},
+        "role": "",
+        "userEmail": "test@gmail.com",
+        "userName": "Test"
+      },
+      {
+        "password": "userpassword",
+        "pages": {},
+        "role": "",
+        "userEmail": "user@gmail.com",
+        "userName": "User"
+      },
+      {
+        "password": "userpassword",
+        "pages": {},
+        "role": "",
+        "userEmail": "user3@gmail.com",
+        "userName": "User"
+      }
+    ]
+  }
+  

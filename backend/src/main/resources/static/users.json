@@ -1,16 +1,18 @@
 {
-    "test@gmail.com":{
-        "userEmail":"test@gmail.com",
-        "userName":"Test",
-        "password":"test",
-        "pages":{},
-        "role":""
+  "users": [
+    {
+      "password": "test",
+      "pages": {},
+      "role": "",
+      "userEmail": "test@gmail.com",
+      "userName": "Test"
     },
-    "user@gmail.com":{
-        "userEmail":"user@gmail.com",
-        "userName":"User",
-        "password":"user",
-        "pages":{},
-        "role":""
+    {
+      "password": "user",
+      "pages": {},
+      "role": "",
+      "userEmail": "user@gmail.com",
+      "userName": "User"
     }
+  ]
 }
