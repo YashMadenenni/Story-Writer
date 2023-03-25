@@ -236,19 +236,19 @@ class UserTest {
     }
 
     @Test
-    public void testGetMyPagesSuccessfulTwoPages(){
+    public void testGetMyPagesSuccessfulTwoPages() throws JSONException, IOException {
 
-        InformationPage page1 = new InformationPage("title 1",userA);
+        InformationPage page1 = new InformationPage("title 1",userA,"./src/main/resources/static/pagetest.json");
         assertEquals(userA.getMyPages().size(),1);
 
 
     }
 
     @Test
-    public void testMyPagesSuccessfulTwoPages(){
+    public void testMyPagesSuccessfulTwoPages() throws JSONException, IOException {
 
-        InformationPage page1 = new InformationPage("title 1",userA);
-        InformationPage page2 = new InformationPage("title 1",userA);
+        InformationPage page1 = new InformationPage("title 1",userA,"./src/main/resources/static/pagetest.json");
+        InformationPage page2 = new InformationPage("title 1",userA,"./src/main/resources/static/pagetest.json");
         assertEquals(userA.getMyPages().size(),2);
 
 

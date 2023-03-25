@@ -1,10 +1,16 @@
 {
     "test@gmail.com":{
+        "userEmail":"test@gmail.com",
         "userName":"Test",
-        "password":"test"
+        "password":"test",
+        "pages":{},
+        "role":""
     },
     "user@gmail.com":{
+        "userEmail":"user@gmail.com",
         "userName":"User",
-        "password":"user"
+        "password":"user",
+        "pages":{},
+        "role":""
     }
 }
