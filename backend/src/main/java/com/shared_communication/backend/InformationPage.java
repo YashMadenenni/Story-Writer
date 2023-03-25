@@ -30,6 +30,7 @@ public class InformationPage {
             this.pagePath=pagePath;
         }
         registerToAuthor();
+        addPageToJson();
 
     }
 
@@ -139,6 +140,57 @@ public class InformationPage {
             throw new IllegalArgumentException("This user is already part ot list of users having write access");
         }
     }
+
+    // remo for commit
+    public void setPagePath(String path){
+
+        this.pagePath = path;
+    }
+    // remo for commit
+    public String getPagePath(){
+
+        return this.pagePath;
+    }
+
+
+    private void addPageToJson() throws IOException, JSONException {
+
+        JSONObject json = null;
+        try {
+            json = loadPages();
+        }
+        catch (IOException | JSONException e){
+
+            throw new IllegalArgumentException("File with this name doesn't exists.");
+        }
+
+        if(json != null) {
+            ArrayList<String> userList = new ArrayList<>();
+            userList.add(author.getEmail());
+            JSONArray jsonArray = new JSONArray(userList);
+            JSONObject newPage = new JSONObject();
+            newPage.put("title",pageTitle);
+            newPage.put("content","");
+            newPage.put("admin",this.author.getEmail());
+            newPage.put("editAccessUser",jsonArray);
+
+
+            json.put("page"+json.length()+1,newPage);
+            FileWriter file = new FileWriter(pagePath);
+            file.write(json.toString());
+            file.flush();
+            file.close();
+        }
+
+    }
+
+    protected JSONObject loadPages()
+            throws IOException, JSONException {
+
+        String jsonBody = new String(Files.readAllBytes(Paths.get(this.pagePath)));
+        return new JSONObject(jsonBody);
+    }
+
 
 
 }

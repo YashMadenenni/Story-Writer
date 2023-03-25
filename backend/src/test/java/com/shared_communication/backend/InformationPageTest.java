@@ -301,6 +301,6 @@ class InformationPageTest {
     @Test
     public void testGetJsonPathSuccessfull(){
 
-        assertEquals(pageUser.getPagePath(),"./src/main/resources/static/pages.json");
+        assertEquals(pageUser.getPagePath(),"./src/main/resources/static/pagetest.json");
     }
 }
