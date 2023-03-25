@@ -118,7 +118,7 @@ public class IndexController {
     @RequestMapping(method = RequestMethod.DELETE,value ="/user",params = {"userName","role"} )
     public ResponseEntity<String> deleteUserFromSystem(@RequestParam String userName,@RequestParam String role) {
 
-        Boolean check = model.deleteUser(userName, role) ;
+        Boolean check = model.deleteUserSystem(userName, role) ;
 
         if(check){
             return ResponseEntity.ok("Success");
