@@ -1,1 +1,1 @@
-{"nallowed@example.com":{"na":"na"},"abcB@example.com":{"userB":"passB"},"author@example.com":{"author":"author"},"test@example.com":{"test":"test"},"admin@example.com":{"admin":"admin"},"abc@example.com":{"userA":"passA"}}
+{"writerU@example.com":{"writerU":"passB"},"nallowed@example.com":{"na":"na"},"abcB@example.com":{"userB":"passB"},"author@example.com":{"author":"author"},"readerU@example.com":{"readerU":"passA"},"test@example.com":{"test":"test"},"admin@example.com":{"admin":"admin"},"abc@example.com":{"userA":"passA"}}
