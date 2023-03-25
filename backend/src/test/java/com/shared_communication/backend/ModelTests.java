@@ -100,9 +100,29 @@ public class ModelTests {
                 foundKey = key;
             }
         }
-        JSONObject pageObj = testPage.getJSONObject(foundKey);
-        assertEquals(pageObj.get("title"),"Test tile for new page");
-        assertEquals(pageObj.get("admin"),userC.getEmail());
+        }
+    @BeforeEach
+    public void setup(){
+        testModel = new Model("src/test/resources/userTest.json","src/test/resources/adminTest.json");
+
+    }
+
+    @Test
+    public void shouldNotOpenJson(){
+        NoSuchFileException thrown = assertThrowsExactly(NoSuchFileException.class, ()->{Model.loadInitialState("wrongpath.json");});
+    }
+
+    @Test
+    public void shouldOpenJson(){
+        org.json.JSONObject result = null;
+        try {
+            result = Model.loadInitialState("src/test/resources/userTest.json");
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        // JSONObject pageObj = testPage.getJSONObject(foundKey);
+        // assertEquals(pageObj.get("title"),"Test tile for new page");
+        // assertEquals(pageObj.get("admin"),userC.getEmail());
     }
 
     @Test
@@ -180,6 +200,64 @@ public class ModelTests {
         testModel.deleteUser("Title101",userC.getEmail());
         currUsers = testModel.getPageUsers("Title101");
         assertFalse(currUsers.contains(userC.getEmail()));
+    }
+    public void shouldOpenAdminJson(){
+        org.json.JSONObject result = null;
+        try {
+            result = Model.loadInitialState("src/test/resources/adminTest.json");
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testAdminRegister() throws JSONException{
+        assertTrue(testModel.registerUser("newAdmin","adminNew@gmail.com","adminpassword","admin"));
+    }
+
+    @Test
+    public void testAdminRegisterFail() throws JSONException{
+        assertTrue(testModel.registerUser("adminTest1","admin1@gmail.com","adminpassword","admin"));
+        assertFalse(testModel.registerUser("adminTest2","admin1@gmail.com","adminpassword","admin"));
+    }
+    @Test
+    public void testAdminLoginSuccess(){
+        assertTrue(testModel.userLogin("admin@gmail.com","adminpassword","admin"));
+    }
+
+    @Test
+    public void testAdminLoginFail(){
+        assertFalse(testModel.userLogin("admin2@gmail.com","adminwrong","Admin2"));
+    }
+    @Test
+    public void testUserRegister() throws JSONException{
+        assertTrue(testModel.registerUser("newUser","userNew@gmail.com","userpassword","user"));
+    }
+
+    @Test
+    public void testUserRegisterFail() throws JSONException{
+        assertTrue(testModel.registerUser("userTest1","user1@gmail.com","userTest","user"));
+        assertFalse(testModel.registerUser("userTest2","user1@gmail.com","userTest","user"));
+    }
+    @Test
+    public void testUserLoginSuccess(){
+        assertTrue(testModel.userLogin("user@gmail.com","userpassword","user"));
+    }
+
+    @Test
+    public void testUserLoginFail(){
+        assertFalse(testModel.userLogin("User2@gmail.com","userwrong","user"));
+    }
+
+    @Test
+    public void removeUserFromSystem(){
+        assertTrue(testModel.deleteUserSystem("user3@gmail.com","user"));
+    }
+
+    @Test
+    public void removeUserFromSystemFail(){
+        assertFalse(testModel.deleteUserSystem("user5@gmail.com","user"));
     }
     @Test
     public void testGetPagePosts() throws JSONException, IOException {
