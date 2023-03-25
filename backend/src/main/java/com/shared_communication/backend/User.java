@@ -23,10 +23,12 @@ public class User{
         this.password = password;
         this.userName = userName;
         this.role = role;
-        addCredentialsToFile(jsonPath,email,userName,password);
+        //addCredentialsToFile(jsonPath,email,userName,password); Changing the user file when called
     }
 
-
+    public String getPassword() {
+        return this.password;
+    }
     public boolean passMatch(String password){
 
         if(password.equals(this.password)){

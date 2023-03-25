@@ -1,5 +1,9 @@
 package com.shared_communication.backend;
 
+import java.io.IOException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,10 +17,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shared_communication.backend.Model;
 
 
 @RestController
 public class IndexController {
+    Model model = new Model("src/main/resources/static/users.json","src/main/resources/static/admin.json");
 
     @RequestMapping(method = RequestMethod.GET,value="/")
     public String welcome() {
@@ -24,7 +30,7 @@ public class IndexController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user")
-    public ResponseEntity<String> userRegister(@RequestBody String user) throws JsonProcessingException{
+    public ResponseEntity<String> userRegister(@RequestBody String user) throws JsonProcessingException, JSONException{
         
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(user);
@@ -33,10 +39,11 @@ public class IndexController {
         String userEmail = jsonNode.get("userEmail").asText();
         String password = jsonNode.get("password").asText();
 
+        JSONObject json = new JSONObject(user);
 
 
         //invoke model
-        Boolean check = false ;
+        Boolean check = model.registerUser(userName, userEmail,password, "user") ;
         
         if(check){
             return ResponseEntity.ok("Success");
@@ -56,7 +63,13 @@ public class IndexController {
         String userEmail = jsonNode.get("userEmail").asText();
         String password = jsonNode.get("password").asText();
 
-        Boolean check = false ;
+        Boolean check =false;
+        try {
+            check = model.registerUser(userName, userEmail,password, "admin");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         if(check){
             return ResponseEntity.ok("Success");
@@ -75,7 +88,7 @@ public class IndexController {
         String userEmail = jsonNode.get("userEmail").asText();
         String password = jsonNode.get("password").asText();
         
-        Boolean check = false ;
+        Boolean check = model.userLogin(userEmail, password, "admin") ;
 
         if(check){
             return ResponseEntity.ok("Success");
@@ -93,7 +106,7 @@ public class IndexController {
         String userEmail = jsonNode.get("userEmail").asText();
         String password = jsonNode.get("password").asText();
 
-        Boolean check = false ;
+        Boolean check = model.userLogin(userEmail, password, "user") ;
 
         if(check){
             return ResponseEntity.ok("Success");
@@ -102,10 +115,10 @@ public class IndexController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE,value ="/user",params = {"userName"} )
-    public ResponseEntity<String> deleteUserFromSystem(@RequestParam String userName) {
+    @RequestMapping(method = RequestMethod.DELETE,value ="/user",params = {"userName","role"} )
+    public ResponseEntity<String> deleteUserFromSystem(@RequestParam String userName,@RequestParam String role) {
 
-        Boolean check = false ;
+        Boolean check = model.deleteUser(userName, role) ;
 
         if(check){
             return ResponseEntity.ok("Success");
@@ -127,25 +140,26 @@ public class IndexController {
     }
 
     @RequestMapping(method = RequestMethod.GET,value="/users")
-    
-    public String getUserList() {
-        return "users.json";
+    public String getUserList() throws IOException, JSONException {
+        JSONObject json = Model.loadInitialState("src/main/resources/static/users.json");
+        String data = json.toString();
+        return data;
     }
 
-    @RequestMapping(method = RequestMethod.GET,value="/user",params = {"userName"})
-    public ResponseEntity<String> getUser(@RequestParam String userName) {
-        Boolean check = false ;
+    @RequestMapping(method = RequestMethod.GET,value="/user",params = {"userEmail"})
+    public ResponseEntity<String> getUser(@RequestParam String userEmail) {
+        
 
-        if(check){
+        if(model.getUser(userEmail) != null){
             return ResponseEntity.ok("Success"); //attach response from model
         }else{
             return ResponseEntity.status(400).body("Failed"); //conflit status code
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT,value="/user",params = {"userName"})
-    public ResponseEntity<String> updateUser(@RequestParam String userName) {
-        Boolean check = false ;
+    @RequestMapping(method = RequestMethod.PUT,value="/user",params = {"userEmail","currentRole","roleChange"})
+    public ResponseEntity<String> updateUser(@RequestParam String userEmail,@RequestParam String currentRole,@RequestParam String roleChange) {
+        Boolean check = model.updateUser(userEmail, currentRole, roleChange) ;
 
         if(check){
             return ResponseEntity.ok("Success");
