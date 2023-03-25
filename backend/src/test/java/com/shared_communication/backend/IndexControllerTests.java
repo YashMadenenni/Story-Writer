@@ -116,7 +116,7 @@ class IndexControllerTests {
 	@Test
 	//Test15
 	public void testGetUser() throws Exception{
-		mockMvc.perform(MockMvcRequestBuilders.get("/user?userName=test@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.get("/user?userEmail=user@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	//Test14
