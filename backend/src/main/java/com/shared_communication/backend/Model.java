@@ -12,14 +12,251 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.io.File;
+
+import java.io.PrintWriter;
+
+import java.sql.Array;
+
+import java.util.HashMap;
+
+
 
 public class Model {
     String path;
     String pagePath = "./src/main/resources/static/pages.json";
 
+    String userPath;
+    String adminPath;
+    private HashMap<String, User> allUsers;
+    private HashMap<String, User> allAdmins;
+    JSONObject userJson = null;
+    JSONObject adminJson = null;
+    String adminFilePath = "src/main/resources/static/admin.json";
+    String userFilePath = "src/main/resources/static/users.json";
+
     public Model(String jsonPath) {
         this.path = jsonPath;
     }
+
+    public Model(String userJsonPath, String adminJsonPath) {
+        this.userPath = userJsonPath;
+        this.adminPath = adminJsonPath;
+        
+        try {
+           this.userJson = loadInitialState(userPath);
+           this.adminJson = loadInitialState(adminPath);
+
+        } catch (IOException | JSONException e) {
+        }
+        if (null != userJson) {
+            try {
+                allUsers = processUsersJson(userJson);
+                allAdmins = processAdminJson(adminJson);
+            } catch (JSONException | IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private HashMap<String, User> processUsersJson(JSONObject userJson) throws JSONException, IOException {
+        HashMap<String, User> allUser = new HashMap<>();
+
+        JSONArray jsonUsers = userJson.getJSONArray("users");
+        for (int i = 0; i < jsonUsers.length(); i++) {
+            JSONObject userObject = jsonUsers.getJSONObject(i);
+
+            String userName = userObject.getString("userName");
+            String userEmail = userObject.getString("userEmail");
+            String password = userObject.getString("password");
+
+            User newUser = new User(userEmail, password, userName, Roles.StandardUser,
+                    "src/main/resources/static/users.json");
+
+            String newUserEmail = newUser.getEmail();
+
+            allUser.put(newUserEmail, newUser);
+        }
+        return allUser;
+    }
+
+    private HashMap<String, User> processAdminJson(JSONObject adminJson) throws JSONException, IOException {
+        HashMap<String, User> allAdmin = new HashMap<>();
+
+        JSONArray jsonAdmins = adminJson.getJSONArray("admin");
+        for (int i = 0; i < jsonAdmins.length(); i++) {
+            JSONObject adminObject = jsonAdmins.getJSONObject(i);
+
+            String userName = adminObject.getString("userName");
+            String userEmail = adminObject.getString("adminEmail");
+            String password = adminObject.getString("password");
+
+            User newAdmin = new User(userEmail, password, userName, Roles.SystemAdmin,
+                    "src/main/resources/static/admin.json");
+
+            String newAdminEmail = newAdmin.getEmail();
+
+            allAdmin.put(newAdminEmail, newAdmin);
+        }
+        return allAdmin;
+    }
+
+    protected static JSONObject loadInitialState(String jsonPath)
+            throws IOException, JSONException {
+
+        String jsonBody = new String(Files.readAllBytes(Paths.get(jsonPath)));
+        return new JSONObject(jsonBody);
+    }
+
+    // userregister
+    public Boolean registerUser(String userName, String email, String password, String role) throws JSONException {
+        JSONObject newUser = new JSONObject();
+        newUser.put("email", email);
+        newUser.put("userName", userName);
+        newUser.put("password", password);
+        User user = null;
+        try {
+
+            if (role == "admin") {
+               
+                
+                if(!allAdmins.containsKey(email)){
+                    user = new User(email, userName, password, Roles.SystemAdmin, "src/main/resources/static/admin.json");
+                allAdmins.put(email, user);
+                }
+            } else if(role=="user") {
+                if(!allUsers.containsKey(email)){
+                    user = new User(email, userName, password, Roles.StandardUser, "src/main/resources/static/users.json");
+                allUsers.put(email, user);
+                }
+            }
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        if (user != null) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    // userLogin
+    public Boolean userLogin(String email, String password, String role) {
+
+        boolean check = false;
+        if (role == "user") {
+            if (allUsers.containsKey(email)) {
+                User user = allUsers.get(email);
+                if ((user.getPassword()).equals(password)) {
+                    check = true;
+                }
+            }
+        } else if (role == "admin") {
+            if (allAdmins.containsKey(email)) {
+                User user = allAdmins.get(email);
+                if ((user.getPassword()).equals(password)) {
+                    check = true;
+                }
+            }
+        }
+
+        return check;
+    }
+    // deleteUser
+
+    public Boolean deleteUserSystem(String email, String role) {
+
+        boolean check = false;
+        if (role == "user") {
+            if (allUsers.containsKey(email)) {
+                allUsers.remove(email);
+                check = true;
+            }
+        } else if (role == "admin") {
+            if (allAdmins.containsKey(email)) {
+                allAdmins.remove(email);
+
+                check = true;
+
+            }
+        }
+
+        return check;
+    }
+
+    // getUser
+    public JSONObject getUser(String email) {
+
+        boolean check = false;
+        JSONObject userJson = new JSONObject();
+
+        if (allUsers.containsKey(email)) {
+            User user = allUsers.get(email);
+            try {
+                userJson.put("userName", user.getUserName());
+                userJson.put("userEmail", user.getEmail());
+                userJson.put("role", user.getRole());
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        } else if (allAdmins.containsKey(email)) {
+            User user = allAdmins.get(email);
+            try {
+                userJson.put("userName", user.getUserName());
+                userJson.put("userEmail", user.getEmail());
+                userJson.put("role", user.getRole());
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        return userJson;
+    }
+
+    // updateUser
+    public Boolean updateUser(String email, String currentRole, String roleChange) {
+
+        boolean check = false;
+        if (currentRole == "user") {
+            if (allUsers.containsKey(email)) {
+                User user = allUsers.get(email);
+                user.setRole(Roles.StandardUser);
+            }
+        } else if (currentRole == "admin") {
+            if (allAdmins.containsKey(email)) {
+                User user = allAdmins.get(email);
+                user.setRole(Roles.SystemAdmin);
+            }
+            changeDataInFile(roleChange, adminJson);
+        }
+
+        return check;
+    }
+
+    public static void changeDataInFile(String initialFilePath, JSONObject jsonDataToWrite) {
+        File myObj = new File(initialFilePath);
+        if (myObj.delete()) {
+            System.out.println("UPDATED JSON: " + myObj.getName());
+        }
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(initialFilePath))) {
+            out.write(jsonDataToWrite.toString());
+            out.close();
+        } catch (Exception e) {
+
+        }
+    }
+    //User methods
 
 
 
