@@ -116,6 +116,8 @@ public class Model {
         newUser.put("email", email);
         newUser.put("userName", userName);
         newUser.put("password", password);
+        //System.out.println(" Password" + password);
+        //System.out.println(" ");
         User user = null;
         try {
 
@@ -123,15 +125,22 @@ public class Model {
                
                 
                 if(!allAdmins.containsKey(email)){
-                    user = new User(email, userName, password, Roles.SystemAdmin, "src/main/resources/static/admin.json");
+                    user = new User(email,password, userName,  Roles.SystemAdmin, "src/main/resources/static/admin.json");
                 allAdmins.put(email, user);
                 }
             } else if(role=="user") {
                 if(!allUsers.containsKey(email)){
-                    user = new User(email, userName, password, Roles.StandardUser, "src/main/resources/static/users.json");
+                    user = new User(email,password, userName,  Roles.StandardUser, "src/main/resources/static/users.json");
                 allUsers.put(email, user);
                 }
             }
+
+            // for (User users : allUsers.values()) {
+            //     System.out.println("After regi ");
+            //     System.out.println(users.getUserEmail());
+            //     System.out.println(users.getPassword());
+            //     System.out.println(" ");
+            // }
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -149,18 +158,35 @@ public class Model {
     // userLogin
     public Boolean userLogin(String email, String password, String role) {
 
+        System.out.println("Model");
+        System.out.println(email);
+            System.out.println(password);
+
+            for (User users : allUsers.values()) {
+                System.out.println(users.getUserEmail());
+            }
+
         boolean check = false;
         if (role == "user") {
+            
             if (allUsers.containsKey(email)) {
+                System.out.println("user in");
                 User user = allUsers.get(email);
+                System.out.println("verify");
+                System.out.println(user.getPassword());
+                System.out.println(password);
                 if ((user.getPassword()).equals(password)) {
+                    System.out.println("user in 2");
                     check = true;
                 }
             }
         } else if (role == "admin") {
+            System.out.println("Admin in");
             if (allAdmins.containsKey(email)) {
+                System.out.println("Admin in 2");
                 User user = allAdmins.get(email);
                 if ((user.getPassword()).equals(password)) {
+                    System.out.println("Admin in 3");
                     check = true;
                 }
             }
@@ -201,6 +227,7 @@ public class Model {
             try {
                 userJson.put("userName", user.getUserName());
                 userJson.put("userEmail", user.getEmail());
+                userJson.put("pages",user.getMyPages());
                 userJson.put("role", user.getRole());
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
@@ -210,8 +237,9 @@ public class Model {
         } else if (allAdmins.containsKey(email)) {
             User user = allAdmins.get(email);
             try {
-                userJson.put("userName", user.getUserName());
-                userJson.put("userEmail", user.getEmail());
+                userJson.put("adminName", user.getUserName());
+                userJson.put("adminEmail", user.getEmail());
+                userJson.put("pages",user.getMyPages());
                 userJson.put("role", user.getRole());
             } catch (JSONException e) {
                 // TODO Auto-generated catch block

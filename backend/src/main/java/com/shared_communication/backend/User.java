@@ -103,7 +103,7 @@ public class User{
         this.role = role;
     }
 
-    private String getUserEmail(){
+    protected String getUserEmail(){
 
         return this.email;
     }
