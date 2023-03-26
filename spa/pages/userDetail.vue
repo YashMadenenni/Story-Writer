@@ -53,19 +53,22 @@ export default {
       role: '',
       roles: ["admin", "user"],
       userName: '',
+      userEmail: '',
       password: '',
       error: "",
     }
   },
   mounted() {
     axios.get('/user', {
-      "userEmail": this.$route.query.userEmail,
+      params: {
+        "userEmail": this.$route.query.userEmail,
+      },
     }).then((response) => {
       this.userName = response.data.userName
+      this.userEmail = response.data.userEmail
       this.password = response.data.password
       this.role = response.data.role
       console.log("response.data: ", response.data)
-      // this.error = response.data.length == 0 ? "No Bus Route found" : "";
     }).catch((error) => {
       console.log('There is error:' + error.response)
     })
@@ -74,7 +77,8 @@ export default {
     async updateUser() {
       await axios.put('/user', {
         "userName": this.userName,
-        "role": this.role == "admin" ? 1 : 2,
+        "roleChange": this.role,
+        "currentRole": this.$route.query.role,
       }).then((response) => {
         console.log("response.data: ", response.data)
         this.$router.go(-1)
@@ -84,7 +88,10 @@ export default {
     },
     async deleteUser() {
       await axios.delete('/user', {
-        "userName": this.userName,
+        params: {
+          "userName": this.userEmail,
+          "role": this.role,
+        },
       }).then((response) => {
         console.log("response.data: ", response.data)
         this.$router.go(-1)

@@ -57,7 +57,8 @@ export default {
   },
   methods: {
     async register(e) {
-      await axios.post('/user', {
+      var endpoint = this.role === "admin" ? "admin" : "user"
+      await axios.post(`/${endpoint}`, {
         "userEmail": this.userEmail,
         "userName": this.userName,
         "password": this.password,

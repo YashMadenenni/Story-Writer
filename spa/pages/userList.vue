@@ -44,8 +44,8 @@ export default {
   mounted() {
     axios.get('/users')
     .then((response) => {
-      console.log("response.data: ", response.data)
-      // this.users = response.data.users
+      console.log("response.data: ", response.data.users)
+      this.users = response.data.users
     })
     .catch((error) => {
       console.log('There is error:' + error.response)
@@ -56,6 +56,7 @@ export default {
       this.$router.push({
         path: '/userDetail', query: {
           userEmail: row.userEmail,
+          role: row.role,
         }
       });
     },
