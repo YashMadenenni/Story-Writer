@@ -49,6 +49,7 @@
         <v-icon>mdi-minus</v-icon>
       </v-btn>
       <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-btn color="primary" @click="logout()" style="margin-left: 10px">Logout</v-btn>
       <v-spacer />
       <v-btn
         icon
@@ -89,6 +90,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'DefaultLayout',
   mounted() {
@@ -136,6 +139,12 @@ export default {
       rightDrawer: false,
       title: 'Vuetify.js'
     }
+  },
+  methods: {
+    logout() {
+      this.$store.commit("auth/logout")
+      this.$router.push('/');
+    },
   }
 }
 </script>
