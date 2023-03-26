@@ -63,31 +63,19 @@ export default {
       this.$router.push('/registerUser')
     },
     async login(e) {
-      if (this.role == "admin") {
-        await axios.post('/adminLogin', {
-          "userEmail": this.userEmail,
-          "userName": this.userName,
-          "password": this.password,
-        }).then((response) => {
-          this.$store.commit("auth/login", "admin")
-          this.$router.push('/createPage')
-          console.log("response.data: ", response.data)
-        }).catch((error) => {
-          console.log('There is error:' + error.response)
-        })
-      } else {
-        await axios.post('/userLogin', {
-          "userEmail": this.userEmail,
-          "userName": this.userName,
-          "password": this.password,
-        }).then((response) => {
-          this.$store.commit("auth/login", "user")
-          this.$router.push('/createPage')
-          console.log("response.data: ", response.data)
-        }).catch((error) => {
-          console.log('There is error:' + error.response)
-        })
-      }
+      var endpoint = this.role === "admin" ? "adminLogin" : "userLogin"
+      var payload = this.role === "admin" ? "admin" : "user"
+      await axios.post(`/${endpoint}`, {
+        "userEmail": this.userEmail,
+        "userName": this.userName,
+        "password": this.password,
+      }).then((response) => {
+        this.$store.commit("auth/login", payload)
+        this.$router.push('/createPage')
+        console.log("response.data: ", response.data)
+      }).catch((error) => {
+        console.log('There is error:' + error.response)
+      })
     }
   },
 }
