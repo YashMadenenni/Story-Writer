@@ -119,7 +119,7 @@ public class IndexController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/user", params = { "userEmail"})
-    public ResponseEntity<String> deleteUserFromSystem(@RequestParam String userEmail) {
+    public ResponseEntity<String> deleteUserFromSystem(@RequestParam String userEmail) throws JSONException {
 
         Boolean check = model.deleteUserSystem(userEmail);
 
