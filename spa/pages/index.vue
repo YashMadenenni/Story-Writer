@@ -58,7 +58,6 @@ export default {
       password: '',
     }
   },
-
   methods: {
     goRegisterUser() {
       this.$router.push('/registerUser')
@@ -70,6 +69,7 @@ export default {
           "userName": this.userName,
           "password": this.password,
         }).then((response) => {
+          this.$store.commit("auth/login", "admin")
           this.$router.push('/createPage')
           console.log("response.data: ", response.data)
         }).catch((error) => {
@@ -81,6 +81,7 @@ export default {
           "userName": this.userName,
           "password": this.password,
         }).then((response) => {
+          this.$store.commit("auth/login", "user")
           this.$router.push('/createPage')
           console.log("response.data: ", response.data)
         }).catch((error) => {

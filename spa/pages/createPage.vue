@@ -44,6 +44,8 @@ export default {
     }
   },
   mounted() {
+    // console.log("hoge2:"+this.$store.getters["auth/loggedIn"])
+    console.log("role:"+this.$store.getters["auth/role"])
   },
   methods: {
     async register(e) {
