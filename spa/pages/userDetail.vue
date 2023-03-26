@@ -53,6 +53,7 @@ export default {
       role: '',
       roles: ["admin", "user"],
       userName: '',
+      userEmail: '',
       password: '',
       error: "",
     }
@@ -64,6 +65,7 @@ export default {
       },
     }).then((response) => {
       this.userName = response.data.userName
+      this.userEmail = response.data.userEmail
       this.password = response.data.password
       this.role = response.data.role
       console.log("response.data: ", response.data)
@@ -75,7 +77,8 @@ export default {
     async updateUser() {
       await axios.put('/user', {
         "userName": this.userName,
-        "role": this.role == "admin" ? 1 : 2,
+        "roleChange": this.role,
+        "currentRole": this.$route.query.role,
       }).then((response) => {
         console.log("response.data: ", response.data)
         this.$router.go(-1)
@@ -85,7 +88,10 @@ export default {
     },
     async deleteUser() {
       await axios.delete('/user', {
-        "userName": this.userName,
+        params: {
+          "userName": this.userEmail,
+          "role": this.role,
+        },
       }).then((response) => {
         console.log("response.data: ", response.data)
         this.$router.go(-1)

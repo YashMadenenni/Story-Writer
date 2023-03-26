@@ -56,6 +56,7 @@ export default {
       this.$router.push({
         path: '/userDetail', query: {
           userEmail: row.userEmail,
+          role: row.role,
         }
       });
     },
