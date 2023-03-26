@@ -3,21 +3,15 @@ package com.shared_communication.backend;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.io.File;
-
 import java.io.PrintWriter;
-
-import java.sql.Array;
-
 import java.util.HashMap;
 
 
@@ -113,9 +107,11 @@ public class Model {
     // userregister
     public Boolean registerUser(String userName, String email, String password, String role) throws JSONException {
         JSONObject newUser = new JSONObject();
-        newUser.put("email", email);
+        
         newUser.put("userName", userName);
         newUser.put("password", password);
+        JSONObject pages = new JSONObject();
+        
         //System.out.println(" Password" + password);
         //System.out.println(" ");
         User user = null;
@@ -127,11 +123,24 @@ public class Model {
                 if(!allAdmins.containsKey(email)){
                     user = new User(email,password, userName,  Roles.SystemAdmin, "src/main/resources/static/admin.json");
                 allAdmins.put(email, user);
+                newUser.put("adminEmail", email);
+                JSONArray jsonAdmins = adminJson.getJSONArray("admin");
+                jsonAdmins.put(newUser);
+                changeDataInFile(adminFilePath, adminJson);
                 }
             } else if(role=="user") {
                 if(!allUsers.containsKey(email)){
                     user = new User(email,password, userName,  Roles.StandardUser, "src/main/resources/static/users.json");
                 allUsers.put(email, user);
+
+                newUser.put("userEmail", email);
+                newUser.put("pages", pages);
+
+                JSONArray jsonUsers = userJson.getJSONArray("users");
+                jsonUsers.put(newUser);
+                changeDataInFile(userFilePath, userJson);
+                
+
                 }
             }
 
@@ -158,35 +167,35 @@ public class Model {
     // userLogin
     public Boolean userLogin(String email, String password, String role) {
 
-        System.out.println("Model");
-        System.out.println(email);
-            System.out.println(password);
+        // System.out.println("Model");
+        // System.out.println(email);
+        //     System.out.println(password);
 
-            for (User users : allUsers.values()) {
-                System.out.println(users.getUserEmail());
-            }
+        //     for (User users : allUsers.values()) {
+        //         System.out.println(users.getUserEmail());
+        //     }
 
         boolean check = false;
         if (role == "user") {
             
             if (allUsers.containsKey(email)) {
-                System.out.println("user in");
+                // System.out.println("user in");
                 User user = allUsers.get(email);
-                System.out.println("verify");
-                System.out.println(user.getPassword());
-                System.out.println(password);
+                // System.out.println("verify");
+                // System.out.println(user.getPassword());
+                // System.out.println(password);
                 if ((user.getPassword()).equals(password)) {
-                    System.out.println("user in 2");
+                   // System.out.println("user in 2");
                     check = true;
                 }
             }
         } else if (role == "admin") {
-            System.out.println("Admin in");
+           // System.out.println("Admin in");
             if (allAdmins.containsKey(email)) {
-                System.out.println("Admin in 2");
+               // System.out.println("Admin in 2");
                 User user = allAdmins.get(email);
                 if ((user.getPassword()).equals(password)) {
-                    System.out.println("Admin in 3");
+                  //  System.out.println("Admin in 3");
                     check = true;
                 }
             }
@@ -196,23 +205,51 @@ public class Model {
     }
     // deleteUser
 
-    public Boolean deleteUserSystem(String email) {
+    public Boolean deleteUserSystem(String email) throws JSONException {
 
         boolean check = false;
         
             if (allUsers.containsKey(email)) {
                 allUsers.remove(email);
                 check = true;
+                deleteFromJsonPage("user",email);
             }
          else if (allAdmins.containsKey(email)) {
                 allAdmins.remove(email);
 
                 check = true;
+                deleteFromJsonPage("admin",email);
 
             }
         
 
         return check;
+    }
+
+    private void deleteFromJsonPage(String userType, String email) throws JSONException {
+        if(userType=="user"){
+            JSONArray jsonUsers = userJson.getJSONArray("users");
+            for (int i = 0; i < jsonUsers.length(); i++) {
+                JSONObject userObject = jsonUsers.getJSONObject(i);
+                if(userObject.getString("userEmail").equals(email)){
+                    jsonUsers.remove(i);
+                }
+            }
+            userJson.remove("users");
+            userJson.put("users", jsonUsers);
+            changeDataInFile(userFilePath,userJson);
+        }else if(userType=="admin"){
+            JSONArray jsonAdmin = adminJson.getJSONArray("admin");
+            for (int i = 0; i < jsonAdmin.length(); i++) {
+                JSONObject userObject = jsonAdmin.getJSONObject(i);
+                if(userObject.getString("adminEmail").equals(email)){
+                    jsonAdmin.remove(i);
+                }
+            }
+            adminJson.remove("admin");
+            adminJson.put("admin", jsonAdmin);
+            changeDataInFile(adminFilePath,adminJson);
+        }
     }
 
     // getUser

@@ -251,12 +251,12 @@ public class ModelTests {
     }
 
     @Test
-    public void removeUserFromSystem(){
+    public void removeUserFromSystem() throws JSONException{
         assertTrue(testModel.deleteUserSystem("user3@gmail.com"));
     }
 
     @Test
-    public void removeUserFromSystemFail(){
+    public void removeUserFromSystemFail() throws JSONException{
         assertFalse(testModel.deleteUserSystem("user5@gmail.com"));
     }
     @Test
