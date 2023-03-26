@@ -15,6 +15,11 @@
         </v-row>
         <v-row>
           <v-col>
+            <v-text-field label="Email" v-model="userEmail"></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
             <v-text-field label="UserName" v-model="userName"></v-text-field>
           </v-col>
         </v-row>
@@ -26,7 +31,7 @@
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.userName || !this.password || !this.role"
+                   :disabled="!this.userEmail || !this.userName || !this.password || !this.role"
                    @click="register()">
               Submit
             </v-btn>
@@ -45,17 +50,15 @@ export default {
     return {
       role: '',
       roles: ["admin", "user"],
+      userEmail: '',
       userName: '',
       password: '',
     }
   },
-
   methods: {
-    // register() {
-    //   this.$router.go(-1)
-    // },
     async register(e) {
       await axios.post('/user', {
+        "userEmail": this.userEmail,
         "userName": this.userName,
         "password": this.password,
         "role": this.role == "admin" ? 1 : 2,

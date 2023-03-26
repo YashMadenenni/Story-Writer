@@ -15,6 +15,11 @@
         </v-row>
         <v-row>
           <v-col>
+            <v-text-field label="Email" v-model="userEmail"></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
             <v-text-field label="UserName" v-model="userName"></v-text-field>
           </v-col>
         </v-row>
@@ -48,39 +53,42 @@ export default {
     return {
       role: '',
       roles: ["admin", "user"],
+      userEmail: '',
       userName: '',
       password: '',
     }
   },
-
   methods: {
-    login() {
-      this.$router.push('/createPage')
-    },
     goRegisterUser() {
       this.$router.push('/registerUser')
     },
-    // async login(e) {
-    //   if (this.role == "admin") {
-    //     await axios.post('/adminLogin', {
-    //       "userName": this.userName,
-    //       "password": this.password,
-    //     }).then((response) => {
-    //       console.log("response.data: ", response.data)
-    //     }).catch((error) => {
-    //       console.log('There is error:' + error.response)
-    //     })
-    //   } else {
-    //     await axios.post('/userLogin', {
-    //       "userName": this.userName,
-    //       "password": this.password,
-    //     }).then((response) => {
-    //       console.log("response.data: ", response.data)
-    //     }).catch((error) => {
-    //       console.log('There is error:' + error.response)
-    //     })
-    //   }
-    // }
+    async login(e) {
+      if (this.role == "admin") {
+        await axios.post('/adminLogin', {
+          "userEmail": this.userEmail,
+          "userName": this.userName,
+          "password": this.password,
+        }).then((response) => {
+          this.$store.commit("auth/login", "admin")
+          this.$router.push('/createPage')
+          console.log("response.data: ", response.data)
+        }).catch((error) => {
+          console.log('There is error:' + error.response)
+        })
+      } else {
+        await axios.post('/userLogin', {
+          "userEmail": this.userEmail,
+          "userName": this.userName,
+          "password": this.password,
+        }).then((response) => {
+          this.$store.commit("auth/login", "user")
+          this.$router.push('/createPage')
+          console.log("response.data: ", response.data)
+        }).catch((error) => {
+          console.log('There is error:' + error.response)
+        })
+      }
+    }
   },
 }
 

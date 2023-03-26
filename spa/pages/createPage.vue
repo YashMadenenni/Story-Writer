@@ -44,18 +44,8 @@ export default {
     }
   },
   mounted() {
-    // this.title = this.$route.query.title
-    // this.content = this.$route.query.content
-    // axios.get('/page', {
-    //   "title": this.title,
-    // }).then((response) => {
-    //   this.title = this.$route.query.title
-    //   this.content = this.$route.query.content
-    //   console.log("response.data: ", response.data)
-    //   // this.error = response.data.length == 0 ? "No Bus Route found" : "";
-    // }).catch((error) => {
-    //   console.log('There is error:' + error.response)
-    // })
+    console.log("loggedIn:"+this.$store.getters["auth/loggedIn"])
+    console.log("role:"+this.$store.getters["auth/role"])
   },
   methods: {
     async register(e) {
