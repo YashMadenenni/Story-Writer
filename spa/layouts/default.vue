@@ -91,12 +91,9 @@
 <script>
 export default {
   name: 'DefaultLayout',
-  data () {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
+  mounted() {
+    if (this.$store.getters["auth/role"] == "admin") {
+      this.items = [
         {
           icon: 'mdi-apps',
           title: 'Create Page',
@@ -107,7 +104,33 @@ export default {
           title: 'Page List',
           to: '/pageList'
         },
-      ],
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'User List',
+          to: '/userList'
+        },
+      ]
+    } else {
+      this.items = [
+        {
+          icon: 'mdi-apps',
+          title: 'Create Page',
+          to: '/createPage'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Page List',
+          to: '/pageList'
+        },
+      ]
+    }
+  },
+  data () {
+    return {
+      clipped: false,
+      drawer: false,
+      fixed: false,
+      items: [],
       miniVariant: false,
       right: true,
       rightDrawer: false,
