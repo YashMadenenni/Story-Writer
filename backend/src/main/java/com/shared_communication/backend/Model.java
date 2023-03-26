@@ -196,22 +196,21 @@ public class Model {
     }
     // deleteUser
 
-    public Boolean deleteUserSystem(String email, String role) {
+    public Boolean deleteUserSystem(String email) {
 
         boolean check = false;
-        if (role == "user") {
+        
             if (allUsers.containsKey(email)) {
                 allUsers.remove(email);
                 check = true;
             }
-        } else if (role == "admin") {
-            if (allAdmins.containsKey(email)) {
+         else if (allAdmins.containsKey(email)) {
                 allAdmins.remove(email);
 
                 check = true;
 
             }
-        }
+        
 
         return check;
     }

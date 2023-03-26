@@ -252,12 +252,12 @@ public class ModelTests {
 
     @Test
     public void removeUserFromSystem(){
-        assertTrue(testModel.deleteUserSystem("user3@gmail.com","user"));
+        assertTrue(testModel.deleteUserSystem("user3@gmail.com"));
     }
 
     @Test
     public void removeUserFromSystemFail(){
-        assertFalse(testModel.deleteUserSystem("user5@gmail.com","user"));
+        assertFalse(testModel.deleteUserSystem("user5@gmail.com"));
     }
     @Test
     public void testGetPagePosts() throws JSONException, IOException {

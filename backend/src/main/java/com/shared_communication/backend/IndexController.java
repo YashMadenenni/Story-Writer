@@ -95,7 +95,7 @@ public class IndexController {
         if (check) {
             return ResponseEntity.ok("Success");
         } else {
-            return ResponseEntity.status(400).body("Failed"); // conflit status code
+            return ResponseEntity.status(401).body("Failed"); // conflit status code
         }
     }
 
@@ -114,14 +114,14 @@ public class IndexController {
         if (check) {
             return ResponseEntity.ok("Success");
         } else {
-            return ResponseEntity.status(400).body("Failed"); // conflit status code
+            return ResponseEntity.status(401).body("Failed"); // conflit status code
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/user", params = { "userName", "role" })
-    public ResponseEntity<String> deleteUserFromSystem(@RequestParam String userName, @RequestParam String role) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/user", params = { "userEmail"})
+    public ResponseEntity<String> deleteUserFromSystem(@RequestParam String userEmail) {
 
-        Boolean check = model.deleteUserSystem(userName, role);
+        Boolean check = model.deleteUserSystem(userEmail);
 
         if (check) {
             return ResponseEntity.ok("Success");
@@ -158,7 +158,7 @@ public class IndexController {
         if (user.length() != 0) {
             return ResponseEntity.status(200).body(user); // attach response from model
         } else {
-            return ResponseEntity.status(400).body(user); // conflit status code
+            return ResponseEntity.status(404).body(user); // conflit status code
         }
     }
 
