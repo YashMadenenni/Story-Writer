@@ -58,20 +58,17 @@ export default {
     }
   },
   mounted() {
-    this.userName = this.$route.query.userName
-    this.password = this.$route.query.password
-    this.role = this.$route.query.role
-    // axios.get('/user', {
-    //   "userName": this.userName,
-    // }).then((response) => {
-    //   this.userName = response.data.userName
-    //   this.password = response.data.password
-    //   this.role = response.data.role
-    //   console.log("response.data: ", response.data)
-    //   // this.error = response.data.length == 0 ? "No Bus Route found" : "";
-    // }).catch((error) => {
-    //   console.log('There is error:' + error.response)
-    // })
+    axios.get('/user', {
+      "userEmail": this.$route.query.userEmail,
+    }).then((response) => {
+      this.userName = response.data.userName
+      this.password = response.data.password
+      this.role = response.data.role
+      console.log("response.data: ", response.data)
+      // this.error = response.data.length == 0 ? "No Bus Route found" : "";
+    }).catch((error) => {
+      console.log('There is error:' + error.response)
+    })
   },
   methods: {
     async updateUser() {

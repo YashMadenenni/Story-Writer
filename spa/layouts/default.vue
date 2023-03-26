@@ -99,19 +99,19 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Top',
-          to: '/top'
+          title: 'Create Page',
+          to: '/createPage'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Page List',
+          to: '/pageList'
         },
         {
           icon: 'mdi-chart-bubble',
           title: 'User List',
           to: '/userList'
         },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Page List',
-          to: '/pageList'
-        }
       ],
       miniVariant: false,
       right: true,

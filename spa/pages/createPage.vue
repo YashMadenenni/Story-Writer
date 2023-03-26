@@ -44,6 +44,7 @@ export default {
     }
   },
   mounted() {
+    $nuxt.setLayout('default')
     // this.title = this.$route.query.title
     // this.content = this.$route.query.content
     // axios.get('/page', {

@@ -33,44 +33,29 @@ export default {
     return {
       headers: [
         {text: 'User name', value: 'userName'},
-        {text: 'Email', value: 'email'},
+        {text: 'Email', value: 'userEmail'},
         {text: 'Role', value: 'role'},
       ],
-      users: [
-        {
-          userName: "hoge1",
-          email: "hoge1@email.com",
-          password: "password1",
-          role: "admin",
-        },
-        {
-          userName: "hoge2",
-          email: "hoge2@email.com",
-          password: "password2",
-          role: "user",
-        }
-      ],
+      users: [],
       user: "",
       error: "",
     }
   },
   mounted() {
-    // axios.get('/users')
-    // .then((response) => {
-    //   console.log("response.data: ", response.data)
-    //   this.users = response.data
-    // })
-    // .catch((error) => {
-    //   console.log('There is error:' + error.response)
-    // })
+    axios.get('/users')
+    .then((response) => {
+      console.log("response.data: ", response.data)
+      // this.users = response.data.users
+    })
+    .catch((error) => {
+      console.log('There is error:' + error.response)
+    })
   },
   methods: {
     handleClick(row) {
       this.$router.push({
         path: '/userDetail', query: {
-          userName: row.userName,
-          password: row.password,
-          role: row.role
+          userEmail: row.userEmail,
         }
       });
     },
