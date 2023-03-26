@@ -59,13 +59,14 @@ export default {
   },
   mounted() {
     axios.get('/user', {
-      "userEmail": this.$route.query.userEmail,
+      params: {
+        "userEmail": this.$route.query.userEmail,
+      },
     }).then((response) => {
       this.userName = response.data.userName
       this.password = response.data.password
       this.role = response.data.role
       console.log("response.data: ", response.data)
-      // this.error = response.data.length == 0 ? "No Bus Route found" : "";
     }).catch((error) => {
       console.log('There is error:' + error.response)
     })
