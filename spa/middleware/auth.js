@@ -1,11 +1,6 @@
-export default ({ store, redirect, route }) => {
-  if (!store.state.loggedIn) {
-    return redirect({
-      path: '/',
-      query: {
-        showMessage: true,
-        redirect: route.path
-      }
-    })
+export default function ({ redirect, store, route}) {
+
+  if (!store.getters["auth/loggedIn"] && route.path !== '/') {
+    redirect('/');
   }
 }
