@@ -44,19 +44,6 @@ export default {
     }
   },
   mounted() {
-    $nuxt.setLayout('default')
-    // this.title = this.$route.query.title
-    // this.content = this.$route.query.content
-    // axios.get('/page', {
-    //   "title": this.title,
-    // }).then((response) => {
-    //   this.title = this.$route.query.title
-    //   this.content = this.$route.query.content
-    //   console.log("response.data: ", response.data)
-    //   // this.error = response.data.length == 0 ? "No Bus Route found" : "";
-    // }).catch((error) => {
-    //   console.log('There is error:' + error.response)
-    // })
   },
   methods: {
     async register(e) {
