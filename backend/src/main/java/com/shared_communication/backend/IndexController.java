@@ -207,16 +207,16 @@ public class IndexController {
     }
 
     // write to page
-    @RequestMapping(method = RequestMethod.PUT, value = "/page")
-    public ResponseEntity<String> updatePageContent(@RequestBody String user)
+    @RequestMapping(method = RequestMethod.POST, value = "/page/content")
+    public ResponseEntity<String> updatePageContent(@RequestBody String body)
             throws JsonMappingException, JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(user);
+        JsonNode jsonNode = objectMapper.readTree(body);
 
         String content = jsonNode.get("content").asText();
         String userEmail = jsonNode.get("userEmail").asText();
-        String title = jsonNode.get("title").asText();
+        String title = jsonNode.get("pageName").asText();
 
         try{
             model.addPostToPage(title, userEmail,content);

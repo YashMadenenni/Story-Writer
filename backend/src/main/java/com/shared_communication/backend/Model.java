@@ -514,16 +514,11 @@ public class Model {
 
             if(foundKey != null){
                 JSONObject page = jsonPages.getJSONObject(foundKey);
-                String content = page.getString("content");
-                ArrayList<String> currentContent = new ArrayList<>(List.of(content.split(",")));
-                if(!currentContent.contains(post) | getPageUsers(title).contains(user.getEmail())){
+                //String content = page.getString("content");
+                //ArrayList<String> currentContent = new ArrayList<>(List.of(content.split(",")));
+                if(getPageUsers(title).contains(user.getEmail())){
                     String newContent;
-                    if(content.equals("")){
-                        newContent = post;
-
-                    }else {
-                     newContent=content + "," + post;
-                    }
+                    newContent = post;
                     page.put("content",newContent);
                     jsonPages.remove(foundKey);
                     jsonPages.put(foundKey,page);
