@@ -24,8 +24,11 @@ public class Model {
     String adminPath;
     private HashMap<String, User> allUsers;
     private HashMap<String, User> allAdmins;
+
+    private HashMap<String, InformationPage> allPages;
     JSONObject userJson = null;
     JSONObject adminJson = null;
+
     String adminFilePath = "src/main/resources/static/admin.json";
     String userFilePath = "src/main/resources/static/users.json";
 
@@ -322,10 +325,17 @@ public class Model {
     }
     //User methods
 
+    public User getUserObj(String userEmail){
+
+       return allUsers.get(userEmail);
+
+    }
 
 
-    public void createNewPage(User user,String title,String pagePath) throws JSONException, IOException {
+    public void createNewPage(String userEmail,String title) throws JSONException, IOException {
 
+        User user = getUserObj(userEmail);
+        String pagePath = getPagePath();
         if(!getAllPageTitles().contains(title)) {
             InformationPage page = new InformationPage(title, user, pagePath);
         }
@@ -404,6 +414,55 @@ public class Model {
         return null;
     }
 
+    public JSONArray getUserCreatedPages(String userEmail) throws IOException, JSONException {
+
+        System.out.println(userEmail);
+
+        JSONObject jsonPages = loadPages();
+        System.out.println(jsonPages.toString());
+        JSONArray resultAllPages = new JSONArray();
+
+        Iterator<String> keys = jsonPages.keys();
+
+        while(keys.hasNext()) {
+            String key = keys.next();
+            if (jsonPages.get(key) instanceof JSONObject) {
+                System.out.println(((JSONObject) jsonPages.get(key)).toString());
+                JSONObject temp = jsonPages.getJSONObject(key);
+                if(temp.getString("admin").equals(userEmail)){
+                    resultAllPages.put(temp);
+                }
+            }
+        }
+/*
+        for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
+
+            String key = (String) it.next();
+            System.out.println((String) it.next());
+
+            JSONObject temp = jsonPages.getJSONObject(key);
+            System.out.println(temp.toString());
+
+            if(temp.getString("admin").equals(userEmail)){
+                System.out.println(userEmail+"vwvwev");
+                resultAllPages.put(temp);
+            }
+
+        }
+
+ */
+        if(resultAllPages.length()!=0){
+
+            return resultAllPages;
+
+        }else{
+            throw new IllegalArgumentException("User has not created anyy page.");
+        }
+
+
+
+    }
+
     public ArrayList<String> getPagePosts(String title) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -431,8 +490,13 @@ public class Model {
         return null;
     }
 
+    public void addPostToPage(String title,String userEmail, String post) throws IOException, JSONException{
 
-    public boolean addPostToPage(String title,User user, String post) throws IOException, JSONException {
+        User user = getUserObj(userEmail);
+        addPostToPage(title,user,post);
+
+    }
+    public void addPostToPage(String title,User user, String post) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
         String foundKey = null;
@@ -467,7 +531,7 @@ public class Model {
                     file.write(jsonPages.toString());
                     file.flush();
                     file.close();
-                    return true;
+
                 }
                 else{
                     throw new IllegalArgumentException("Same post already exists on this page or user doesn't have required access");
@@ -479,11 +543,11 @@ public class Model {
 
         }
 
-        return false;
+
     }
 
 
-    public boolean deleteUser(String title,String user) throws IOException, JSONException {
+    public void deleteUser(String title,String user) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
         String foundKey=null;
@@ -516,7 +580,7 @@ public class Model {
                     file.write(jsonPages.toString());
                     file.flush();
                     file.close();
-                    return true;
+
                 }
                 else{
                     throw new IllegalArgumentException("User doesn't have access to this page.");
@@ -529,11 +593,10 @@ public class Model {
 
         }
 
-        return false;
+
     }
 
     public boolean addUser(String title,String userEmail) throws IOException, JSONException {
-
         JSONObject jsonPages = loadPages();
         if(jsonPages != null) {
 
@@ -550,6 +613,7 @@ public class Model {
             }
 
             if(foundKey != null){
+
 
                 JSONObject page = jsonPages.getJSONObject(foundKey);
                 JSONArray  users = page.getJSONArray("editAccessUser");

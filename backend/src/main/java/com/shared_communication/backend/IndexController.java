@@ -174,29 +174,36 @@ public class IndexController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/page", params = { "pageName" })
-    public ResponseEntity<String> createPage(@RequestParam String pageName) {
+    @RequestMapping(method = RequestMethod.POST, value = "/page")
+    public ResponseEntity<String> createPage(@RequestBody String body) throws IOException, JSONException {
 
-        Boolean check = false;
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(body);
 
-        if (check) {
+        String userName = jsonNode.get("userEmail").asText();
+        String pageName = jsonNode.get("pageName").asText();
+
+        try{
+            model.createNewPage(userName,pageName);
             return ResponseEntity.ok("Success");
-        } else {
-            return ResponseEntity.status(400).body("Failed"); // conflit status code
+        }catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
         }
 
     }
 
     // get all pages
-    @RequestMapping(method = RequestMethod.GET, value = "/page", params = { "userName" })
-    public ResponseEntity<String> getUserPages(@RequestParam String userName) {
-        Boolean check = false;
+    @RequestMapping(method = RequestMethod.GET, value = "/page", params = { "userEmail" })
+    public ResponseEntity<String> getUserPages(@RequestParam String userEmail) {
 
-        if (check) {
-            return ResponseEntity.ok("Success");// attach body from model response
-        } else {
-            return ResponseEntity.status(400).body("Failed"); // conflit status code
+        try{
+
+            String result = model.getUserCreatedPages(userEmail).toString();
+            return ResponseEntity.status(200).body(result);
+        } catch(Exception e){
+            return ResponseEntity.status(400).body(e.getMessage()); // conflit status code
         }
+
     }
 
     // write to page
@@ -207,42 +214,62 @@ public class IndexController {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(user);
 
-        String userName = jsonNode.get("userName").asText();
+        String content = jsonNode.get("content").asText();
         String userEmail = jsonNode.get("userEmail").asText();
-        String password = jsonNode.get("password").asText();
+        String title = jsonNode.get("title").asText();
 
-        Boolean check = false;
-
-        if (check) {
+        try{
+            model.addPostToPage(title, userEmail,content);
             return ResponseEntity.ok("Success");
-        } else {
-            return ResponseEntity.status(400).body("Failed"); // conflit status code
+        }catch (Exception e){
+
+            return ResponseEntity.status(400).body(e.getMessage()); // conflit status code
         }
+
 
     }
 
     // editUserAccessAdd
-    @RequestMapping(method = RequestMethod.PUT, value = "/page", params = { "pageName", "userName" })
-    public ResponseEntity<String> editUserAccessAdd(@RequestParam String pageName, @RequestParam String userName) {
-        Boolean check = false;
+    @RequestMapping(method = RequestMethod.POST, value = "/page/access")
+    public ResponseEntity<String> editUserAccessAdd(@RequestBody String body) throws JSONException, IOException {
 
-        if (check) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(body);
+
+        String userEmail = jsonNode.get("userEmail").asText();
+        String pageName = jsonNode.get("pageName").asText();
+
+        try{
+            model.addUser(pageName,userEmail);
             return ResponseEntity.ok("Success");
-        } else {
-            return ResponseEntity.status(400).body("Failed"); // conflit status code
-        }
 
+        }catch (Exception e){
+
+            return ResponseEntity.status(400).body(e.getMessage());
+
+        }
     }
 
     // editUserAccessRemove
-    @RequestMapping(method = RequestMethod.DELETE, value = "/page", params = { "pageName", "userName" })
-    public ResponseEntity<String> editUserAccessRemove(@RequestParam String userName, @RequestParam String pageName) {
-        Boolean check = false;
+    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access")
+    public ResponseEntity<String> editUserAccessRemove(@RequestBody String body) throws JsonProcessingException {
 
-        if (check) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(body);
+
+        String userEmail = jsonNode.get("userEmail").asText();
+        String pageName = jsonNode.get("pageName").asText();
+
+
+        try{
+            model.deleteUser(pageName,userEmail);
             return ResponseEntity.ok("Success");
-        } else {
-            return ResponseEntity.status(400).body("Failed"); // conflit status code
+
+        }catch (Exception e){
+
+            return ResponseEntity.status(400).body(e.getMessage());
+
         }
     }
 
