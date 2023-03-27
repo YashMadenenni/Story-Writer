@@ -107,12 +107,12 @@ public class IndexControllerTests {
 		mockMvc.perform(MockMvcRequestBuilders.delete("/access?pageName=Communication&userName=test2@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	// @Test
-	// //p
-	// //Test12
-	// public void testEditProfile() throws Exception {
-	// 	mockMvc.perform(MockMvcRequestBuilders.put("/user").content("{userName:\"new Email\"}")).andExpect(MockMvcResultMatchers.status().isOk());
-	// }
+	@Test
+	//p
+	//Test12
+	public void testEditProfile() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.post("/user/update").content("{\"userEmail\":\"test@gmail.com\", \"currentRole\":\"user\"}")).andExpect(MockMvcResultMatchers.status().isOk());
+	}
 
 	@Test
 	//p

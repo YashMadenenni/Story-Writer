@@ -113,7 +113,7 @@ public class Model {
         
         newUser.put("userName", userName);
         newUser.put("password", password);
-        JSONObject pages = new JSONObject();
+        //JSONObject pages = new JSONObject();
         
         //System.out.println(" Password" + password);
         //System.out.println(" ");
@@ -127,6 +127,7 @@ public class Model {
                     user = new User(email,password, userName,  Roles.SystemAdmin, "src/main/resources/static/admin.json");
                 allAdmins.put(email, user);
                 newUser.put("adminEmail", email);
+                newUser.put("role", "admin");
                 JSONArray jsonAdmins = adminJson.getJSONArray("admin");
                 jsonAdmins.put(newUser);
                 changeDataInFile(adminFilePath, adminJson);
@@ -137,7 +138,8 @@ public class Model {
                 allUsers.put(email, user);
 
                 newUser.put("userEmail", email);
-                newUser.put("pages", pages);
+                newUser.put("role", "user");
+                //newUser.put("pages", pages);
 
                 JSONArray jsonUsers = userJson.getJSONArray("users");
                 jsonUsers.put(newUser);
@@ -255,56 +257,86 @@ public class Model {
         }
     }
 
-    // getUser
-    public JSONObject getUser(String email) {
+        // getUser
+        public JSONObject getUser(String email) {
 
-        boolean check = false;
-        JSONObject userJson = new JSONObject();
-
-        if (allUsers.containsKey(email)) {
-            User user = allUsers.get(email);
-            try {
-                userJson.put("userName", user.getUserName());
-                userJson.put("userEmail", user.getEmail());
-                userJson.put("pages",user.getMyPages());
-                userJson.put("role", user.getRole());
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-        } else if (allAdmins.containsKey(email)) {
-            User user = allAdmins.get(email);
-            try {
-                userJson.put("adminName", user.getUserName());
-                userJson.put("adminEmail", user.getEmail());
-                userJson.put("pages",user.getMyPages());
-                userJson.put("role", user.getRole());
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-        }
-
-        return userJson;
-    }
-
-    // updateUser
-    public Boolean updateUser(String email, String currentRole, String roleChange) {
-
-        boolean check = false;
-        if (currentRole == "user") {
+            boolean check = false;
+            JSONObject userJson = new JSONObject();
+    
             if (allUsers.containsKey(email)) {
                 User user = allUsers.get(email);
-                user.setRole(Roles.StandardUser);
+                try {
+                    userJson.put("userName", user.getUserName());
+                    userJson.put("userEmail", user.getEmail());
+                    userJson.put("pages",user.getMyPages());
+                    userJson.put("role", user.getRole());
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+    
+            } else if (allAdmins.containsKey(email)) {
+                User user = allAdmins.get(email);
+                try {
+                    userJson.put("adminName", user.getUserName());
+                    userJson.put("adminEmail", user.getEmail());
+                    userJson.put("pages",user.getMyPages());
+                    userJson.put("role", user.getRole());
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+    
             }
-        } else if (currentRole == "admin") {
+    
+            return userJson;
+        }
+
+    // updateUser
+    public Boolean updateUser(String email, String role) throws JSONException {
+
+        
+        boolean check = false;
+        if (role.equals( "user")) {
+            if (allUsers.containsKey(email)) {
+                User user = allUsers.get(email);
+                
+                user.setRole(Roles.SystemAdmin);
+
+                allUsers.remove(email);
+                allAdmins.put(email, user);
+
+                deleteFromJsonPage("user", email);
+                JSONArray jsonAdmins = adminJson.getJSONArray("admin");
+                JSONObject newUser = new JSONObject();
+                newUser.put("adminEmail", user.getEmail());
+                newUser.put("password", user.getPassword());
+                newUser.put("role", user.getRole());
+                newUser.put("userName", user.getUserName());
+                jsonAdmins.put(newUser);
+                
+                changeDataInFile(adminFilePath, adminJson);
+                check= true;
+            }
+        } else if (role.equals("admin")) {
             if (allAdmins.containsKey(email)) {
                 User user = allAdmins.get(email);
-                user.setRole(Roles.SystemAdmin);
+                user.setRole(Roles.StandardUser);
+                allAdmins.remove(email);
+                allUsers.put(email, user);
+
+                deleteFromJsonPage("admin", email);
+                JSONArray jsonUsers = userJson.getJSONArray("users");
+                JSONObject newUser = new JSONObject();
+                newUser.put("userEmail", user.getEmail());
+                newUser.put("password", user.getPassword());
+                newUser.put("role", user.getRole());
+                newUser.put("userName", user.getUserName());
+                jsonUsers.put(newUser);
+                changeDataInFile(userFilePath, userJson);
+                check= true;
             }
-            changeDataInFile(roleChange, adminJson);
+           
         }
 
         return check;
