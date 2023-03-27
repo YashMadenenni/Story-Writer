@@ -162,10 +162,17 @@ public class IndexController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/user", params = { "userEmail", "currentRole", "roleChange" })
-    public ResponseEntity<String> updateUser(@RequestParam String userEmail, @RequestParam String currentRole,
-            @RequestParam String roleChange) {
-        Boolean check = model.updateUser(userEmail, currentRole, roleChange);
+    @RequestMapping(method = RequestMethod.POST , value = "/user/update")
+    public ResponseEntity<String> updateUser(@RequestBody String body) throws JSONException, JsonMappingException, JsonProcessingException {
+        
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(body);
+        
+        String userEmail = jsonNode.get("userEmail").asText();
+        String role = jsonNode.get("currentRole").asText();
+        
+
+        Boolean check = model.updateUser(userEmail, role);
 
         if (check) {
             return ResponseEntity.ok("Success");
