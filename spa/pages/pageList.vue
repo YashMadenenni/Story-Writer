@@ -32,32 +32,28 @@ export default {
   data() {
     return {
       headers: [
+        {text: 'Admin', value: 'admin'},
         {text: 'Title', value: 'title'},
-        {text: 'Content', value: 'content'},
       ],
-      pages: [
-        {
-          title: "hoge1",
-          content: "hogehogehogehogehogehogehogehoge",
-        },
-        {
-          title: "hoge2",
-          content: "hogehogehogehogehogehogehogehoge",
-        }
-      ],
+      userEmail: '',
+      pages: [],
       page: "",
       error: "",
     }
   },
   mounted() {
-    // axios.get('/pages')
-    // .then((response) => {
-    //   console.log("response.data: ", response.data)
-    //   this.pages = response.data
-    // })
-    // .catch((error) => {
-    //   console.log('There is error:' + error.response)
-    // })
+    this.userEmail = this.$store.getters["auth/userEmail"]
+    axios.get('/page', {
+      params: {
+        "userEmail": this.userEmail,
+      },
+    }).then((response) => {
+      console.log("response.data: ", response.data)
+      this.pages = response.data
+    })
+    .catch((error) => {
+      console.log('There is error:' + error.response)
+    })
   },
   methods: {
     handleClick(row) {
