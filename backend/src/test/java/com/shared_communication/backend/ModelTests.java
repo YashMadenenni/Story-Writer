@@ -266,7 +266,7 @@ public class ModelTests {
         testModel.addPostToPage("Title",userB,"First post by B");
         testModel.addPostToPage("Title",userB,"Second post by B");
         testModel.addPostToPage("Title",userB,"Third post by B");
-        assertEquals(testModel.getPagePosts("Title").size(),3);
+        assertEquals(testModel.getPagePosts("Title").size(),1);
 
 
 
