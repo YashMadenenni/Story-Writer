@@ -62,7 +62,6 @@ export default {
         "userEmail": this.userEmail,
         "userName": this.userName,
         "password": this.password,
-        "role": this.role == "admin" ? 1 : 2,
       }).then((response) => {
         console.log("response.data: ", response.data)
         this.$router.go(-1)

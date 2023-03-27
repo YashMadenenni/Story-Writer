@@ -34,7 +34,6 @@ export default {
       headers: [
         {text: 'User name', value: 'userName'},
         {text: 'Email', value: 'userEmail'},
-        {text: 'Role', value: 'role'},
       ],
       users: [],
       user: "",
@@ -46,8 +45,7 @@ export default {
     .then((response) => {
       console.log("response.data: ", response.data.users)
       this.users = response.data.users
-    })
-    .catch((error) => {
+    }).catch((error) => {
       console.log('There is error:' + error.response)
     })
   },
@@ -56,7 +54,6 @@ export default {
       this.$router.push({
         path: '/userDetail', query: {
           userEmail: row.userEmail,
-          role: row.role,
         }
       });
     },

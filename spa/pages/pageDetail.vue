@@ -40,7 +40,6 @@
 import axios from 'axios'
 
 export default {
-  layout: "index",
   data() {
     return {
       title: '',
