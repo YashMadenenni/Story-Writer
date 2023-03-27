@@ -61,6 +61,7 @@ export default {
         path: '/pageDetail', query: {
           title: row.title,
           content: row.content,
+          userEmail: this.userEmail,
         }
       });
     },

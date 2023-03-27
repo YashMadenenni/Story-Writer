@@ -42,12 +42,14 @@ import axios from 'axios'
 export default {
   data() {
     return {
+      userEmail: '',
       title: '',
       content: '',
       error: "",
     }
   },
   mounted() {
+    this.userEmail = this.$route.query.userEmail
     this.title = this.$route.query.title
     this.content = this.$route.query.content
     // axios.get('/page', {
@@ -63,15 +65,28 @@ export default {
   },
   methods: {
     async updatePage() {
-      await axios.put('/page', {
-        "title": this.title,
+      await axios.post('/page/content', {
+        "userEmail": this.userEmail,
         "content": this.content,
+        "pageName": this.title,
       }).then((response) => {
         console.log("response.data: ", response.data)
         this.$router.go(-1)
       }).catch((error) => {
         console.log('There is error:' + error.response)
       })
+      // await axios.put('/page', null, {
+      //   params: {
+      //     "userEmail": this.userEmail,
+      //     "content": this.content,
+      //     "pageName": this.title,
+      //   },
+      // }).then((response) => {
+      //   console.log("response.data: ", response.data)
+      //   this.$router.go(-1)
+      // }).catch((error) => {
+      //   console.log('There is error:' + error.response)
+      // })
     },
     async deletePage() {
       await axios.delete('/page', {
