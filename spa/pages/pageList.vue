@@ -59,9 +59,10 @@ export default {
     handleClick(row) {
       this.$router.push({
         path: '/pageDetail', query: {
+          userEmail: this.userEmail,
           title: row.title,
           content: row.content,
-          userEmail: this.userEmail,
+          editAccessUser: row.editAccessUser,
         }
       });
     },

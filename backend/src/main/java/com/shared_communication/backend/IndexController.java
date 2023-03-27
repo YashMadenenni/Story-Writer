@@ -259,15 +259,8 @@ public class IndexController {
     }
 
     // editUserAccessRemove
-    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access")
-    public ResponseEntity<String> editUserAccessRemove(@RequestBody String body) throws JsonProcessingException {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(body);
-
-        String userEmail = jsonNode.get("userEmail").asText();
-        String pageName = jsonNode.get("pageName").asText();
-
+    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access", params = { "userEmail", "pageName" })
+    public ResponseEntity<String> editUserAccessRemove(@RequestParam String userEmail, @RequestParam String pageName) {
 
         try{
             model.deleteUser(pageName,userEmail);

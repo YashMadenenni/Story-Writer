@@ -60,6 +60,7 @@ export default {
     '/page': 'http://localhost:8080',
     '/pages': 'http://localhost:8080',
     '/page/content': 'http://localhost:8080',
+    '/page/access': 'http://localhost:8080',
     '/userLogin': 'http://localhost:8080',
     '/adminLogin': 'http://localhost:8080',
   },

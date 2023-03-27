@@ -31,6 +31,32 @@
             </v-btn>
           </v-col>
         </v-row>
+        <v-row>
+          <v-col>
+            <v-select v-model="user" :items="users" label="Read Access Users"></v-select>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn color="primary"
+                   :disabled="!this.user" @click="addUser()">
+              Add user to editAccessUser
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-select v-model="editAccessUser" :items="editAccessUsers" label="Edit Access Users"></v-select>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn color="primary"
+                   :disabled="!this.editAccessUser" @click="deleteUser()">
+              Delete user from editAccessUser
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-container>
     </v-form>
   </v-app>
@@ -46,22 +72,27 @@ export default {
       title: '',
       content: '',
       error: "",
+      editAccessUsers: [],
+      editAccessUser: '',
+      users: [],
+      user: '',
     }
   },
   mounted() {
     this.userEmail = this.$route.query.userEmail
     this.title = this.$route.query.title
     this.content = this.$route.query.content
-    // axios.get('/page', {
-    //   "title": this.title,
-    // }).then((response) => {
-    //   this.title = this.$route.query.title
-    //   this.content = this.$route.query.content
-    //   console.log("response.data: ", response.data)
-    //   // this.error = response.data.length == 0 ? "No Bus Route found" : "";
-    // }).catch((error) => {
-    //   console.log('There is error:' + error.response)
-    // })
+    this.editAccessUsers = this.$route.query.editAccessUser
+    axios.get('/users')
+      .then((response) => {
+        console.log("response.data: ", response.data.users)
+        for (var i in response.data.users) {
+          console.log("hoge1:"+response.data.users[i].userEmail)
+          this.users.push(response.data.users[i].userEmail);
+        }
+      }).catch((error) => {
+      console.log('There is error:' + error.response)
+    })
   },
   methods: {
     async updatePage() {
@@ -90,7 +121,31 @@ export default {
     },
     async deletePage() {
       await axios.delete('/page', {
-        "title": this.title,
+        "pageName": this.title,
+      }).then((response) => {
+        console.log("response.data: ", response.data)
+        this.$router.go(-1)
+      }).catch((error) => {
+        console.log('There is error:' + error.response)
+      })
+    },
+    async addUser() {
+      await axios.post('/page/access', {
+        "userEmail": this.user,
+        "pageName": this.title,
+      }).then((response) => {
+        console.log("response.data: ", response.data)
+        this.$router.go(-1)
+      }).catch((error) => {
+        console.log('There is error:' + error.response)
+      })
+    },
+    async deleteUser() {
+      await axios.delete('/page/access', {
+        params: {
+          "userEmail": this.editAccessUser,
+          "pageName": this.title,
+        },
       }).then((response) => {
         console.log("response.data: ", response.data)
         this.$router.go(-1)
