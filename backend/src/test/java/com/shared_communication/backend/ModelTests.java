@@ -89,7 +89,8 @@ public class ModelTests {
     public void testSuccesfulPageCreaion() throws JSONException, IOException {
 
         User userC = new User("abcC@example.com", "passC", "userC", Roles.StandardUser, "./src/main/resources/static/test.json");
-        testModel.createNewPage(userC,"Test tile for new page","./src/main/resources/static/pagetestmodel.json");
+        testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
+        testModel.createNewPage("test@gmail.com","Test tile for new page");
         String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/pagetestmodel.json")));
         JSONObject testPage = new JSONObject(jsonBody);
         String foundKey = null;

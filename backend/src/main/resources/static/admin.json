@@ -1,12 +1,1 @@
-{ "admin":[
-    {
-        "userName":"TestA",
-        "adminEmail":"admin@gmail.com",
-        "password":"testA"
-    },
-    {
-        "userName":"Admin",
-        "adminEmail":"admin1@gmail.com",
-        "password":"admin"
-    }]
-}
+{"admin":[{"password":"adminpassword","userName":"Admin","adminEmail":"admin@gmail.com"},{"password":"adminpassword","userName":"adminTest1","adminEmail":"admin1@gmail.com"},{"password":"testLoginAdmin","userName":"Test","adminEmail":"testLoginAdmin@gmail.com"},{"password":"testIndexAdmin","userName":"Test","adminEmail":"testIndexAdmin@gmail.com"}]}

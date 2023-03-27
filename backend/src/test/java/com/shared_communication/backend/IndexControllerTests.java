@@ -81,14 +81,16 @@ public class IndexControllerTests {
 	//Test8
 	@Test
 	public void testEditUserAccessAdd() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.put("/access?pageName=Communication&userName=test2@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
+		String jsonBody = "{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"Testterminall\"}";
+		mockMvc.perform(MockMvcRequestBuilders.post("/page/access").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	//p
 	//Test9
 	@Test
 	public void testEditUserAccessRemove() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete("/access?pageName=Communication&userName=test2@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
+		String jsonBody ="{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"Testterminall\"}";
+		mockMvc.perform(MockMvcRequestBuilders.delete("/page/access").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	//p
@@ -161,6 +163,13 @@ public class IndexControllerTests {
 	public void testDeletePageInvalidName() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.delete("/page?pageName=Communication")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
+
+	@Test
+	public void testgetPagevalidName() throws Exception{
+		mockMvc.perform(MockMvcRequestBuilders.get("/page?userEmail=test34@gmail.com")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+	}
+
+
 
 	//Test18
 	//Test15
