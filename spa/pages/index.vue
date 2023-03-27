@@ -20,18 +20,13 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field label="UserName" v-model="userName"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
             <v-text-field label="Password" v-model="password" type="password"></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.userName || !this.password || !this.role"
+                   :disabled="!this.userEmail || !this.password || !this.role"
                    @click="login()">
               Login
             </v-btn>
@@ -54,7 +49,6 @@ export default {
       role: '',
       roles: ["admin", "user"],
       userEmail: '',
-      userName: '',
       password: '',
     }
   },
@@ -65,19 +59,16 @@ export default {
     async login(e) {
       var endpoint = this.role === "admin" ? "adminLogin" : "userLogin"
       var payload = this.role === "admin" ? "admin" : "user"
-      this.$store.commit("auth/login", payload)
-      this.$router.push('/createPage')
-      // await axios.post(`/${endpoint}`, {
-      //   "userEmail": this.userEmail,
-      //   "userName": this.userName,
-      //   "password": this.password,
-      // }).then((response) => {
-      //   this.$store.commit("auth/login", payload)
-      //   this.$router.push('/createPage')
-      //   console.log("response.data: ", response.data)
-      // }).catch((error) => {
-      //   console.log('There is error:' + error.response)
-      // })
+      await axios.post(`/${endpoint}`, {
+        "userEmail": this.userEmail,
+        "password": this.password,
+      }).then((response) => {
+        this.$store.commit("auth/login", payload)
+        this.$router.push('/createPage')
+        console.log("response.data: ", response.data)
+      }).catch((error) => {
+        console.log('There is error:' + error.response)
+      })
     }
   },
 }
