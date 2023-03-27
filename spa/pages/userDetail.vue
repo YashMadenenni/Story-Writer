@@ -15,18 +15,13 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field label="UserName" v-model="userName"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field label="Password" v-model="password" type="password"></v-text-field>
+            <v-text-field :readonly=true label="UserName" v-model="userName"></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.userName || !this.role" @click="updateUser()">
+                   :disabled="!this.role" @click="updateUser()">
               Update
             </v-btn>
           </v-col>
@@ -47,7 +42,6 @@
 import axios from 'axios'
 
 export default {
-  layout: "index",
   data() {
     return {
       role: '',
@@ -59,15 +53,15 @@ export default {
     }
   },
   mounted() {
+    this.userEmail = this.$route.query.userEmail
     axios.get('/user', {
       params: {
-        "userEmail": this.$route.query.userEmail,
+        "userEmail": this.userEmail,
       },
     }).then((response) => {
       this.userName = response.data.userName
       this.userEmail = response.data.userEmail
-      this.password = response.data.password
-      this.role = response.data.role
+      // this.role = response.data.role
       console.log("response.data: ", response.data)
     }).catch((error) => {
       console.log('There is error:' + error.response)
@@ -75,10 +69,12 @@ export default {
   },
   methods: {
     async updateUser() {
-      await axios.put('/user', {
-        "userName": this.userName,
-        "roleChange": this.role,
-        "currentRole": this.$route.query.role,
+      await axios.put('/user', null,{
+        params: {
+          "userEmail": this.userEmail,
+          "currentRole": this.role,
+          "roleChange": this.role,
+       },
       }).then((response) => {
         console.log("response.data: ", response.data)
         this.$router.go(-1)
@@ -89,8 +85,7 @@ export default {
     async deleteUser() {
       await axios.delete('/user', {
         params: {
-          "userName": this.userEmail,
-          "role": this.role,
+          "userEmail": this.userEmail,
         },
       }).then((response) => {
         console.log("response.data: ", response.data)

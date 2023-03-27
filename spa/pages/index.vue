@@ -65,17 +65,19 @@ export default {
     async login(e) {
       var endpoint = this.role === "admin" ? "adminLogin" : "userLogin"
       var payload = this.role === "admin" ? "admin" : "user"
-      await axios.post(`/${endpoint}`, {
-        "userEmail": this.userEmail,
-        "userName": this.userName,
-        "password": this.password,
-      }).then((response) => {
-        this.$store.commit("auth/login", payload)
-        this.$router.push('/createPage')
-        console.log("response.data: ", response.data)
-      }).catch((error) => {
-        console.log('There is error:' + error.response)
-      })
+      this.$store.commit("auth/login", payload)
+      this.$router.push('/createPage')
+      // await axios.post(`/${endpoint}`, {
+      //   "userEmail": this.userEmail,
+      //   "userName": this.userName,
+      //   "password": this.password,
+      // }).then((response) => {
+      //   this.$store.commit("auth/login", payload)
+      //   this.$router.push('/createPage')
+      //   console.log("response.data: ", response.data)
+      // }).catch((error) => {
+      //   console.log('There is error:' + error.response)
+      // })
     }
   },
 }
