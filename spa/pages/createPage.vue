@@ -13,15 +13,15 @@
             <v-text-field label="Title" v-model="title"></v-text-field>
           </v-col>
         </v-row>
-        <v-row>
-          <v-col>
-            <v-textarea placeholder="Content" v-model="content" outlined></v-textarea>
-          </v-col>
-        </v-row>
+<!--        <v-row>-->
+<!--          <v-col>-->
+<!--            <v-textarea placeholder="Content" v-model="content" outlined></v-textarea>-->
+<!--          </v-col>-->
+<!--        </v-row>-->
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.title || !this.content"
+                   :disabled="!this.title"
                    @click="register()">
               Submit
             </v-btn>
@@ -38,20 +38,24 @@ export default {
   layout: "default",
   data() {
     return {
+      userEmail: '',
       title: '',
-      content: '',
+      // content: '',
       error: "",
     }
   },
   mounted() {
+    this.userEmail = this.$store.getters["auth/userEmail"]
     console.log("loggedIn:"+this.$store.getters["auth/loggedIn"])
     console.log("role:"+this.$store.getters["auth/role"])
+    console.log("userEmail:"+this.$store.getters["auth/userEmail"])
   },
   methods: {
     async register(e) {
       await axios.post('/page', {
-        "title": this.title,
-        "content": this.content,
+        "userEmail": this.userEmail,
+        "pageName": this.title,
+        // "content": this.content,
       }).then((response) => {
         console.log("response.data: ", response.data)
       }).catch((error) => {
