@@ -32,6 +32,8 @@ public class Model {
     String adminFilePath = "src/main/resources/static/admin.json";
     String userFilePath = "src/main/resources/static/users.json";
 
+    String adminMessagePath = "src/main/resources/static/usermessage.json";
+
     public Model(String jsonPath) {
         this.path = jsonPath;
     }
@@ -520,9 +522,6 @@ public class Model {
                 }
             }
 
-        }else{
-
-            throw new IllegalArgumentException("Only admin can see all the pages.");
         }
         return resultAllPages;
 
@@ -857,6 +856,16 @@ public class Model {
         }
 
         return false;
+    }
+
+    public void addAdminMessage(String email,String Message){
+
+
+    }
+
+    public void getAdminMessage(){
+
+
     }
 
 }
