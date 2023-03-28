@@ -413,6 +413,32 @@ public class Model {
         return json;
     }
 
+    public JSONObject getPageInfo(String title) throws IOException, JSONException {
+
+        JSONObject jsonPages = loadPages();
+        String foundKey=null;
+
+        for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
+            String key = (String) it.next();
+
+            JSONObject temp = jsonPages.getJSONObject(key);
+
+            if(temp.getString("title").equals(title)){
+                foundKey = key;
+            }
+
+        }
+        if(foundKey==null){
+
+            throw new IllegalArgumentException("Page with this name doesn't exists.");
+
+        }
+        JSONObject page = jsonPages.getJSONObject(foundKey);
+        return page;
+
+
+    }
+
     public ArrayList<String> getPageUsers(String title) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -446,20 +472,39 @@ public class Model {
         return null;
     }
 
-    public JSONArray getUserCreatedPages(String userEmail) throws IOException, JSONException {
-
-        System.out.println(userEmail);
+    public JSONArray getAllPages(String userEmail) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
-        System.out.println(jsonPages.toString());
         JSONArray resultAllPages = new JSONArray();
+        Iterator<String> keys = jsonPages.keys();
+        User user = getUserObj(userEmail);
+        if(user.getRole()==Roles.SystemAdmin){
 
+            while(keys.hasNext()) {
+                String key = keys.next();
+                if (jsonPages.get(key) instanceof JSONObject) {
+                    JSONObject temp = jsonPages.getJSONObject(key);
+                    resultAllPages.put(temp);
+                }
+            }
+
+        }else{
+
+            throw new IllegalArgumentException("Only admin can see all the pages.");
+        }
+        return resultAllPages;
+
+    }
+
+    public JSONArray getUserCreatedPages(String userEmail) throws IOException, JSONException {
+
+        JSONObject jsonPages = loadPages();
+        JSONArray resultAllPages = new JSONArray();
         Iterator<String> keys = jsonPages.keys();
 
         while(keys.hasNext()) {
             String key = keys.next();
             if (jsonPages.get(key) instanceof JSONObject) {
-                System.out.println(((JSONObject) jsonPages.get(key)).toString());
                 JSONObject temp = jsonPages.getJSONObject(key);
                 if(temp.getString("admin").equals(userEmail)){
                     resultAllPages.put(temp);

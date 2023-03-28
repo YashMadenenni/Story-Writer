@@ -274,6 +274,40 @@ public class IndexController {
 
     }
 
+    /**API End point to get all pages from the system
+     * @param userEmail the user email of an admin
+     * @return list of all pages as JSON string
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/page/admin", params = { "userEmail" })
+    public ResponseEntity<String> getAllPages(@RequestParam String userEmail) {
+
+        try{
+
+            String result = model.getAllPages(userEmail).toString();
+            return ResponseEntity.status(200).body(result);
+        } catch(Exception e){
+            return ResponseEntity.status(400).body(e.getMessage()); // conflit status code
+        }
+
+    }
+
+    /**API End point to get details of a page
+     * @param title of the page for which details to be fetched
+     * @return list of all pages as JSON string
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/page/info", params = { "title" })
+    public ResponseEntity<String> getPageDetail(@RequestParam String title) {
+
+        try{
+
+            JSONObject page = model.getPageInfo(title);
+            return ResponseEntity.status(200).body(page.toString());
+        } catch(Exception e){
+            return ResponseEntity.status(400).body(e.getMessage()); // conflit status code
+        }
+
+    }
+
     
     /**API Endpoint to update page content
      * @param body stores the request body with content to be added
