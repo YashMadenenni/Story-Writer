@@ -439,11 +439,11 @@ public class Model {
 
     }
 
-    public ArrayList<String> getPageUsers(String title) throws IOException, JSONException {
+    public ArrayList<String> getPageEditUsers(String title) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
         String foundKey=null;
-
+        ArrayList<String> userList = new ArrayList<>();
         for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
             String key = (String) it.next();
 
@@ -459,19 +459,51 @@ public class Model {
 
             JSONObject page = jsonPages.getJSONObject(foundKey);
             JSONArray users = page.getJSONArray("editAccessUser");
-            ArrayList<String> userList = new ArrayList<>();
+
             if (users != null) {
                 int len = users.length();
                 for (int i=0;i<len;i++){
                     userList.add(users.get(i).toString());
                 }
             }
-            return userList;
+
 
         }
-        return null;
+        return userList;
     }
 
+
+    public ArrayList<String> getPageReadUsers(String title) throws IOException, JSONException {
+
+        JSONObject jsonPages = loadPages();
+        String foundKey=null;
+        ArrayList<String> userList = new ArrayList<>();
+        for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
+            String key = (String) it.next();
+
+            JSONObject temp = jsonPages.getJSONObject(key);
+
+            if(temp.getString("title").equals(title)){
+                foundKey = key;
+            }
+
+        }
+
+        if(foundKey != null) {
+
+            JSONObject page = jsonPages.getJSONObject(foundKey);
+            JSONArray users = page.getJSONArray("readAccessUser");
+
+            if (users != null) {
+                int len = users.length();
+                for (int i=0;i<len;i++){
+                    userList.add(users.get(i).toString());
+                }
+            }
+
+        }
+        return userList;
+    }
     public JSONArray getAllPages(String userEmail) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -593,7 +625,7 @@ public class Model {
                 JSONObject page = jsonPages.getJSONObject(foundKey);
                 //String content = page.getString("content");
                 //ArrayList<String> currentContent = new ArrayList<>(List.of(content.split(",")));
-                if(getPageUsers(title).contains(user.getEmail())){
+                if(getPageEditUsers(title).contains(user.getEmail())){
                     String newContent;
                     newContent = post;
                     page.put("content",newContent);
@@ -619,7 +651,7 @@ public class Model {
     }
 
 
-    public void deleteUser(String title,String user) throws IOException, JSONException {
+    public void deleteUserEditAccess(String title, String user) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
         String foundKey=null;
@@ -641,7 +673,7 @@ public class Model {
 
                 JSONObject page = jsonPages.getJSONObject(foundKey);
                 JSONArray  users = page.getJSONArray("editAccessUser");
-                ArrayList<String> userList = getPageUsers(title);
+                ArrayList<String> userList = getPageEditUsers(title);
                 if(userList.contains(user)){
                     userList.remove(user);
                     JSONArray updatedUsers = new JSONArray(userList);
@@ -668,7 +700,63 @@ public class Model {
 
     }
 
-    public boolean addUser(String title,String userEmail) throws IOException, JSONException {
+    public void deleteUserReadAccess(String title, String user) throws IOException, JSONException {
+
+        JSONObject jsonPages = loadPages();
+        String foundKey=null;
+        if(jsonPages != null) {
+
+
+            for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
+                String key = (String) it.next();
+
+                JSONObject temp = jsonPages.getJSONObject(key);
+
+                if(temp.getString("title").equals(title)){
+                    foundKey = key;
+                }
+
+            }
+
+            if(foundKey != null){
+
+                JSONObject page = jsonPages.getJSONObject(foundKey);
+                JSONArray  usersEdit = page.getJSONArray("editAccessUser");
+                JSONArray  usersRead = page.getJSONArray("readAccessUser");
+                ArrayList<String> userListEdit = getPageEditUsers(title);
+                ArrayList<String> userListRead = getPageReadUsers(title);
+                if(userListRead.contains(user)){
+                    userListRead.remove(user);
+                    JSONArray updatedUsers = new JSONArray(userListRead);
+                    page.put("readAccessUser",updatedUsers);
+                    if(userListEdit.contains(user)){
+                        userListEdit.remove(user);
+                        JSONArray updatedUsersEdit = new JSONArray(userListEdit);
+                        page.put("editAccessUser",updatedUsers);
+                    }
+                    jsonPages.remove(foundKey);
+                    jsonPages.put(foundKey,page);
+                    FileWriter file = new FileWriter(this.pagePath);
+                    file.write(jsonPages.toString());
+                    file.flush();
+                    file.close();
+
+                }
+                else{
+                    throw new IllegalArgumentException("User doesn't have access to this page.");
+                }
+
+            }
+            else{
+                throw new IllegalArgumentException("Page with this title doesn't exists.");
+            }
+
+        }
+
+
+    }
+
+    public boolean addUserEditAccess(String title, String userEmail) throws IOException, JSONException {
         JSONObject jsonPages = loadPages();
         if(jsonPages != null) {
 
@@ -688,12 +776,67 @@ public class Model {
 
 
                 JSONObject page = jsonPages.getJSONObject(foundKey);
-                JSONArray  users = page.getJSONArray("editAccessUser");
-                ArrayList<String> userList = getPageUsers(title);
-                if(!userList.contains(userEmail)){
-                    userList.add(userEmail);
-                    JSONArray updatedUsers = new JSONArray(userList);
+                JSONArray  usersEdit = page.getJSONArray("editAccessUser");
+                JSONArray  usersRead = page.getJSONArray("readAccessUser");
+                ArrayList<String> userListEdit = getPageEditUsers(title);
+                ArrayList<String> userListRead = getPageReadUsers(title);
+                if(!userListEdit.contains(userEmail)){
+                    userListEdit.add(userEmail);
+                    JSONArray updatedUsers = new JSONArray(userListEdit);
                     page.put("editAccessUser",updatedUsers);
+                    if(!userListRead.contains(userEmail)){
+                        userListRead.add(userEmail);
+                        JSONArray updatedUsersRead = new JSONArray(userListRead);
+                        page.put("readAccessUser",updatedUsersRead);
+                    }
+                    jsonPages.remove(foundKey);
+                    jsonPages.put(foundKey,page);
+                    FileWriter file = new FileWriter(this.pagePath);
+                    file.write(jsonPages.toString());
+                    file.flush();
+                    file.close();
+                    return true;
+                }
+                else{
+                    throw new IllegalArgumentException("User already have write access to the page.");
+                }
+
+            }
+            else{
+                throw new IllegalArgumentException("Page with this title doesn't exists.");
+            }
+
+        }
+
+        return false;
+    }
+
+    public boolean addUserReadAccess(String title, String userEmail) throws IOException, JSONException {
+        JSONObject jsonPages = loadPages();
+        if(jsonPages != null) {
+
+            String foundKey=null;
+            for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
+                String key = (String) it.next();
+
+                JSONObject temp = jsonPages.getJSONObject(key);
+
+                if(temp.getString("title").equals(title)){
+                    foundKey = key;
+                }
+
+            }
+
+            if(foundKey != null){
+
+
+                JSONObject page = jsonPages.getJSONObject(foundKey);
+                JSONArray  usersRead = page.getJSONArray("readAccessUser");
+                ArrayList<String> userListRead = getPageReadUsers(title);
+                if(!userListRead.contains(userEmail)){
+                    userListRead.add(userEmail);
+                    JSONArray updatedUsers = new JSONArray(userListRead);
+                    page.put("readAccessUser",updatedUsers);
                     jsonPages.remove(foundKey);
                     jsonPages.put(foundKey,page);
                     FileWriter file = new FileWriter(this.pagePath);

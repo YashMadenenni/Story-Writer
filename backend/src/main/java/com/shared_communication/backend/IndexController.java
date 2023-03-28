@@ -10,14 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shared_communication.backend.Model;
 
 
 @RestController
@@ -355,7 +353,7 @@ public class IndexController {
         String pageName = jsonNode.get("pageName").asText();
 
         try{
-            model.addUser(pageName,userEmail);
+            model.addUserEditAccess(pageName,userEmail);
             return ResponseEntity.ok("Success");
 
         }catch (Exception e){
@@ -382,7 +380,7 @@ public class IndexController {
 
 
         try{
-            model.deleteUser(pageName,userEmail);
+            model.deleteUserEditAccess(pageName,userEmail);
             return ResponseEntity.ok("Success");
 
         }catch (Exception e){
@@ -398,15 +396,48 @@ public class IndexController {
      * @param pageName the page the user had to be added
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/page", params = { "pageName", "userName" })
-    public ResponseEntity<String> UserAccessAdd(@RequestParam String userName, @RequestParam String pageName) {
-        Boolean check = false;
+    @RequestMapping(method = RequestMethod.POST, value = "/page/access")
+    public ResponseEntity<String> readUserAccessAdd(@RequestBody String body) throws JsonProcessingException {
 
-        if (check) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(body);
+
+        String userEmail = jsonNode.get("userEmail").asText();
+        String pageName = jsonNode.get("pageName").asText();
+
+        try{
+            model.addUserReadAccess(pageName,userEmail);
             return ResponseEntity.ok("Success");
-        } else {
-            return ResponseEntity.status(400).body("Failed"); // conflit status code
+
+        }catch (Exception e){
+
+            return ResponseEntity.status(400).body(e.getMessage());
+
         }
     }
 
+    /**API Endpoint to add user to a page
+     * @param userName the user to be added
+     * @param pageName the page the user had to be added
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access")
+    public ResponseEntity<String> readUserRemoveAdd(@RequestBody String body) throws JsonProcessingException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(body);
+
+        String userEmail = jsonNode.get("userEmail").asText();
+        String pageName = jsonNode.get("pageName").asText();
+
+        try{
+            model.deleteUserReadAccess(pageName,userEmail);
+            return ResponseEntity.ok("Success");
+
+        }catch (Exception e){
+
+            return ResponseEntity.status(400).body(e.getMessage());
+
+        }
+    }
 }

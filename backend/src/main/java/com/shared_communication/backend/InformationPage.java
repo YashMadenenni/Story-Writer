@@ -102,7 +102,7 @@ public class InformationPage {
         }
     }
 
-    //@TODO check if system admins can make any changes in a post or not
+
     public void addPost(User user, String post){
 
         if(writeUsers.contains(user) | this.author.userEquals(user) | (user.getRole().equals(Roles.SystemAdmin))){
@@ -168,11 +168,13 @@ public class InformationPage {
             ArrayList<String> userList = new ArrayList<>();
             userList.add(author.getEmail());
             JSONArray jsonArray = new JSONArray(userList);
+            JSONArray jsonArrayRead = new JSONArray(userList);
             JSONObject newPage = new JSONObject();
             newPage.put("title",pageTitle);
             newPage.put("content","");
             newPage.put("admin",this.author.getEmail());
             newPage.put("editAccessUser",jsonArray);
+            newPage.put("readAccessUser",jsonArrayRead);
 
 
             json.put("page"+json.length()+1,newPage);
