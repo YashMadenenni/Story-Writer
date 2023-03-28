@@ -443,7 +443,7 @@ public class Model {
 
         JSONObject jsonPages = loadPages();
         String foundKey=null;
-
+        ArrayList<String> userList = new ArrayList<>();
         for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
             String key = (String) it.next();
 
@@ -459,17 +459,17 @@ public class Model {
 
             JSONObject page = jsonPages.getJSONObject(foundKey);
             JSONArray users = page.getJSONArray("editAccessUser");
-            ArrayList<String> userList = new ArrayList<>();
+
             if (users != null) {
                 int len = users.length();
                 for (int i=0;i<len;i++){
                     userList.add(users.get(i).toString());
                 }
             }
-            return userList;
+
 
         }
-        return null;
+        return userList;
     }
 
 
@@ -477,7 +477,7 @@ public class Model {
 
         JSONObject jsonPages = loadPages();
         String foundKey=null;
-
+        ArrayList<String> userList = new ArrayList<>();
         for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
             String key = (String) it.next();
 
@@ -493,17 +493,16 @@ public class Model {
 
             JSONObject page = jsonPages.getJSONObject(foundKey);
             JSONArray users = page.getJSONArray("readAccessUser");
-            ArrayList<String> userList = new ArrayList<>();
+
             if (users != null) {
                 int len = users.length();
                 for (int i=0;i<len;i++){
                     userList.add(users.get(i).toString());
                 }
             }
-            return userList;
 
         }
-        return null;
+        return userList;
     }
     public JSONArray getAllPages(String userEmail) throws IOException, JSONException {
 
