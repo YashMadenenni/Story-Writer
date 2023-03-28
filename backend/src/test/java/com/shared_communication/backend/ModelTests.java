@@ -151,7 +151,7 @@ public class ModelTests {
     public void testGetPageUsers() throws JSONException, IOException {
 
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
-        ArrayList<String> users = testModel.getPageUsers("Title");
+        ArrayList<String> users = testModel.getPageEditUsers("Title");
         assertTrue(users.contains("abcB@example.com"));
     }
 
@@ -179,10 +179,10 @@ public class ModelTests {
         InformationPage pageUserAdd = new InformationPage("Title101", userB,"./src/main/resources/static/pagetestmodel.json");
 
         User userC = new User("abcC@example.com", "passC", "userC", Roles.StandardUser, "./src/main/resources/static/test.json");
-        ArrayList<String> currUsers = testModel.getPageUsers("Title101");
+        ArrayList<String> currUsers = testModel.getPageEditUsers("Title101");
         assertFalse(currUsers.contains(userC.getEmail()));
-        testModel.addUser("Title101",userC.getEmail());
-        currUsers = testModel.getPageUsers("Title101");
+        testModel.addUserEditAccess("Title101",userC.getEmail());
+        currUsers = testModel.getPageEditUsers("Title101");
         assertTrue(currUsers.contains(userC.getEmail()));
     }
 
@@ -193,13 +193,13 @@ public class ModelTests {
         InformationPage pageUserAdd = new InformationPage("Title101", userB,"./src/main/resources/static/pagetestmodel.json");
 
         User userC = new User("abcC@example.com", "passC", "userC", Roles.StandardUser, "./src/main/resources/static/test.json");
-        ArrayList<String> currUsers = testModel.getPageUsers("Title101");
+        ArrayList<String> currUsers = testModel.getPageEditUsers("Title101");
         assertFalse(currUsers.contains(userC.getEmail()));
-        testModel.addUser("Title101",userC.getEmail());
-        currUsers = testModel.getPageUsers("Title101");
+        testModel.addUserEditAccess("Title101",userC.getEmail());
+        currUsers = testModel.getPageEditUsers("Title101");
         assertTrue(currUsers.contains(userC.getEmail()));
-        testModel.deleteUser("Title101",userC.getEmail());
-        currUsers = testModel.getPageUsers("Title101");
+        testModel.deleteUserEditAccess("Title101",userC.getEmail());
+        currUsers = testModel.getPageEditUsers("Title101");
         assertFalse(currUsers.contains(userC.getEmail()));
     }
     public void shouldOpenAdminJson(){
