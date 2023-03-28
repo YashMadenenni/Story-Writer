@@ -130,7 +130,7 @@ public class IndexController {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(user);
 
-        String userName = jsonNode.get("userName").asText();
+//        String userName = jsonNode.get("userName").asText();
         String userEmail = jsonNode.get("userEmail").asText();
         String password = jsonNode.get("password").asText();
 

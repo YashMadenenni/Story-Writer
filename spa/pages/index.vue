@@ -64,6 +64,7 @@ export default {
         "password": this.password,
       }).then((response) => {
         this.$store.commit("auth/login", payload)
+        this.$store.commit("auth/setEmail", this.userEmail)
         this.$router.push('/createPage')
         console.log("response.data: ", response.data)
       }).catch((error) => {
