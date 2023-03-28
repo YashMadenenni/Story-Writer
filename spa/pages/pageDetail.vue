@@ -80,14 +80,21 @@ export default {
   },
   mounted() {
     this.userEmail = this.$route.query.userEmail
-    this.title = this.$route.query.title
-    this.content = this.$route.query.content
-    this.editAccessUsers = this.$route.query.editAccessUser
+    axios.get('/page/info', {
+      params: {
+        "title": this.$route.query.title,
+      },
+    }).then((response) => {
+      this.title = this.$route.query.title
+      this.content = this.$route.query.content
+      this.editAccessUsers = this.$route.query.editAccessUser
+      console.log("response.data: ", response.data)
+    }).catch((error) => {
+      console.log('There is error:' + error.response)
+    }),
     axios.get('/users')
       .then((response) => {
-        console.log("response.data: ", response.data.users)
         for (var i in response.data.users) {
-          console.log("hoge1:"+response.data.users[i].userEmail)
           this.users.push(response.data.users[i].userEmail);
         }
       }).catch((error) => {

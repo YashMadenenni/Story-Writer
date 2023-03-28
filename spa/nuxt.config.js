@@ -56,9 +56,11 @@ export default {
   proxy: {
     '/user': 'http://localhost:8080',
     '/users': 'http://localhost:8080',
+    '/user/update': 'http://localhost:8080',
     '/admin': 'http://localhost:8080',
     '/page': 'http://localhost:8080',
-    '/pages': 'http://localhost:8080',
+    '/page/admin': 'http://localhost:8080',
+    '/page/info': 'http://localhost:8080',
     '/page/content': 'http://localhost:8080',
     '/page/access': 'http://localhost:8080',
     '/userLogin': 'http://localhost:8080',
