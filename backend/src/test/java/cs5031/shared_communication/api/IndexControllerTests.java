@@ -25,6 +25,10 @@ public class IndexControllerTests {
 	JSONObject pageJson = null;
 	JSONObject adminMessage=null;
 
+	/**
+	 * Method to set environment after each test
+	 * @throws IOException
+	 */
 	@AfterEach
 	public void setjson() throws IOException {
 
@@ -40,6 +44,11 @@ public class IndexControllerTests {
 
 	}
 
+	/**
+	 * Method to set environment before each test
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	@BeforeEach
 	public void getjson() throws IOException, JSONException {
 
@@ -100,8 +109,10 @@ public class IndexControllerTests {
 		mockMvc.perform(MockMvcRequestBuilders.delete("/user?userEmail=user@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	//p
-	//Test5
+	/**
+	 * Test case check page creation API
+	 * @throws Exception
+	 */
 	@Test
 	public void testCreatePage() throws Exception{
 
@@ -109,44 +120,60 @@ public class IndexControllerTests {
 		mockMvc.perform(MockMvcRequestBuilders.post("/page").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	//p
-	//Test8
+	/**
+	 * Test case check page edit user API
+	 * @throws Exception
+	 */
 	@Test
 	public void testEditUserAccessAdd() throws Exception {
 		String jsonBody = "{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"Title2\"}";
 		mockMvc.perform(MockMvcRequestBuilders.post("/page/access").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	//p
-	//Test8
+	/**
+	 * Test case check user read access granted API
+	 * @throws Exception
+	 */
 	@Test
 	public void testReadUserAccessAddSuccessful() throws Exception {
 		String jsonBody = "{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"TestAdd\"}";
 		mockMvc.perform(MockMvcRequestBuilders.post("/page/access/user").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	//p
-	//Test9
+	/**
+	 * Test case to check edit request granted API
+	 * @throws Exception
+	 */
 	@Test
 	public void testEditUserAccessRemove() throws Exception {
 		String jsonBody ="{\"userEmail\":\"xyz@gmail.com\", \"pageName\":\"Testnow\"}";
 		mockMvc.perform(MockMvcRequestBuilders.delete("/page/access").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	/**
+	 * Test case to check read access revoked API
+	 * @throws Exception
+	 */
 	@Test
 	public void testReadUserAccessRemove() throws Exception {
 		String jsonBody ="{\"userEmail\":\"xyz@gmail.com\", \"pageName\":\"TitleAdd\"}";
 		mockMvc.perform(MockMvcRequestBuilders.delete("/page/access/user").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	//p
-	//Test10
+	/**
+	 * Test case to check read request granted API
+	 * @throws Exception
+	 */
 	@Test
 	public void testReadUserAccessAdd() throws Exception {
 		String jsonBody ="{\"userEmail\":\"user@gmail.com\", \"pageName\":\"Title2\"}";
 		mockMvc.perform(MockMvcRequestBuilders.post("/page/access/user").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
+	/**
+	 * Test case to check user to be removed from page completely
+	 * @throws Exception
+	 */
 	//p
 	//Test11
 	@Test
@@ -169,8 +196,11 @@ public class IndexControllerTests {
 	public void testEditProfileAdmin() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.post("/user/update").content("{\"userEmail\":\"admin1@gmail.com\", \"currentRole\":\"admin\"}")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-//Test15
-	//Test5
+
+	/**
+	 * Test to check mutltiple page not allowed API
+	 * @throws Exception
+	 */
 	@Test
 	public void testMultiplePagewithSameName() throws Exception{
 		String jsonBody = "{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"CheckNow\"}";
@@ -248,6 +278,10 @@ public class IndexControllerTests {
 		mockMvc.perform(MockMvcRequestBuilders.get("/access?pageName=Communication&userName=test2@gmail.com")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
 
+	/**
+	 * Test case to check get all self read pages API
+	 * @throws Exception
+	 */
 	@Test
 	public void testGetAllMyReadPages() throws Exception {
 
@@ -255,6 +289,10 @@ public class IndexControllerTests {
 		mockMvc.perform(MockMvcRequestBuilders.get("/page/access/my").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	/**
+	 * Test case to check get all self edit pages API
+	 * @throws Exception
+	 */
 	@Test
 	public void testGetAllMyWritePages() throws Exception {
 
@@ -262,6 +300,10 @@ public class IndexControllerTests {
 		mockMvc.perform(MockMvcRequestBuilders.get("/page/access/mywrite").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	/**
+	 * Test case to check admin message sharing API
+	 * @throws Exception
+	 */
 	@Test
 	public void testShareAdminMessage() throws Exception {
 
@@ -269,6 +311,10 @@ public class IndexControllerTests {
 		mockMvc.perform(MockMvcRequestBuilders.post("/page/admin/message").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	/**
+	 * Test case to get admin message API
+	 * @throws Exception
+	 */
 	@Test
 	public void testGetAdminMessage() throws Exception {
 

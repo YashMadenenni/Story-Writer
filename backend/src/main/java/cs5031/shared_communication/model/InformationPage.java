@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Information page class
+ */
 public class InformationPage {
     private String pageTitle;
     private User author;
@@ -22,6 +25,14 @@ public class InformationPage {
     private ArrayList<User> writeUsers = new ArrayList<>();
     private LinkedHashMap<User,String> posts = new LinkedHashMap<>();
 
+    /**
+     * Constructor method for the information page class
+     * @param title title of the page
+     * @param author author of the page
+     * @param pagePath path of the file where page information is to be stored
+     * @throws JSONException
+     * @throws IOException
+     */
     public InformationPage(String title, User author,String pagePath) throws JSONException, IOException {
 
         this.pageTitle = title;
@@ -34,15 +45,27 @@ public class InformationPage {
 
     }
 
+    /**
+     * Get author of the page
+     * @return user object who is author of the page
+     */
     public User getAuthor(){
 
         return this.author;
     }
+
+    /**
+     * Method to add page to the user object
+     */
     public void registerToAuthor(){
 
         this.author.addMyPage(this);
     }
 
+    /**
+     * Method to add a user which can read contents of the page
+     * @param user user to be granted read access
+     */
     public void addReadUser(User user){
 
         if(!readUsers.contains(user)) {
@@ -53,6 +76,10 @@ public class InformationPage {
         }
     }
 
+    /**
+     * Method to add a user which can write to the page
+     * @param user user which can write to the page
+     */
     public void addWriteUser(User user){
 
         if(!writeUsers.contains(user)) {
@@ -67,15 +94,28 @@ public class InformationPage {
         }
     }
 
+    /**
+     * Method to get list of users which can read the page
+     * @return list of users
+     */
     public ArrayList<User> getPageReadUsers(){
 
         return this.readUsers;
     }
 
+    /**
+     * Method to get list of users which can write to the page
+     * @return list of users
+     */
     public ArrayList<User> getPageWriteUsers(){
 
         return this.writeUsers;
     }
+
+    /**
+     * Method to remove read access of the user
+     * @param user users whose access is to be removed
+     */
     public void removeReadUser(User user){
 
         if(readUsers.contains(user)) {
@@ -92,6 +132,10 @@ public class InformationPage {
         }
     }
 
+    /**
+     * Method to remove write access of the user
+     * @param user user whose write access is to be removed
+     */
     public void removeWriteUser(User user){
 
         if(writeUsers.contains(user)) {
@@ -102,6 +146,11 @@ public class InformationPage {
         }
     }
 
+    /**
+     * Method to add a post to the page
+     * @param user user to add the post
+     * @param post post content
+     */
 
     public void addPost(User user, String post){
 
@@ -119,11 +168,19 @@ public class InformationPage {
 
     }
 
+    /**
+     * Method to get posts stored in the form of a hasmap
+     * @return posts information
+     */
     public LinkedHashMap<User,String> getPosts(){
 
         return this.posts;
     }
 
+    /**
+     * Method to change user from read to write access
+     * @param user user to be changed
+     */
     public void changeReadToWriteUser(User user){
 
         if(!writeUsers.contains(user)){
@@ -141,17 +198,31 @@ public class InformationPage {
         }
     }
 
-    // remo for commit
+
+    /**
+     * Method to set path of json file to store page info
+     * @param path path of the file
+     */
     public void setPagePath(String path){
 
         this.pagePath = path;
     }
-    // remo for commit
+
+
+    /**
+     * Method to get the path of the file
+     * @return return path of the file
+     */
     public String getPagePath(){
 
         return this.pagePath;
     }
 
+    /**
+     * Method to add page to a json file
+     * @throws IOException
+     * @throws JSONException
+     */
 
     private void addPageToJson() throws IOException, JSONException {
 
@@ -186,6 +257,12 @@ public class InformationPage {
 
     }
 
+    /**
+     * Method to load all the pages stored in a json
+     * @return s JSONObject storing all the files
+     * @throws IOException
+     * @throws JSONException
+     */
     protected JSONObject loadPages()
             throws IOException, JSONException {
 

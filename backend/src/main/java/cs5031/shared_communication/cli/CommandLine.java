@@ -1,4 +1,4 @@
-package cs5031.shared_communication;
+package cs5031.shared_communication.cli;
 
 import java.io.Console;
 import java.util.ArrayList;

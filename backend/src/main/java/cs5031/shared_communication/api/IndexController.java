@@ -393,9 +393,9 @@ public class IndexController {
     }
 
     
-    /**API Endpoint to add user to a page
-
-     * @return
+    /**API Endpoint to add user to a read access list of the page
+     * * @param body has the request body
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.POST, value = "/page/access/user")
     public ResponseEntity<String> readUserAccessAdd(@RequestBody String body) throws JsonProcessingException {
@@ -418,8 +418,9 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to remove a user from read access list of a page
+     * @param body has the request body
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/page/access/user")
     public ResponseEntity<String> readUserRemoveAdd(@RequestBody String body) throws JsonProcessingException {
@@ -442,8 +443,9 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to get all the pages a user can read from
+     * @param body has the request body
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.GET, value = "/page/access/my")
     public ResponseEntity<String> getMyReadPages(@RequestBody String body) throws JsonProcessingException {
@@ -466,8 +468,9 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to get all the pages a user can write to
+     * @param body has the request body
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.GET, value = "/page/access/mywrite")
     public ResponseEntity<String> getMyWritePages(@RequestBody String body) throws JsonProcessingException {
@@ -490,8 +493,9 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to add a message byy admin to a json file which can be shared with all the users
+     * @param body has the request body
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.POST, value = "/page/admin/message")
     public ResponseEntity<String> addAdminMessage(@RequestBody String body) throws JsonProcessingException {
@@ -514,8 +518,8 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to get message shared by admin
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.GET, value = "/page/admin/message")
     public ResponseEntity<String> getAdminMessage() throws JsonProcessingException {
