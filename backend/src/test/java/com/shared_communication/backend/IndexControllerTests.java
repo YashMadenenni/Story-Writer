@@ -1,5 +1,9 @@
 package com.shared_communication.backend;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -9,9 +13,61 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+
 @SpringBootTest
 @AutoConfigureMockMvc
-public class IndexControllerTests { 
+public class IndexControllerTests {
+
+	@AfterEach
+	public void resetCreds() throws IOException, JSONException {
+
+
+		JSONObject pageToAdd = new JSONObject();
+		JSONObject top = new JSONObject();
+		pageToAdd.put("editAccessUser",new JSONArray(List.of("a@example.com")));
+		pageToAdd.put("readAccessUser",new JSONArray(List.of("a@example.com")));
+		pageToAdd.put("admin","a@example.com");
+		pageToAdd.put("title","Notitle");
+		pageToAdd.put("content","");
+		top.put("page1",pageToAdd);
+
+		JSONObject pageToAddb = new JSONObject();
+
+		pageToAddb.put("editAccessUser",new JSONArray(List.of("abcB@example.com")));
+		pageToAddb.put("readAccessUser",new JSONArray(List.of("abc@example.com")));
+		pageToAddb.put("admin","abcB@example.com");
+		pageToAddb.put("title","Title");
+		pageToAddb.put("content","");
+		top.put("page2",pageToAddb);
+
+		JSONObject pageToAdda = new JSONObject();
+
+		pageToAdda.put("editAccessUser",new JSONArray(List.of("abc@example.com")));
+		pageToAdda.put("readAccessUser",new JSONArray(List.of("abc@example.com")));
+		pageToAdda.put("admin","abc@example.com");
+		pageToAdda.put("title","Title2");
+		pageToAdda.put("content","");
+		top.put("page3",pageToAdda);
+
+		JSONObject pageToAddc = new JSONObject();
+		pageToAddc.put("editAccessUser",new JSONArray(List.of("abc@example.com")));
+		pageToAddc.put("readAccessUser",new JSONArray(List.of("abc@example.com")));
+		pageToAddc.put("admin","abc@example.com");
+		pageToAddc.put("title","TitleAdd");
+		pageToAddc.put("content","");
+		top.put("page0",pageToAddc);
+
+		FileWriter pagefile = new FileWriter("./src/main/resources/static/pagetestmodel.json");
+		pagefile.write(top.toString());
+		pagefile.flush();
+		pagefile.close();
+
+
+	}
+
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -81,7 +137,7 @@ public class IndexControllerTests {
 	//Test8
 	@Test
 	public void testEditUserAccessAdd() throws Exception {
-		String jsonBody = "{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"Testterminall\"}";
+		String jsonBody = "{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"TestAdd\"}";
 		mockMvc.perform(MockMvcRequestBuilders.post("/page/access").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
@@ -89,7 +145,7 @@ public class IndexControllerTests {
 	//Test9
 	@Test
 	public void testEditUserAccessRemove() throws Exception {
-		String jsonBody ="{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"Testterminall\"}";
+		String jsonBody ="{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"TestAdd\"}";
 		mockMvc.perform(MockMvcRequestBuilders.delete("/page/access").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 

@@ -858,12 +858,45 @@ public class Model {
         return false;
     }
 
-    public void addAdminMessage(String email,String Message){
+    public boolean addAdminMessage(String email,String Message) throws IOException, JSONException {
+
+        String jsonBody = new String(Files.readAllBytes(Paths.get(this.adminMessagePath)));
+        JSONObject json = null;
+        try {
+            json = new JSONObject(jsonBody);
+        } catch (JSONException e){
+
+            throw new IllegalArgumentException("File with this name doesn't exists.");
+        }
+        if(json!=null) {
+            json.put(email, Message);
+            FileWriter file = new FileWriter(this.adminMessagePath);
+            file.write(json.toString());
+            file.flush();
+            file.close();
+            return true;
+        }
+        else{
+            return false;
+        }
 
 
     }
 
-    public void getAdminMessage(){
+    public String getAdminMessage() throws IOException {
+
+        String jsonBody = new String(Files.readAllBytes(Paths.get(this.adminMessagePath)));
+        JSONObject json = null;
+        try {
+            json = new JSONObject(jsonBody);
+            return json.toString();
+        } catch (JSONException e){
+
+            throw new IllegalArgumentException("File with this name doesn't exists.");
+        }
+
+
+
 
 
     }
