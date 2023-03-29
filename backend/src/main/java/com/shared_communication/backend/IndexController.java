@@ -392,11 +392,10 @@ public class IndexController {
 
     
     /**API Endpoint to add user to a page
-     * @param userName the user to be added 
-     * @param pageName the page the user had to be added
+
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/page/access")
+    @RequestMapping(method = RequestMethod.POST, value = "/page/access/yash")
     public ResponseEntity<String> readUserAccessAdd(@RequestBody String body) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -417,11 +416,9 @@ public class IndexController {
     }
 
     /**API Endpoint to add user to a page
-     * @param userName the user to be added
-     * @param pageName the page the user had to be added
      * @return
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access/yash")
     public ResponseEntity<String> readUserRemoveAdd(@RequestBody String body) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
