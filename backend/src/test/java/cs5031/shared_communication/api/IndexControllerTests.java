@@ -72,7 +72,7 @@ public class IndexControllerTests {
 	@Test
 	public void testUserlogin() throws Exception{
 		
-		mockMvc.perform(MockMvcRequestBuilders.post("/userLogin").content("{\"userEmail\":\"usernew@gmail.com\", \"userName\":\"Test\", \"password\":\"userTestnew\"}")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post("/userLogin").content("{\"userEmail\":\"testIndexregister@gmail.com\", \"userName\":\"Test\", \"password\":\"testIndex\"}")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 		//p
 	//Test7
