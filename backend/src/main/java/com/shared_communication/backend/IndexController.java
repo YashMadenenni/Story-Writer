@@ -1,6 +1,7 @@
 package com.shared_communication.backend;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -395,8 +396,9 @@ public class IndexController {
 
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/page/access/yash")
+    @RequestMapping(method = RequestMethod.POST, value = "/page/access/user")
     public ResponseEntity<String> readUserAccessAdd(@RequestBody String body) throws JsonProcessingException {
+        System.out.println("first here");
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(body);
@@ -418,8 +420,9 @@ public class IndexController {
     /**API Endpoint to add user to a page
      * @return
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access/yash")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access/user")
     public ResponseEntity<String> readUserRemoveAdd(@RequestBody String body) throws JsonProcessingException {
+
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(body);
@@ -437,4 +440,95 @@ public class IndexController {
 
         }
     }
+
+    /**API Endpoint to add user to a page
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/page/access/my")
+    public ResponseEntity<String> getMyReadPages(@RequestBody String body) throws JsonProcessingException {
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(body);
+        ArrayList<String> output= new ArrayList<>();
+
+        String userEmail = jsonNode.get("userEmail").asText();
+        System.out.println(userEmail);
+        try{
+            output = model.getMyReadPages(userEmail);
+            return ResponseEntity.ok(output.toString());
+
+        }catch (Exception e){
+
+            return ResponseEntity.status(400).body(""+output.size());
+
+        }
+    }
+
+    /**API Endpoint to add user to a page
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/page/access/mywrite")
+    public ResponseEntity<String> getMyWritePages(@RequestBody String body) throws JsonProcessingException {
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(body);
+        ArrayList<String> output= new ArrayList<>();
+
+        String userEmail = jsonNode.get("userEmail").asText();
+        System.out.println(userEmail);
+        try{
+            output = model.getMyWritePages(userEmail);
+            return ResponseEntity.ok(output.toString());
+
+        }catch (Exception e){
+
+            return ResponseEntity.status(400).body(""+output.size());
+
+        }
+    }
+
+    /**API Endpoint to add user to a page
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/page/admin/message")
+    public ResponseEntity<String> addAdminMessage(@RequestBody String body) throws JsonProcessingException {
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(body);
+        ArrayList<String> output= new ArrayList<>();
+
+        String userEmail = jsonNode.get("userEmail").asText();
+        String userMessage = jsonNode.get("message").asText();
+        try{
+            model.addAdminMessage(userEmail,userMessage);
+            return ResponseEntity.ok("Success");
+
+        }catch (Exception e){
+
+            return ResponseEntity.status(400).body(e.getMessage());
+
+        }
+    }
+
+    /**API Endpoint to add user to a page
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/page/admin/message")
+    public ResponseEntity<String> getAdminMessage() throws JsonProcessingException {
+
+        try{
+            String adminMessage = model.getAdminMessage();
+            return ResponseEntity.ok(adminMessage);
+
+        }catch (Exception e){
+
+            return ResponseEntity.status(400).body(e.getMessage());
+
+        }
+    }
+
+
 }

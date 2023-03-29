@@ -511,9 +511,7 @@ public class Model {
         JSONObject jsonPages = loadPages();
         JSONArray resultAllPages = new JSONArray();
         Iterator<String> keys = jsonPages.keys();
-        User user = getUserObj(userEmail);
-        if(user.getRole()==Roles.SystemAdmin){
-
+        if(allAdmins.containsKey(userEmail)){
             while(keys.hasNext()) {
                 String key = keys.next();
                 if (jsonPages.get(key) instanceof JSONObject) {
@@ -522,8 +520,10 @@ public class Model {
                 }
             }
 
+            return resultAllPages;
+        }else{
+            throw new IllegalArgumentException("This user does not have admin privileges.");
         }
-        return resultAllPages;
 
     }
 
@@ -564,7 +564,7 @@ public class Model {
             return resultAllPages;
 
         }else{
-            throw new IllegalArgumentException("User has not created anyy page.");
+            throw new IllegalArgumentException("User has not created any page.");
         }
 
 
@@ -716,7 +716,6 @@ public class Model {
                 }
 
             }
-
             if(foundKey != null){
 
                 JSONObject page = jsonPages.getJSONObject(foundKey);
@@ -812,6 +811,7 @@ public class Model {
 
     public boolean addUserReadAccess(String title, String userEmail) throws IOException, JSONException {
         JSONObject jsonPages = loadPages();
+
         if(jsonPages != null) {
 
             String foundKey=null;
@@ -833,6 +833,7 @@ public class Model {
                 JSONArray  usersRead = page.getJSONArray("readAccessUser");
                 ArrayList<String> userListRead = getPageReadUsers(title);
                 if(!userListRead.contains(userEmail)){
+
                     userListRead.add(userEmail);
                     JSONArray updatedUsers = new JSONArray(userListRead);
                     page.put("readAccessUser",updatedUsers);
@@ -840,6 +841,7 @@ public class Model {
                     jsonPages.put(foundKey,page);
                     FileWriter file = new FileWriter(this.pagePath);
                     file.write(jsonPages.toString());
+
                     file.flush();
                     file.close();
                     return true;
@@ -862,6 +864,7 @@ public class Model {
 
         String jsonBody = new String(Files.readAllBytes(Paths.get(this.adminMessagePath)));
         JSONObject json = null;
+
         try {
             json = new JSONObject(jsonBody);
         } catch (JSONException e){
@@ -869,6 +872,7 @@ public class Model {
             throw new IllegalArgumentException("File with this name doesn't exists.");
         }
         if(json!=null) {
+
             json.put(email, Message);
             FileWriter file = new FileWriter(this.adminMessagePath);
             file.write(json.toString());
@@ -895,10 +899,51 @@ public class Model {
             throw new IllegalArgumentException("File with this name doesn't exists.");
         }
 
+    }
+
+    public ArrayList<String> getMyReadPages(String userEmail) throws IOException, JSONException {
+
+        JSONObject jsonPages = loadPages();
+        ArrayList<String> myReadPages = new ArrayList<String>();
+        if (jsonPages != null) {
+
+            String foundKey = null;
+            for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
+                String key = (String) it.next();
+
+                JSONObject temp = jsonPages.getJSONObject(key);
+                ArrayList<String> userListRead = getPageReadUsers(temp.getString("title"));
+                if (userListRead.contains(userEmail)) {
+                    myReadPages.add(temp.getString("title"));
+                }
+
+            }
 
 
-
+        }
+        return myReadPages;
 
     }
 
+    public ArrayList<String> getMyWritePages(String userEmail) throws IOException, JSONException {
+
+        JSONObject jsonPages = loadPages();
+        ArrayList<String> myWritePages = new ArrayList<String>();
+        if(jsonPages != null) {
+
+            String foundKey=null;
+            for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
+                String key = (String) it.next();
+
+                JSONObject temp = jsonPages.getJSONObject(key);
+                ArrayList<String> userListRead = getPageEditUsers(temp.getString("title"));
+                if(userListRead.contains(userEmail)){
+                    myWritePages.add(temp.getString("title"));
+                }
+
+            }
+
+        }
+        return myWritePages;
+}
 }
