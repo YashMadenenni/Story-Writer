@@ -1,8 +1,9 @@
-package com.shared_communication.backend;
+package cs5031.shared_communication.api;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import cs5031.shared_communication.model.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;

@@ -1,13 +1,11 @@
-package com.shared_communication.backend;
+package cs5031.shared_communication;
 
 import java.io.Console;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Scanner;
-import com.shared_communication.backend.*;
 
+import cs5031.shared_communication.model.Model;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;

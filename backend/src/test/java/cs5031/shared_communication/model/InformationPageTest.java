@@ -1,4 +1,4 @@
-package com.shared_communication.backend;
+package cs5031.shared_communication.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;

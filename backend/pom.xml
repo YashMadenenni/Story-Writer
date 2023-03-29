@@ -8,10 +8,10 @@
 		<version>3.0.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.shared_communication</groupId>
-	<artifactId>backend</artifactId>
+	<groupId>cs5031</groupId>
+	<artifactId>shared_communication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>backend</name>
+	<name>shared_communication</name>
 	<description>p3-shared-system</description>
 	<properties>
 		<java.version>17</java.version>

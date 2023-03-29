@@ -1,4 +1,4 @@
-package com.shared_communication.backend;
+package cs5031.shared_communication.model;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,7 +102,7 @@ public class Model {
         return allAdmin;
     }
 
-    protected static JSONObject loadInitialState(String jsonPath)
+    public static JSONObject loadInitialState(String jsonPath)
             throws IOException, JSONException {
 
         String jsonBody = new String(Files.readAllBytes(Paths.get(jsonPath)));

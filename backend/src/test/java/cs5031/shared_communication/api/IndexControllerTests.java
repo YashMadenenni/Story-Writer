@@ -1,6 +1,6 @@
-package com.shared_communication.backend;
+package cs5031.shared_communication.api;
 
-import org.json.JSONArray;
+import cs5031.shared_communication.model.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -18,7 +17,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -69,7 +67,6 @@ public class IndexControllerTests {
 
 	}
 
-	
 
 	//Test4
 	@Test
