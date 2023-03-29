@@ -112,6 +112,11 @@ export default {
           title: 'User List',
           to: '/userList'
         },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Create Message',
+          to: '/createMessage'
+        },
       ]
     } else {
       this.items = [
