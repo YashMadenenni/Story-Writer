@@ -40,20 +40,20 @@ export default {
   },
   mounted() {
     this.userEmail = this.$store.getters["auth/userEmail"]
-    console.log("loggedIn:"+this.$store.getters["auth/loggedIn"])
-    console.log("role:"+this.$store.getters["auth/role"])
-    console.log("userEmail:"+this.$store.getters["auth/userEmail"])
   },
   methods: {
     async register(e) {
       await axios.post('/page/admin/message', {
         "userEmail": this.userEmail,
         "message": this.message,
-        // "content": this.content,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Create Message", {
+          position: "top-center"
+        })
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to create message error: ${error}`, {
+          position: "top-center"
+        })
       })
     }
   },

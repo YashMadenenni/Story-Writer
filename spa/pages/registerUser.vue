@@ -63,12 +63,12 @@ export default {
         "userName": this.userName,
         "password": this.password,
       }).then((response) => {
-        this.$toast.success("Success User Register", {
+        this.$toast.success("Success Register User", {
           position: "top-center"
         })
         this.$router.go(-1)
       }).catch((error) => {
-        this.$toast.error(`Success User Register`, {
+        this.$toast.error(`Failed to register user error: ${error}`, {
           position: "top-center"
         })
       })
