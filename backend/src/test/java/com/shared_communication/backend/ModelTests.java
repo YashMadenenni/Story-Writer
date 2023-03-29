@@ -1,7 +1,9 @@
 package com.shared_communication.backend;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
@@ -15,6 +17,8 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import javax.management.relation.Role;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,10 +55,10 @@ public class ModelTests {
         file.close();
 
 
-
         JSONObject pageToAdd = new JSONObject();
         JSONObject top = new JSONObject();
         pageToAdd.put("editAccessUser",new JSONArray(List.of("a@example.com")));
+        pageToAdd.put("readAccessUser",new JSONArray(List.of("a@example.com")));
         pageToAdd.put("admin","a@example.com");
         pageToAdd.put("title","Notitle");
         pageToAdd.put("content","");
@@ -63,6 +67,7 @@ public class ModelTests {
         JSONObject pageToAddb = new JSONObject();
 
         pageToAddb.put("editAccessUser",new JSONArray(List.of("abcB@example.com")));
+        pageToAddb.put("readAccessUser",new JSONArray(List.of("abcB@example.com")));
         pageToAddb.put("admin","abcB@example.com");
         pageToAddb.put("title","Title");
         pageToAddb.put("content","");
@@ -71,6 +76,7 @@ public class ModelTests {
         JSONObject pageToAdda = new JSONObject();
 
         pageToAdda.put("editAccessUser",new JSONArray(List.of("abc@example.com")));
+        pageToAdda.put("readAccessUser",new JSONArray(List.of("abc@example.com")));
         pageToAdda.put("admin","abc@example.com");
         pageToAdda.put("title","Title2");
         pageToAdda.put("content","");
@@ -102,6 +108,22 @@ public class ModelTests {
             }
         }
         }
+
+    @Test
+    public void testFailedPageCreation() throws JSONException, IOException {
+
+        User userC = new User("abcC@example.com", "passC", "userC", Roles.StandardUser, "./src/main/resources/static/test.json");
+        testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
+        testModel.createNewPage("test@gmail.com","Test tile for new page");
+
+        IllegalArgumentException thrown =
+                assertThrowsExactly(IllegalArgumentException.class, () -> {
+                    testModel.createNewPage("test@gmail.com","Test tile for new page");;
+
+                });
+
+    }
+
     @BeforeEach
     public void setup(){
         testModel = new Model("src/test/resources/userTest.json","src/test/resources/adminTest.json");
@@ -148,6 +170,20 @@ public class ModelTests {
     }
 
     @Test
+    public void testLoadingPageFailed() throws JSONException, IOException {
+        testModel.setPagePath("./src/main/resources/static/notvalid.json");
+        NoSuchFileException thrown =
+                assertThrowsExactly(NoSuchFileException.class, () -> {
+                    JSONObject  json = testModel.loadPages();
+
+                });
+        testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
+
+
+
+    }
+
+    @Test
     public void testGetPageUsers() throws JSONException, IOException {
 
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -164,11 +200,67 @@ public class ModelTests {
     }
 
     @Test
+    public void testGetPageTitleFailed() throws JSONException, IOException {
+        testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
+        ArrayList<String> title = testModel.getAllPageTitles();
+        assertFalse(title.contains("Titl"));
+
+    }
+
+    @Test
+    public void testGetAllPageTitlesSuccessfully() throws JSONException, IOException {
+        testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
+        ArrayList<String> titles = testModel.getAllPageTitles();
+        assertTrue(titles.contains("Title2"));
+        assertTrue(titles.contains("Title"));
+    }
+
+    @Test
+    public void testGetAllPageTitlesNotInList() throws JSONException, IOException {
+        testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
+        ArrayList<String> titles = testModel.getAllPageTitles();
+        assertFalse(titles.contains("does not exists"));
+
+    }
+
+    @Test
     public void testAddPost() throws JSONException, IOException {
 
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
+        //testModel.addUserEditAccess("Title","abcB@example.com");
         testModel.addPostToPage("Title",userB,"First post by B");
         assertTrue(testModel.getPagePosts("Title").contains("First post by B"));
+    }
+
+    @Test
+    public void testAddPostFailed() throws JSONException, IOException {
+
+        testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
+        //testModel.addUserEditAccess("Title","abcB@example.com");
+        IllegalArgumentException thrown =
+                assertThrowsExactly(IllegalArgumentException.class, () -> {
+                    testModel.addPostToPage("Title",userA,"First post by A");
+
+                });
+    }
+
+    @Test
+    public void testGetPageInfo() throws JSONException, IOException {
+
+        testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
+        JSONObject page = testModel.getPageInfo("Title2");
+        page.has("title");
+    }
+
+    @Test
+    public void testGetPageInfoFailed() throws JSONException, IOException {
+        testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
+        IllegalArgumentException thrown =
+                assertThrowsExactly(IllegalArgumentException.class, () -> {
+                    JSONObject page = testModel.getPageInfo("does not exists");
+
+                });
+
     }
 
 
@@ -177,7 +269,6 @@ public class ModelTests {
 
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
         InformationPage pageUserAdd = new InformationPage("Title101", userB,"./src/main/resources/static/pagetestmodel.json");
-
         User userC = new User("abcC@example.com", "passC", "userC", Roles.StandardUser, "./src/main/resources/static/test.json");
         ArrayList<String> currUsers = testModel.getPageEditUsers("Title101");
         assertFalse(currUsers.contains(userC.getEmail()));
@@ -272,7 +363,42 @@ public class ModelTests {
 
     }
 
+    @Test
+    public void testgetUserObject() throws JSONException, IOException {
 
+        User user = testModel.getUserObj("test@gmail.com");
+        assertEquals(user.getUserEmail(),"test@gmail.com");
+    }
+
+
+    @Test
+    public void testReadAccess() throws JSONException, IOException {
+
+        ArrayList<String> users = testModel.getPageReadUsers("Title2");
+        users.contains("abc@example.com");
+
+    }
+    @Test
+    public void testOnlyReadAccess() throws JSONException, IOException {
+
+        ArrayList<String> users = testModel.getPageReadUsers("Title2");
+        users.contains("readabc@example.com");
+
+    }
+
+
+    @Test
+    public void testaddAdminMessage() throws JSONException, IOException {
+
+        testModel.addAdminMessage("admin@gmail.com","Admin's Message");
+        String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/usermessage.json")));
+        JSONObject json = null;
+
+        json = new JSONObject(jsonBody);
+        assertTrue(json.has("admin@gmail.com"));
+
+
+    }
 
 
 

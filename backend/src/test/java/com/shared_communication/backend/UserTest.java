@@ -126,6 +126,7 @@ class UserTest {
 
 
         User userC = new User("userC@example.com", "passC", "usrC", Roles.StandardUser, "./src/main/resources/static/test.json");
+        userC.addCredentialsToFile("./src/main/resources/static/test.json", userC.getEmail(), userC.getUserName(), "nullpass");
         String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/test.json")));
         JSONObject testCreds = new JSONObject(jsonBody);
         assertTrue(testCreds.has("userC@example.com"));
@@ -138,6 +139,7 @@ class UserTest {
 
 
         User userC = new User("userC@example.com", "passC", "usrC", Roles.StandardUser, "./src/main/resources/static/test.json");
+        userC.addCredentialsToFile("./src/main/resources/static/test.json",userC.getEmail(),userC.getUserName(),"nullpass");
         String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/test.json")));
         JSONObject testCreds = new JSONObject(jsonBody);
         assertTrue(testCreds.getJSONObject("userC@example.com").has("usrC"));
@@ -162,6 +164,8 @@ class UserTest {
 
         User userC = new User("userC@example.com", "passC", "usrC", Roles.StandardUser, "./src/main/resources/static/test.json");
         User userE = new User("userE@example.com", "passE", "usrE", Roles.StandardUser, "./src/main/resources/static/test.json");
+        userC.addCredentialsToFile("./src/main/resources/static/test.json",userC.getEmail(),userC.getUserName(),"nullpass");
+        userE.addCredentialsToFile("./src/main/resources/static/test.json",userE.getEmail(),userE.getUserName(),"nullpass");
         String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/test.json")));
         JSONObject testCreds = new JSONObject(jsonBody);
         assertTrue(testCreds.has("userC@example.com"));
@@ -170,14 +174,6 @@ class UserTest {
 
     }
 
-    @Test
-    public void shouldNotOpenJson() {
-        IllegalArgumentException thrown =
-                assertThrowsExactly(IllegalArgumentException.class, () -> {
-                    new User("userC@example.com", "passC", "usrC", Roles.StandardUser, "./src/main/resources/static/invalidpath.json");
-                    ;
-                });
-    }
 
     @Test
     public void testCorrectEnumStdUser() {

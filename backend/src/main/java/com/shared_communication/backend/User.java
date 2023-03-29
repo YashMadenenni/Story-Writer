@@ -60,7 +60,7 @@ public class User{
         return this.email;
     }
 
-    private void addCredentialsToFile(String jsonPath,String email, String userName,String passWord) throws IOException, JSONException {
+    public void addCredentialsToFile(String jsonPath,String email, String userName,String passWord) throws IOException, JSONException {
 
         JSONObject json = null;
         try {

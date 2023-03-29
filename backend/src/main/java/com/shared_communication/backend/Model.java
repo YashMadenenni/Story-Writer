@@ -881,10 +881,21 @@ public class Model {
         }
 
 
-
     }
 
-    public void getAdminMessage(){
+    public String getAdminMessage() throws IOException {
+
+        String jsonBody = new String(Files.readAllBytes(Paths.get(this.adminMessagePath)));
+        JSONObject json = null;
+        try {
+            json = new JSONObject(jsonBody);
+            return json.toString();
+        } catch (JSONException e){
+
+            throw new IllegalArgumentException("File with this name doesn't exists.");
+        }
+
+
 
 
 
