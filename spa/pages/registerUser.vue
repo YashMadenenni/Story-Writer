@@ -63,10 +63,14 @@ export default {
         "userName": this.userName,
         "password": this.password,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success User Register", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Success User Register`, {
+          position: "top-center"
+        })
       })
     }
   },
