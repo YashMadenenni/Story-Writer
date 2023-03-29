@@ -36,6 +36,7 @@ export default {
         {text: 'Title', value: 'title'},
       ],
       userEmail: '',
+      role: '',
       pages: [],
       page: "",
       error: "",
@@ -43,7 +44,9 @@ export default {
   },
   mounted() {
     this.userEmail = this.$store.getters["auth/userEmail"]
-    axios.get('/page', {
+    this.role = this.$store.getters["auth/role"]
+    var endpoint = this.role === "admin" ? "page/admin" : "page"
+    axios.get(`/${endpoint}`, {
       params: {
         "userEmail": this.userEmail,
       },

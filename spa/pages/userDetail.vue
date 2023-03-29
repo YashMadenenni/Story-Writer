@@ -69,12 +69,9 @@ export default {
   },
   methods: {
     async updateUser() {
-      await axios.put('/user', null,{
-        params: {
-          "userEmail": this.userEmail,
-          "currentRole": this.role,
-          "roleChange": this.role,
-       },
+      await axios.post('/user/update', {
+        "userEmail": this.userEmail,
+        "currentRole": this.role,
       }).then((response) => {
         console.log("response.data: ", response.data)
         this.$router.go(-1)
