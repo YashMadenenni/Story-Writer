@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,55 +16,41 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class IndexControllerTests {
 
+	JSONObject pageJson = null;
+	JSONObject adminMessage=null;
+
 	@AfterEach
-	public void resetCreds() throws IOException, JSONException {
+	public void setjson() throws IOException {
 
-
-		JSONObject pageToAdd = new JSONObject();
-		JSONObject top = new JSONObject();
-		pageToAdd.put("editAccessUser",new JSONArray(List.of("a@example.com")));
-		pageToAdd.put("readAccessUser",new JSONArray(List.of("a@example.com")));
-		pageToAdd.put("admin","a@example.com");
-		pageToAdd.put("title","Notitle");
-		pageToAdd.put("content","");
-		top.put("page1",pageToAdd);
-
-		JSONObject pageToAddb = new JSONObject();
-
-		pageToAddb.put("editAccessUser",new JSONArray(List.of("abcB@example.com")));
-		pageToAddb.put("readAccessUser",new JSONArray(List.of("abc@example.com")));
-		pageToAddb.put("admin","abcB@example.com");
-		pageToAddb.put("title","Title");
-		pageToAddb.put("content","");
-		top.put("page2",pageToAddb);
-
-		JSONObject pageToAdda = new JSONObject();
-
-		pageToAdda.put("editAccessUser",new JSONArray(List.of("abc@example.com")));
-		pageToAdda.put("readAccessUser",new JSONArray(List.of("abc@example.com")));
-		pageToAdda.put("admin","abc@example.com");
-		pageToAdda.put("title","Title2");
-		pageToAdda.put("content","");
-		top.put("page3",pageToAdda);
-
-		JSONObject pageToAddc = new JSONObject();
-		pageToAddc.put("editAccessUser",new JSONArray(List.of("abc@example.com")));
-		pageToAddc.put("readAccessUser",new JSONArray(List.of("abc@example.com")));
-		pageToAddc.put("admin","abc@example.com");
-		pageToAddc.put("title","TitleAdd");
-		pageToAddc.put("content","");
-		top.put("page0",pageToAddc);
-
-		FileWriter pagefile = new FileWriter("./src/main/resources/static/pagetestmodel.json");
-		pagefile.write(top.toString());
+		FileWriter pagefile = new FileWriter("./src/main/resources/static/pages.json");
+		pagefile.write(pageJson.toString());
 		pagefile.flush();
 		pagefile.close();
+
+		FileWriter messagefile = new FileWriter("./src/main/resources/static/usermessage.json");
+		messagefile.write(adminMessage.toString());
+		messagefile.flush();
+		messagefile.close();
+
+	}
+
+	@BeforeEach
+	public void getjson() throws IOException, JSONException {
+
+		String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/pages.json")));
+		pageJson = new JSONObject(jsonBody);
+
+		String jsonBodyAdminMessage = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/usermessage.json")));
+		adminMessage = new JSONObject(jsonBodyAdminMessage);
+
 
 
 	}
@@ -73,12 +60,12 @@ public class IndexControllerTests {
 	private MockMvc mockMvc;
 
     Model model = new Model("src/main/resources/static/users.json", "src/main/resources/static/admin.json");
-	
+
 
 	//Test1
 	@Test 
 	public void testUserRegisteration() throws Exception{
-				mockMvc.perform(MockMvcRequestBuilders.post("/user").content("{\"userEmail\":\"testIndex@gmail.com\", \"userName\":\"Test\", \"password\":\"testIndex\"}")).andExpect(MockMvcResultMatchers.status().isOk());
+				mockMvc.perform(MockMvcRequestBuilders.post("/user").content("{\"userEmail\":\"testIndexregister@gmail.com\", \"userName\":\"Test\", \"password\":\"testIndex\"}")).andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
 
@@ -88,13 +75,13 @@ public class IndexControllerTests {
 	@Test
 	public void testUserlogin() throws Exception{
 		
-		mockMvc.perform(MockMvcRequestBuilders.post("/userLogin").content("{\"userEmail\":\"testIndex@gmail.com\", \"userName\":\"Test\", \"password\":\"testIndex\"}")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post("/userLogin").content("{\"userEmail\":\"usernew@gmail.com\", \"userName\":\"Test\", \"password\":\"userTestnew\"}")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 		//p
 	//Test7
 	@Test
 	public void testDeleteUserSystemLevel () throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete("/user?userEmail=test@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.delete("/user?userEmail=user3@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	//Test2
@@ -107,80 +94,90 @@ public class IndexControllerTests {
 	//Test3
 	@Test 
 	public void testAdminlogin() throws Exception{
-		mockMvc.perform(MockMvcRequestBuilders.post("/admin").content("{\"userEmail\":\"testLoginAdmin@gmail.com\", \"userName\":\"Test\", \"password\":\"testLoginAdmin\"}")).andExpect(MockMvcResultMatchers.status().isOk());
-		mockMvc.perform(MockMvcRequestBuilders.post("/adminLogin").content("{\"userEmail\":\"testLoginAdmin@gmail.com\", \"userName\":\"Test\", \"password\":\"testLoginAdmin\"}")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post("/admin").content("{\"userEmail\":\"testLoginAdmin1@gmail.com\", \"userName\":\"Test\", \"password\":\"testLoginAdmin\"}")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post("/adminLogin").content("{\"userEmail\":\"testLoginAdmin1@gmail.com\", \"userName\":\"Test\", \"password\":\"testLoginAdmin\"}")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test
 	public void testDeleteUserAdminSystemLevel () throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete("/user?userEmail=admin@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.delete("/user?userEmail=user@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	//p
 	//Test5
 	@Test
 	public void testCreatePage() throws Exception{
-		mockMvc.perform(MockMvcRequestBuilders.post("/page?pageName=Communication")).andExpect(MockMvcResultMatchers.status().isOk());
+
+		String jsonBody = "{\"userEmail\":\"test@gmail.com\", \"pageName\":\"CheckPage\"}";
+		mockMvc.perform(MockMvcRequestBuilders.post("/page").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	//Test6
-	@Test
-	public void testWriteToFile() throws Exception{
-
-		String jsonBody = "{user:\"test@gmail.com\" ,page:\"Communication\" content : \"Writing to file from test case\"}";
-		mockMvc.perform(MockMvcRequestBuilders.put("/page").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
-	}
-
-
-	
 	//p
 	//Test8
 	@Test
 	public void testEditUserAccessAdd() throws Exception {
-		String jsonBody = "{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"TestAdd\"}";
+		String jsonBody = "{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"Title2\"}";
 		mockMvc.perform(MockMvcRequestBuilders.post("/page/access").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	//p
+	//Test8
+	@Test
+	public void testReadUserAccessAddSuccessful() throws Exception {
+		String jsonBody = "{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"TestAdd\"}";
+		mockMvc.perform(MockMvcRequestBuilders.post("/page/access/user").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	//p
 	//Test9
 	@Test
 	public void testEditUserAccessRemove() throws Exception {
-		String jsonBody ="{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"TestAdd\"}";
+		String jsonBody ="{\"userEmail\":\"xyz@gmail.com\", \"pageName\":\"Testnow\"}";
 		mockMvc.perform(MockMvcRequestBuilders.delete("/page/access").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	public void testReadUserAccessRemove() throws Exception {
+		String jsonBody ="{\"userEmail\":\"xyz@gmail.com\", \"pageName\":\"TitleAdd\"}";
+		mockMvc.perform(MockMvcRequestBuilders.delete("/page/access/user").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	//p
 	//Test10
 	@Test
 	public void testReadUserAccessAdd() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/access?pageName=Communication&userName=test2@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
+		String jsonBody ="{\"userEmail\":\"user@gmail.com\", \"pageName\":\"Title2\"}";
+		mockMvc.perform(MockMvcRequestBuilders.post("/page/access/user").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 	
 	//p
 	//Test11
 	@Test
 	public void testUserAccessRemovePageLevel() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete("/access?pageName=Communication&userName=test2@gmail.com")).andExpect(MockMvcResultMatchers.status().isOk());
+		String jsonBody ="{\"userEmail\":\"xyz@gmail.com\", \"pageName\":\"Testnow\"}";
+		mockMvc.perform(MockMvcRequestBuilders.delete("/page/access").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test
 	//p
 	//Test12
 	public void testEditProfile() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/user/update").content("{\"userEmail\":\"test@gmail.com\", \"currentRole\":\"user\"}")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.post("/user/update").content("{\"userEmail\":\"user@gmail.com\", \"currentRole\":\"user\"}")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
+
 
 	@Test
 	//p
-	//Test13
-	public void testDeletePage() throws Exception{
-		mockMvc.perform(MockMvcRequestBuilders.delete("/page?pageName=Communication")).andExpect(MockMvcResultMatchers.status().isOk());
+	//Test12
+	public void testEditProfileAdmin() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.post("/user/update").content("{\"userEmail\":\"admin1@gmail.com\", \"currentRole\":\"admin\"}")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 //Test15
 	//Test5
 	@Test
 	public void testMultiplePagewithSameName() throws Exception{
-		mockMvc.perform(MockMvcRequestBuilders.post("/page?pageName=Communication")).andExpect(MockMvcResultMatchers.status().isOk()).andDo(result -> mockMvc.perform(MockMvcRequestBuilders.post("/page?pageName=Communication")).andExpect(MockMvcResultMatchers.status().isUnauthorized()));
+		String jsonBody = "{\"userEmail\":\"user1@gmail.com\", \"pageName\":\"CheckNow\"}";
+		mockMvc.perform(MockMvcRequestBuilders.post("/page").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk()).andDo(result -> mockMvc.perform(MockMvcRequestBuilders.post("/page").content(jsonBody)).andExpect(MockMvcResultMatchers.status().is4xxClientError()));
 	}
 	@Test
 	//Test14
@@ -212,22 +209,19 @@ public class IndexControllerTests {
 		mockMvc.perform(MockMvcRequestBuilders.post("/userLogin").content("{\"userEmail\":\"test35@gmail.com\", \"userName\":\"Test35\", \"password\":\"test35\"}")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
 
-	//p
-	//Test17
-	//Test13
-	@Test
-	public void testDeletePageInvalidName() throws Exception{
-		mockMvc.perform(MockMvcRequestBuilders.delete("/page?pageName=Communication")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
-	}
 
 	@Test
-	public void testgetPagevalidName() throws Exception{
+	public void testgetPagevalidNameFailed() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.get("/page?userEmail=test34@gmail.com")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
 
+	@Test
+	public void testgetPagevalidNameSuccessful() throws Exception{
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/page?userEmail=abc@example.com")).andExpect(MockMvcResultMatchers.status().isOk());
+	}
 
 
-	//Test18
 	//Test15
 	@Test
 	public void testGetUserInvalidName() throws Exception{
@@ -255,5 +249,33 @@ public class IndexControllerTests {
 	@Test
 	public void testUserAccessRemovePageLevelInvalidUserName() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/access?pageName=Communication&userName=test2@gmail.com")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+	}
+
+	@Test
+	public void testGetAllMyReadPages() throws Exception {
+
+		String jsonBody = "{\"userEmail\":\"user@gmail.com\"}";
+		mockMvc.perform(MockMvcRequestBuilders.get("/page/access/my").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	public void testGetAllMyWritePages() throws Exception {
+
+		String jsonBody = "{\"userEmail\":\"user@gmail.com\"}";
+		mockMvc.perform(MockMvcRequestBuilders.get("/page/access/mywrite").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	public void testShareAdminMessage() throws Exception {
+
+		String jsonBody = "{\"userEmail\":\"admin@gmail.com\",\"message\":\"Message from admin\"}";
+		mockMvc.perform(MockMvcRequestBuilders.post("/page/admin/message").content(jsonBody)).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	public void testGetAdminMessage() throws Exception {
+
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/page/admin/message")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 } 
