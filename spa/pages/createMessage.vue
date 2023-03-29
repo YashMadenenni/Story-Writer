@@ -4,7 +4,7 @@
       <v-container>
         <v-card>
           <v-card-title>
-            Create Page
+            Create Message
             <v-spacer/>
           </v-card-title>
         </v-card>

@@ -117,6 +117,11 @@ export default {
           title: 'Create Message',
           to: '/createMessage'
         },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Message List',
+          to: '/messageList'
+        },
       ]
     } else {
       this.items = [
@@ -129,6 +134,11 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'Page List',
           to: '/pageList'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Message List',
+          to: '/messageList'
         },
       ]
     }
