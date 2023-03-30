@@ -43,10 +43,8 @@ export default {
   mounted() {
     axios.get('/users')
     .then((response) => {
-      console.log("response.data: ", response.data.users)
       this.users = response.data.users
     }).catch((error) => {
-      console.log('There is error:' + error.response)
     })
   },
   methods: {
