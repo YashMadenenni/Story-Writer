@@ -133,7 +133,7 @@ export default {
         {
           icon: 'mdi-chart-bubble',
           title: 'Page List',
-          to: '/pageList'
+          to: '/userPageList'
         },
         {
           icon: 'mdi-chart-bubble',

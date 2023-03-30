@@ -31,8 +31,11 @@ export default {
   data() {
     return {
       headers: [
-        {text: 'Message', value: 'messages'},
+        {text: 'admin', value: 'admin'},
+        {text: 'Message', value: 'message'},
       ],
+      admin: "",
+      message: "",
       messages: [],
       error: "",
     }
@@ -40,8 +43,8 @@ export default {
   mounted() {
     axios.get('/page/admin/message')
       .then((response) => {
-        console.log("response.data: ", response.data)
-        this.message = response.data
+        console.log("response.data: ", response.data.message)
+        this.messages = response.data.message
       }).catch((error) => {
       console.log('There is error:' + error.response)
     })
