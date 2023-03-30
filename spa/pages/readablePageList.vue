@@ -60,7 +60,7 @@ export default {
   methods: {
     handleClick(row) {
       this.$router.push({
-        path: '/pageDetail', query: {
+        path: '/readOnlyPageDetail', query: {
           userEmail: this.userEmail,
           title: row.title,
         }
