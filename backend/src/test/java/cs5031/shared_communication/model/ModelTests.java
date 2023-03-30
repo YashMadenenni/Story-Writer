@@ -147,11 +147,17 @@ public class ModelTests {
 
     }
 
+    /**
+     * Test case for checking error when trying to open invalid json
+     */
     @Test
     public void shouldNotOpenJson(){
         NoSuchFileException thrown = assertThrowsExactly(NoSuchFileException.class, ()->{Model.loadInitialState("wrongpath.json");});
     }
 
+    /**
+     * Test case for successful opening of a json file
+     */
     @Test
     public void shouldOpenJson(){
         org.json.JSONObject result = null;
@@ -382,6 +388,10 @@ public class ModelTests {
         currUsers = testModel.getPageEditUsers("Title101");
         assertFalse(currUsers.contains(userC.getEmail()));
     }
+
+    /**
+     * Test case for not allowing to open invalid Admin json
+     */
     public void shouldOpenAdminJson(){
         org.json.JSONObject result = null;
         try {
@@ -392,50 +402,89 @@ public class ModelTests {
         assertNotNull(result);
     }
 
+    /**
+     * Test case to check fucntionality of registering an admin
+     * @throws JSONException
+     */
     @Test
     public void testAdminRegister() throws JSONException{
         assertTrue(testModel.registerUser("newAdmin","adminNew@gmail.com","adminpassword","admin"));
     }
 
+    /**
+     * Test case to check admin registration fails when invalid details are provided
+     * @throws JSONException
+     */
     @Test
     public void testAdminRegisterFail() throws JSONException{
         assertTrue(testModel.registerUser("adminTest1","admin1@gmail.com","adminpassword","admin"));
         assertFalse(testModel.registerUser("adminTest2","admin1@gmail.com","adminpassword","admin"));
     }
+
+    /**
+     * Test case to check admin able to login successfully
+     */
     @Test
     public void testAdminLoginSuccess(){
         assertTrue(testModel.userLogin("admin@gmail.com","adminpassword","admin"));
     }
 
+    /**
+     * Test case to check admin unable to login
+     */
     @Test
     public void testAdminLoginFail(){
         assertFalse(testModel.userLogin("admin2@gmail.com","adminwrong","Admin2"));
     }
+
+    /**
+     * Test case check user registration method
+     * @throws JSONException
+     */
     @Test
     public void testUserRegister() throws JSONException{
         assertTrue(testModel.registerUser("newUser","userNew@gmail.com","userpassword","user"));
     }
 
+    /**
+     * Test case to check user registration fails
+     * @throws JSONException
+     */
     @Test
     public void testUserRegisterFail() throws JSONException{
         assertTrue(testModel.registerUser("userTest1","user1@gmail.com","userTest","user"));
         assertFalse(testModel.registerUser("userTest2","user1@gmail.com","userTest","user"));
     }
+
+    /**
+     * Test case to ensure user is able to login successfully
+     */
     @Test
     public void testUserLoginSuccess(){
         assertTrue(testModel.userLogin("user@gmail.com","userpassword","user"));
     }
 
+    /**
+     * Test case to ensure use login fails
+     */
     @Test
     public void testUserLoginFail(){
         assertFalse(testModel.userLogin("User2@gmail.com","userwrong","user"));
     }
 
+    /**
+     * Test case to remove user from the system
+     * @throws JSONException
+     */
     @Test
     public void removeUserFromSystem() throws JSONException{
         assertTrue(testModel.deleteUserSystem("user3@gmail.com"));
     }
 
+    /**
+     * Test case to remove user from system fails
+     * @throws JSONException
+     */
     @Test
     public void removeUserFromSystemFail() throws JSONException{
         assertFalse(testModel.deleteUserSystem("user5@gmail.com"));

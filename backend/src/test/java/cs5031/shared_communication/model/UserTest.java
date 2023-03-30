@@ -35,6 +35,11 @@ class UserTest {
         assertTrue(userA.passMatch(passA));
     }
 
+    /**
+     * Setting environment after each test case
+     * @throws IOException
+     * @throws JSONException
+     */
     @AfterEach
     public void resetCreds() throws IOException, JSONException {
 
