@@ -46,7 +46,7 @@ export default {
   mounted() {
     this.userEmail = this.$store.getters["auth/userEmail"]
     this.role = this.$store.getters["auth/role"]
-    axios.get("/page/access/my", {
+    axios.get("/page/access/my/gui", {
       params: {
         "userEmail": this.userEmail,
       },

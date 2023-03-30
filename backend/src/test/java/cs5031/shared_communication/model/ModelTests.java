@@ -547,6 +547,8 @@ public class ModelTests {
     }
 
 
+
+
     /**
      * Test to add message by admin
      * @throws JSONException
@@ -555,12 +557,49 @@ public class ModelTests {
     @Test
     public void testaddAdminMessage() throws JSONException, IOException {
 
-        testModel.addAdminMessage("admin@gmail.com","Admin's Message");
+        testModel.addAdminMessage("adminnew@gmail.com","Admin's new Message");
+        String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/usermessage.json")));
+        JSONObject json = null;
+        json = new JSONObject(jsonBody);
+        JSONObject jsonFound = null;
+        JSONArray messageArray = (JSONArray) json.get("message");
+        for (int i = 0; i < messageArray.length(); i++) {
+            JSONObject element = messageArray.getJSONObject(i);
+
+            if(element.get("admin").equals("adminnew@gmail.com")){
+
+                jsonFound = (JSONObject) messageArray.get(i);
+            }
+        }
+        assertTrue(jsonFound.get("admin").equals("adminnew@gmail.com"));
+
+
+    }
+
+    /**
+     * Test to add message by admin
+     * @throws JSONException
+     * @throws IOException
+     */
+    @Test
+    public void testaddAdminMessageReplace() throws JSONException, IOException {
+
+        testModel.addAdminMessage("admin@example.com","Admin's new replaced Message");
         String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/usermessage.json")));
         JSONObject json = null;
 
         json = new JSONObject(jsonBody);
-        assertTrue(json.has("admin@gmail.com"));
+        JSONObject jsonFound = null;
+        JSONArray messageArray = (JSONArray) json.get("message");
+        for (int i = 0; i < messageArray.length(); i++) {
+            JSONObject element = messageArray.getJSONObject(i);
+
+            if(element.get("admin").equals("admin@example.com")){
+
+                jsonFound = (JSONObject) messageArray.get(i);
+            }
+        }
+        assertTrue(jsonFound.get("message").equals("Admin's new replaced Message"));
 
 
     }
@@ -577,7 +616,7 @@ public class ModelTests {
         JSONObject json = null;
 
         json = new JSONObject(jsonBody);
-        assertTrue(json.has("admin1@example.com"));
+        assertTrue(json.has("message"));
 
 
     }
@@ -592,11 +631,12 @@ public class ModelTests {
     public void testGetAdminMessage() throws JSONException, IOException {
 
         String jsonBody = testModel.getAdminMessage();
-        jsonBody.contains("admin1@example.com");
+        jsonBody.contains("message");
 
 
 
     }
+
 
     /**
      * Testing if reading access working on edge cases

@@ -143,7 +143,7 @@ export default {
       })
     },
     async deleteReadAccessUser() {
-      await axios.delete('/page/access/user', {
+      await axios.delete('/page/access/user/gui', {
         params: {
           "userEmail": this.readAccessUser,
           "pageName": this.title,
@@ -175,7 +175,7 @@ export default {
       })
     },
     async deleteEditAccessUser() {
-      await axios.delete('/page/access', {
+      await axios.delete('/page/access/gui', {
         params: {
           "userEmail": this.editAccessUser,
           "pageName": this.title,

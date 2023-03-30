@@ -1,1 +1,1 @@
-{"admin@gmail.com":"Admin's Message","admin1@example.com":"Message 1","admin2@example.com":"Message 2"}
+{"message":[{"admin":"adminold@example.com","message":"Admin's  old message"},{"admin":"adminnew@gmail.com","message":"Admin's new Message"},{"admin":"admin@example.com","message":"Admin's new replaced Message"}]}

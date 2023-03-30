@@ -424,13 +424,7 @@ public class Model {
      */
     public void createNewPage(String userEmail,String title) throws JSONException, IOException {
 
-        User user = null;
-
-        if(allAdmins.containsKey(userEmail)){
-            user = allAdmins.get(userEmail);
-        } else {
-            user = allUsers.get(userEmail);
-        }
+        User user = getUserObj(userEmail);
         String pagePath = getPagePath();
         if(!getAllPageTitles().contains(title)) {
             InformationPage page = new InformationPage(title, user, pagePath);
@@ -1026,6 +1020,7 @@ public class Model {
      * @throws IOException
      * @throws JSONException
      */
+
     public boolean addAdminMessage(String email,String Message) throws IOException, JSONException {
 
         String jsonBody = new String(Files.readAllBytes(Paths.get(this.adminMessagePath)));
@@ -1037,11 +1032,29 @@ public class Model {
 
             throw new IllegalArgumentException("File with this name doesn't exists.");
         }
+
+
+
+
         if(json!=null) {
 
-            json.put(email, Message);
+            JSONArray messageArray = json.getJSONArray("message");
+            for (int i = 0; i < messageArray.length(); i++) {
+                JSONObject element = messageArray.getJSONObject(i);
+
+                if(element.get("admin").equals(email)){
+
+                    messageArray.remove(i);
+                }
+            }
+            JSONObject newMessage = new JSONObject();
+            newMessage.put("admin",email);
+            newMessage.put("message",Message);
+            messageArray.put(newMessage);
+            JSONObject newMessagefile = new JSONObject();
+            newMessagefile.put("message",messageArray);
             FileWriter file = new FileWriter(this.adminMessagePath);
-            file.write(json.toString());
+            file.write(newMessagefile.toString());
             file.flush();
             file.close();
             return true;
