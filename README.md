@@ -58,8 +58,7 @@ To run CLI user first have to fire up the server using command
 ```
 mvn spring-boot:run
 ```
-The command line starts working when the server is run with mvn spring-boot: run and also can be started separately with help of IDE as a java file, this was implemented in the assumption that the user can start at any point when the server is running and not necessarily start with the server.
-
+As soon as the server is started by running the command mvn spring-boot:run the CLI will get activated and it will start accepting inputs from the user.
 ### How to use SPA
 
 Basically, please this run the SPA on the http://localhost:3000/ Port.
