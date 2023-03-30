@@ -461,27 +461,19 @@ public class IndexController {
     }
 
     /**API Endpoint to get all the pages a user can write to
-     * @param body has the request body
+     * @param userEmail has the request params
      * @return status code with status message
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/page/access/mywrite")
-    public ResponseEntity<String> getMyWritePages(@RequestBody String body) throws JsonProcessingException {
+    @RequestMapping(method = RequestMethod.GET, value = "/page/access/mywrite", params = { "userEmail" })
+    public ResponseEntity<ArrayList<String>> getMyWritePages(@RequestParam String userEmail) {
 
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(body);
-        ArrayList<String> output= new ArrayList<>();
-
-        String userEmail = jsonNode.get("userEmail").asText();
-        System.out.println(userEmail);
         try{
-            output = model.getMyWritePages(userEmail);
-            return ResponseEntity.ok(output.toString());
-
-        }catch (Exception e){
-
-            return ResponseEntity.status(400).body(""+output.size());
-
+            ArrayList<String> result = model.getMyWritePages(userEmail);
+            return ResponseEntity.status(200).body(result);
+        } catch(Exception e){
+            ArrayList<String> a = new ArrayList<>();
+            a.add(e.getMessage());
+            return ResponseEntity.status(400).body(a); // conflit status code
         }
     }
 
