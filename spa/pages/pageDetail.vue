@@ -26,27 +26,43 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-select v-model="user" :items="users" label="Read Access Users"></v-select>
+            <v-select v-model="readAccessUser" :items="users" label="Read Access Users"></v-select>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.user" @click="addUser()">
-              Add user to editAccessUser
+                   :disabled="!this.readAccessUser" @click="addReadAccessUser()">
+              Add read access user
             </v-btn>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <v-select v-model="editAccessUser" :items="editAccessUsers" label="Edit Access Users"></v-select>
+            <v-btn color="primary"
+                   :disabled="!this.readAccessUser" @click="deleteReadAccessUser()">
+              Delete read access user
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-select v-model="editAccessUser" :items="users" label="Edit Access Users"></v-select>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.editAccessUser" @click="deleteUser()">
-              Delete user from editAccessUser
+                   :disabled="!this.editAccessUser" @click="addEditAccessUser()">
+              Add edit access user
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn color="primary"
+                   :disabled="!this.editAccessUser" @click="deleteEditAccessUser()">
+              Delete edit access user
             </v-btn>
           </v-col>
         </v-row>
@@ -64,11 +80,9 @@ export default {
       userEmail: '',
       title: '',
       content: '',
-      error: "",
-      editAccessUsers: [],
-      editAccessUser: '',
       users: [],
-      user: '',
+      readAccessUser: '',
+      editAccessUser: '',
     }
   },
   mounted() {
@@ -80,7 +94,6 @@ export default {
     }).then((response) => {
       this.title = response.data.title
       this.content = response.data.content
-      this.editAccessUsers = response.data.editAccessUser
     }).catch((error) => {
       this.$toast.error(`Failed to load page error: ${error}`, {
         position: "top-center"
@@ -114,9 +127,9 @@ export default {
         })
       })
     },
-    async addUser() {
-      await axios.post('/page/access', {
-        "userEmail": this.user,
+    async addReadAccessUser() {
+      await axios.post('/page/access/user', {
+        "userEmail": this.readAccessUser,
         "pageName": this.title,
       }).then((response) => {
         this.$toast.success("Success add user to the page", {
@@ -129,7 +142,39 @@ export default {
         })
       })
     },
-    async deleteUser() {
+    async deleteReadAccessUser() {
+      await axios.delete('/page/access/user', {
+        params: {
+          "userEmail": this.readAccessUser,
+          "pageName": this.title,
+        },
+      }).then((response) => {
+        this.$toast.success("Success delete user from the page", {
+          position: "top-center"
+        })
+        this.$router.go(-1)
+      }).catch((error) => {
+        this.$toast.error(`Failed to delete user from the page error: ${error}`, {
+          position: "top-center"
+        })
+      })
+    },
+    async addEditAccessUser() {
+      await axios.post('/page/access', {
+        "userEmail": this.editAccessUser,
+        "pageName": this.title,
+      }).then((response) => {
+        this.$toast.success("Success add user to the page", {
+          position: "top-center"
+        })
+        this.$router.go(-1)
+      }).catch((error) => {
+        this.$toast.error(`Failed to add user to the page error: ${error}`, {
+          position: "top-center"
+        })
+      })
+    },
+    async deleteEditAccessUser() {
       await axios.delete('/page/access', {
         params: {
           "userEmail": this.editAccessUser,
@@ -145,7 +190,7 @@ export default {
           position: "top-center"
         })
       })
-    }
+    },
   },
 }
 

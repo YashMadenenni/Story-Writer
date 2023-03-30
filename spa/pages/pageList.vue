@@ -51,8 +51,7 @@ export default {
       },
     }).then((response) => {
       this.pages = response.data
-    })
-    .catch((error) => {
+    }).catch((error) => {
     })
   },
   methods: {
