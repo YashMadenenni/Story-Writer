@@ -45,7 +45,8 @@ export default {
   mounted() {
     this.userEmail = this.$store.getters["auth/userEmail"]
     this.role = this.$store.getters["auth/role"]
-    axios.get("page/admin", {
+    var endpoint = this.role === "admin" ? "page/admin" : "page"
+    axios.get(`/${endpoint}`, {
       params: {
         "userEmail": this.userEmail,
       },

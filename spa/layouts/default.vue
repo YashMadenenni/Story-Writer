@@ -132,18 +132,8 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'Your Own Page List',
-          to: '/userPageList'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Readable Page List',
-          to: '/readablePageList'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Editable Page List',
-          to: '/editablePageList'
+          title: 'Page List',
+          to: '/pageList'
         },
         {
           icon: 'mdi-chart-bubble',
