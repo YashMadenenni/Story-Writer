@@ -14,6 +14,13 @@ import java.util.ArrayList;
  */
 public class User{
 
+    /**
+     *@param email - user email
+     *@param password - user password
+     *@param userName- user name
+     *@param mePages - user pages
+     *@param role - user role
+     */
     private String email;
     private String password;
     private String userName;

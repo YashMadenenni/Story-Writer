@@ -152,6 +152,10 @@ public class InformationPage {
      * @param post post content
      */
 
+    /**Method to add content
+     * @param user - user
+     * @param post - content
+     */
     public void addPost(User user, String post){
 
         if(writeUsers.contains(user) | this.author.userEquals(user) | (user.getRole().equals(Roles.SystemAdmin))){
@@ -224,6 +228,10 @@ public class InformationPage {
      * @throws JSONException
      */
 
+    /**Method to Add pages to pages json file
+     * @throws IOException
+     * @throws JSONException
+     */
     private void addPageToJson() throws IOException, JSONException {
 
         JSONObject json = null;

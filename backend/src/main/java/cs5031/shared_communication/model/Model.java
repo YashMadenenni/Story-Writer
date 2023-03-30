@@ -14,20 +14,25 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
-
-/**
- * Model class object
+/*
+ * Model class is the main backend class which server interacts
+ * 
  */
+
 public class Model {
     String path;
     String pagePath = "./src/main/resources/static/pages.json";
 
+    /**
+     *@param allUsers strores all users for current model
+     *@param allAdmin stores all admins for current model 
+     *@param userJson stores users latest details from file users.json
+     * @param adminJson stores admin latest details from file admin.json
+     */
     String userPath;
     String adminPath;
     private HashMap<String, User> allUsers;
     private HashMap<String, User> allAdmins;
-
-    private HashMap<String, InformationPage> allPages;
     JSONObject userJson = null;
     JSONObject adminJson = null;
 
@@ -64,13 +69,19 @@ public class Model {
                 allUsers = processUsersJson(userJson);
                 allAdmins = processAdminJson(adminJson);
             } catch (JSONException | IOException e) {
-                // TODO Auto-generated catch block
+                
                 e.printStackTrace();
             }
 
         }
     }
 
+    /**Method to parse through users json and store the data in allUser
+     * @param userJson stores users latest details from file users.json
+     * @return allUsers
+     * @throws JSONException
+     * @throws IOException
+     */
     private HashMap<String, User> processUsersJson(JSONObject userJson) throws JSONException, IOException {
         HashMap<String, User> allUser = new HashMap<>();
 
@@ -92,6 +103,12 @@ public class Model {
         return allUser;
     }
 
+    /**
+     * @param adminJson stores users latest details from file admin.json
+     * @return allAdmins
+     * @throws JSONException
+     * @throws IOException
+     */
     private HashMap<String, User> processAdminJson(JSONObject adminJson) throws JSONException, IOException {
         HashMap<String, User> allAdmin = new HashMap<>();
 
@@ -113,6 +130,12 @@ public class Model {
         return allAdmin;
     }
 
+    /**Helper method to read json file
+     * @param jsonPath path of the json file
+     * @return JSONObject
+     * @throws IOException
+     * @throws JSONException
+     */
     public static JSONObject loadInitialState(String jsonPath)
             throws IOException, JSONException {
 
@@ -120,16 +143,20 @@ public class Model {
         return new JSONObject(jsonBody);
     }
 
-    // userregister
+    
+    /**Method to register user 
+     * @param userName -stores user name
+     * @param email - stores user email
+     * @param password - stores user password
+     * @param role - stores role of user "admin"/"user"
+     * @return true if success else faliled 
+     * @throws JSONException
+     */
     public Boolean registerUser(String userName, String email, String password, String role) throws JSONException {
         JSONObject newUser = new JSONObject();
         
         newUser.put("userName", userName);
         newUser.put("password", password);
-        //JSONObject pages = new JSONObject();
-        
-        //System.out.println(" Password" + password);
-        //System.out.println(" ");
         User user = null;
         try {
 
@@ -152,7 +179,6 @@ public class Model {
 
                 newUser.put("userEmail", email);
                 newUser.put("role", "user");
-                //newUser.put("pages", pages);
 
                 JSONArray jsonUsers = userJson.getJSONArray("users");
                 jsonUsers.put(newUser);
@@ -161,16 +187,8 @@ public class Model {
 
                 }
             }
-
-            // for (User users : allUsers.values()) {
-            //     System.out.println("After regi ");
-            //     System.out.println(users.getUserEmail());
-            //     System.out.println(users.getPassword());
-            //     System.out.println(" ");
-            // }
-
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            
             e.printStackTrace();
         }
 
@@ -182,38 +200,29 @@ public class Model {
 
     }
 
-    // userLogin
+    
+    /**Method for user login.
+     * @param email - stores user email
+     * @param password - stores user password
+     * @return true if success else failed
+     */
     public Boolean userLogin(String email, String password, String role) {
 
-        // System.out.println("Model");
-        // System.out.println(email);
-        //     System.out.println(password);
-
-        //     for (User users : allUsers.values()) {
-        //         System.out.println(users.getUserEmail());
-        //     }
 
         boolean check = false;
         if (role == "user") {
             
             if (allUsers.containsKey(email)) {
-                // System.out.println("user in");
+
                 User user = allUsers.get(email);
-                // System.out.println("verify");
-                // System.out.println(user.getPassword());
-                // System.out.println(password);
                 if ((user.getPassword()).equals(password)) {
-                   // System.out.println("user in 2");
                     check = true;
                 }
             }
         } else if (role == "admin") {
-           // System.out.println("Admin in");
             if (allAdmins.containsKey(email)) {
-               // System.out.println("Admin in 2");
                 User user = allAdmins.get(email);
                 if ((user.getPassword()).equals(password)) {
-                  //  System.out.println("Admin in 3");
                     check = true;
                 }
             }
@@ -221,8 +230,13 @@ public class Model {
 
         return check;
     }
-    // deleteUser
+    
 
+    /** Method to delete user from system
+     * @param email - stores email of the user to be deleted
+     * @return true if success else failed
+     * @throws JSONException
+     */
     public Boolean deleteUserSystem(String email) throws JSONException {
 
         boolean check = false;
@@ -244,6 +258,11 @@ public class Model {
         return check;
     }
 
+    /**Method TO Delete user and  update json file that stores data
+     * @param userType
+     * @param email - emial of the user to delete
+     * @throws JSONException
+     */
     private void deleteFromJsonPage(String userType, String email) throws JSONException {
         if(userType=="user"){
             JSONArray jsonUsers = userJson.getJSONArray("users");
@@ -270,7 +289,11 @@ public class Model {
         }
     }
 
-        // getUser
+        
+        /**Method to get the user details
+         * @param email - stores the email of user to fetch
+         * @return user JSONObject
+         */
         public JSONObject getUser(String email) {
 
             boolean check = false;
@@ -305,7 +328,13 @@ public class Model {
             return userJson;
         }
 
-    // updateUser
+    
+    /**Method to update user
+     * @param email - email of user to update
+     * @param role - current role of this user
+     * @return true if success
+     * @throws JSONException
+     */
     public Boolean updateUser(String email, String role) throws JSONException {
 
         
@@ -355,6 +384,10 @@ public class Model {
         return check;
     }
 
+    /**Method to change data in file 
+     * @param initialFilePath - path of file
+     * @param jsonDataToWrite - json data to overwrite
+     */
     public static void changeDataInFile(String initialFilePath, JSONObject jsonDataToWrite) {
         File myObj = new File(initialFilePath);
         if (myObj.delete()) {
@@ -621,23 +654,6 @@ public class Model {
                 }
             }
         }
-/*
-        for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
-
-            String key = (String) it.next();
-            System.out.println((String) it.next());
-
-            JSONObject temp = jsonPages.getJSONObject(key);
-            System.out.println(temp.toString());
-
-            if(temp.getString("admin").equals(userEmail)){
-                System.out.println(userEmail+"vwvwev");
-                resultAllPages.put(temp);
-            }
-
-        }
-
- */
         if(resultAllPages.length()!=0){
 
             return resultAllPages;
@@ -1063,7 +1079,6 @@ public class Model {
         ArrayList<String> myReadPages = new ArrayList<String>();
         if (jsonPages != null) {
 
-            String foundKey = null;
             for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
                 String key = (String) it.next();
 
