@@ -1,29 +1,67 @@
 # cs5031p3code
 
-## Getting started Web-UI
+#### Building and running the project:
 
-## Build Setup
-
-```bash
-
-$ cd spa
-
-# install dependencies
-$ npm install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
+Navigate to the root dir using
 ```
+cd backend
+```
+
+Command to create package
+```
+mvn package
+```
+
+To run the tests:
+```
+mvn test
+```
+
+To run the code:
+```
+mvn spring-boot:run
+```
+
+#### Running GUI and CLI
+
+###### GUI
+
+In a new terminal execute these commands
+```
+cd spa
+```
+
+Install dependencies
+```
+npm install
+```
+
+Serve with hot reload at localhost:3000
+```
+npm run dev
+```
+The server will start running at localhost:3000.
+
+Build for production and launch server
+```
+npm run build
+npm run start
+```
+
+Generate static project
+```
+npm run generate
+```
+
+###### CLI
+To run CLI user first have to fire up the server using command
+```
+mvn spring-boot:run
+```
+As soon as the server is started by running the command mvn spring-boot:run the CLI will get activated and it will start accepting inputs from the user.
 ### How to use SPA
 
-Basically, please this run the SPA on the http://localhost:3000/ Port.  
+Basically, please this run the SPA on the http://localhost:3000/ Port.
 
 ### How to deploy Web-UI to lab's server
 
@@ -47,7 +85,7 @@ You need to modify some codes in 'nuxt.config.js' to avoid CORS between SPA and 
 Please modify some codes in 'nux.config.js' based on your server host and port number.
 
 ```
-nuxt.config.js: L:61-75
+nuxt.config.js: L:60-80
 Please fix target URL based on the server you use.
 
 proxy: {
@@ -64,6 +102,10 @@ proxy: {
     '/page/access/user': 'http://localhost:8080',
     '/page/access/my': 'http://localhost:8080',
     '/page/access/mywrite': 'http://localhost:8080',
+    '/page/access/my/gui': 'http://localhost:8080',
+    '/page/access/mywrite/gui': 'http://localhost:8080',
+    '/page/access/user/gui': 'http://localhost:8080',
+    '/page/access/gui': 'http://localhost:8080',
     '/userLogin': 'http://localhost:8080',
     '/adminLogin': 'http://localhost:8080',
 },
