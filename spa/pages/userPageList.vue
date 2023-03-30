@@ -61,7 +61,6 @@ export default {
           userEmail: this.userEmail,
           title: row.title,
           content: row.content,
-          editAccessUser: row.editAccessUser,
         }
       });
     },
