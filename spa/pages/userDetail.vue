@@ -15,18 +15,13 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field label="UserName" v-model="userName"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field label="Password" v-model="password" type="password"></v-text-field>
+            <v-text-field :readonly=true label="UserEmail" v-model="userEmail"></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.userName || !this.role" @click="updateUser()">
+                   :disabled="!this.role" @click="updateUser()">
               Update
             </v-btn>
           </v-col>
@@ -47,52 +42,66 @@
 import axios from 'axios'
 
 export default {
-  layout: "index",
   data() {
     return {
       role: '',
       roles: ["admin", "user"],
       userName: '',
+      userEmail: '',
       password: '',
-      error: "",
+      currentRole: "",
     }
   },
   mounted() {
-    this.userName = this.$route.query.userName
-    this.password = this.$route.query.password
-    this.role = this.$route.query.role
-    // axios.get('/user', {
-    //   "userName": this.userName,
-    // }).then((response) => {
-    //   this.userName = response.data.userName
-    //   this.password = response.data.password
-    //   this.role = response.data.role
-    //   console.log("response.data: ", response.data)
-    //   // this.error = response.data.length == 0 ? "No Bus Route found" : "";
-    // }).catch((error) => {
-    //   console.log('There is error:' + error.response)
-    // })
+    this.userEmail = this.$route.query.userEmail
+    axios.get('/user', {
+      params: {
+        "userEmail": this.userEmail,
+      },
+    }).then((response) => {
+      this.userName = response.data.userName
+      this.userEmail = response.data.userEmail
+      if (response.data.role == "StandardUser") {
+        this.currentRole = "user"
+      } else {
+        this.currentRole = "admin"
+      }
+    }).catch((error) => {
+      this.$toast.error(`Failed to load user error: ${error}`, {
+        position: "top-center"
+      })
+    })
   },
   methods: {
     async updateUser() {
-      await axios.put('/user', {
-        "userName": this.userName,
-        "role": this.role == "admin" ? 1 : 2,
+      await axios.post('/user/update', {
+        "userEmail": this.userEmail,
+        "currentRole": this.currentRole,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Update User", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to update user error: ${error}`, {
+          position: "top-center"
+        })
       })
     },
     async deleteUser() {
       await axios.delete('/user', {
-        "userName": this.userName,
+        params: {
+          "userEmail": this.userEmail,
+        },
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Delete User", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to delete user error: ${error}`, {
+          position: "top-center"
+        })
       })
     }
   },

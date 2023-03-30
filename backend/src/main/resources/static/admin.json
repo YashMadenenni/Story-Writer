@@ -1,10 +1,1 @@
-{
-    "testAdmin@gmail.com":{
-        "userName":"TestA",
-        "password":"testA"
-    },
-    "admin@gmail.com":{
-        "userName":"Admin",
-        "password":"admin"
-    }
-}
+{"admin":[{"password":"testA","userName":"TestA","adminEmail":"admin@gmail.com"},{"password":"adminpassword","userName":"Admin","adminEmail":"admin@gmail.com"},{"password":"adminpassword","role":"admin","userName":"adminTest1","adminEmail":"admin1@gmail.com"}]}

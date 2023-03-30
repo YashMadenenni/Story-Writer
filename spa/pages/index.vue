@@ -15,7 +15,7 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field label="UserName" v-model="userName"></v-text-field>
+            <v-text-field label="Email" v-model="userEmail"></v-text-field>
           </v-col>
         </v-row>
         <v-row>
@@ -26,7 +26,7 @@
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.userName || !this.password || !this.role"
+                   :disabled="!this.userEmail || !this.password || !this.role"
                    @click="login()">
               Login
             </v-btn>
@@ -48,39 +48,33 @@ export default {
     return {
       role: '',
       roles: ["admin", "user"],
-      userName: '',
+      userEmail: '',
       password: '',
     }
   },
-
   methods: {
-    login() {
-      this.$router.push('/top')
-    },
     goRegisterUser() {
       this.$router.push('/registerUser')
     },
-    // async login(e) {
-    //   if (this.role == "admin") {
-    //     await axios.post('/adminLogin', {
-    //       "userName": this.userName,
-    //       "password": this.password,
-    //     }).then((response) => {
-    //       console.log("response.data: ", response.data)
-    //     }).catch((error) => {
-    //       console.log('There is error:' + error.response)
-    //     })
-    //   } else {
-    //     await axios.post('/userLogin', {
-    //       "userName": this.userName,
-    //       "password": this.password,
-    //     }).then((response) => {
-    //       console.log("response.data: ", response.data)
-    //     }).catch((error) => {
-    //       console.log('There is error:' + error.response)
-    //     })
-    //   }
-    // }
+    async login(e) {
+      var endpoint = this.role === "admin" ? "adminLogin" : "userLogin"
+      var payload = this.role === "admin" ? "admin" : "user"
+      await axios.post(`/${endpoint}`, {
+        "userEmail": this.userEmail,
+        "password": this.password,
+      }).then((response) => {
+        this.$store.commit("auth/login", payload)
+        this.$store.commit("auth/setEmail", this.userEmail)
+        this.$toast.success("Success Login", {
+          position: "top-center"
+        })
+        this.$router.push('/createPage')
+      }).catch((error) => {
+        this.$toast.error(`Failed to login error: ${error}`, {
+          position: "top-center"
+        })
+      })
+    }
   },
 }
 

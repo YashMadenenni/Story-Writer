@@ -1,21 +1,21 @@
-package com.shared_communication.backend;
+package cs5031.shared_communication.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+/**
+ * Test for user class and methods
+ */
 class UserTest {
 
     public User userA = new User("emailA@example.com", "passA", "usrA", Roles.StandardUser, "./src/main/resources/static/test.json");
@@ -35,6 +35,11 @@ class UserTest {
         assertTrue(userA.passMatch(passA));
     }
 
+    /**
+     * Setting environment after each test case
+     * @throws IOException
+     * @throws JSONException
+     */
     @AfterEach
     public void resetCreds() throws IOException, JSONException {
 
@@ -126,6 +131,7 @@ class UserTest {
 
 
         User userC = new User("userC@example.com", "passC", "usrC", Roles.StandardUser, "./src/main/resources/static/test.json");
+        userC.addCredentialsToFile("./src/main/resources/static/test.json", userC.getEmail(), userC.getUserName(), "nullpass");
         String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/test.json")));
         JSONObject testCreds = new JSONObject(jsonBody);
         assertTrue(testCreds.has("userC@example.com"));
@@ -133,11 +139,17 @@ class UserTest {
 
     }
 
+    /**
+     * Test to validate the credentials are successfully writeen to a file
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void writeCredentialSuccessfullyUserName() throws JSONException, IOException {
 
 
         User userC = new User("userC@example.com", "passC", "usrC", Roles.StandardUser, "./src/main/resources/static/test.json");
+        userC.addCredentialsToFile("./src/main/resources/static/test.json",userC.getEmail(),userC.getUserName(),"nullpass");
         String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/test.json")));
         JSONObject testCreds = new JSONObject(jsonBody);
         assertTrue(testCreds.getJSONObject("userC@example.com").has("usrC"));
@@ -145,7 +157,11 @@ class UserTest {
 
     }
 
-
+    /**
+     * Test to check when credentials are not added
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testCredentialNotAdded() throws JSONException, IOException {
 
@@ -157,11 +173,18 @@ class UserTest {
 
     }
 
+    /**
+     * Test to ensure multiple credentials can be added tot he file
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testCredentialMultipleAdd() throws JSONException, IOException {
 
         User userC = new User("userC@example.com", "passC", "usrC", Roles.StandardUser, "./src/main/resources/static/test.json");
         User userE = new User("userE@example.com", "passE", "usrE", Roles.StandardUser, "./src/main/resources/static/test.json");
+        userC.addCredentialsToFile("./src/main/resources/static/test.json",userC.getEmail(),userC.getUserName(),"nullpass");
+        userE.addCredentialsToFile("./src/main/resources/static/test.json",userE.getEmail(),userE.getUserName(),"nullpass");
         String jsonBody = new String(Files.readAllBytes(Paths.get("./src/main/resources/static/test.json")));
         JSONObject testCreds = new JSONObject(jsonBody);
         assertTrue(testCreds.has("userC@example.com"));
@@ -170,21 +193,20 @@ class UserTest {
 
     }
 
-    @Test
-    public void shouldNotOpenJson() {
-        IllegalArgumentException thrown =
-                assertThrowsExactly(IllegalArgumentException.class, () -> {
-                    new User("userC@example.com", "passC", "usrC", Roles.StandardUser, "./src/main/resources/static/invalidpath.json");
-                    ;
-                });
-    }
-
+    /**
+     * Test to check corrent Role enum returned
+     */
     @Test
     public void testCorrectEnumStdUser() {
 
         assertEquals(userA.getRole(), Roles.StandardUser);
     }
 
+    /***
+     * Test to check correct enum returned
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testCorrectEnumAdmin() throws JSONException, IOException {
 
@@ -192,6 +214,9 @@ class UserTest {
         assertEquals(admin.getRole(), Roles.SystemAdmin);
     }
 
+    /**
+     * Test for setting user role
+     */
     @Test
     public void testSettingRole() {
 
@@ -199,7 +224,9 @@ class UserTest {
         assertEquals(userA.getRole(), Roles.SystemAdmin);
     }
 
-
+    /**
+     * Test for getting user email
+     */
     @Test
     public void testUserEmailFetching() {
 
@@ -207,7 +234,9 @@ class UserTest {
         assertEquals(userA.getEmail(), "emailA@example.com");
     }
 
-
+    /**
+     * Test for checking if users are equals
+     */
     @Test
     public void testUserEqual() {
 
@@ -215,6 +244,9 @@ class UserTest {
         assertTrue(userA.userEquals(userA));
     }
 
+    /**
+     * Test to ensure different users are not equals
+     */
     @Test
     public void testUserNotEqual() {
 
@@ -222,12 +254,18 @@ class UserTest {
         assertFalse(userA.userEquals(userB));
     }
 
+    /**
+     * Test to get oages for a users
+     */
     @Test
     public void testGetPages() {
 
         assertEquals(userA.getMyPages(), new ArrayList<InformationPage>());
     }
 
+    /**
+     * Test to ensure no pages initially
+     */
     @Test
     public void testMyPagesInitialZero() {
 
@@ -235,20 +273,30 @@ class UserTest {
 
     }
 
+    /**
+     * Test to get pages for user successfully
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
-    public void testGetMyPagesSuccessfulTwoPages(){
+    public void testGetMyPagesSuccessfulTwoPages() throws JSONException, IOException {
 
-        InformationPage page1 = new InformationPage("title 1",userA);
+        InformationPage page1 = new InformationPage("title 1",userA,"./src/main/resources/static/pagetest.json");
         assertEquals(userA.getMyPages().size(),1);
 
 
     }
 
+    /**
+     * Test to get multiple pages successfully.
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
-    public void testMyPagesSuccessfulTwoPages(){
+    public void testMyPagesSuccessfulTwoPages() throws JSONException, IOException {
 
-        InformationPage page1 = new InformationPage("title 1",userA);
-        InformationPage page2 = new InformationPage("title 1",userA);
+        InformationPage page1 = new InformationPage("title 1",userA,"./src/main/resources/static/pagetest.json");
+        InformationPage page2 = new InformationPage("title 1",userA,"./src/main/resources/static/pagetest.json");
         assertEquals(userA.getMyPages().size(),2);
 
 

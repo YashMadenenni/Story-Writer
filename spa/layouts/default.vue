@@ -49,6 +49,7 @@
         <v-icon>mdi-minus</v-icon>
       </v-btn>
       <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-btn color="primary" @click="logout()" style="margin-left: 10px">Logout</v-btn>
       <v-spacer />
       <v-btn
         icon
@@ -89,30 +90,86 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'DefaultLayout',
-  data () {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
+  mounted() {
+    if (this.$store.getters["auth/role"] == "admin") {
+      this.items = [
         {
           icon: 'mdi-apps',
-          title: 'Top',
-          to: '/top'
+          title: 'Create Page',
+          to: '/createPage'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Page List',
+          to: '/pageList'
         },
         {
           icon: 'mdi-chart-bubble',
           title: 'User List',
           to: '/userList'
-        }
-      ],
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Create Message',
+          to: '/createMessage'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Message List',
+          to: '/messageList'
+        },
+      ]
+    } else {
+      this.items = [
+        {
+          icon: 'mdi-apps',
+          title: 'Create Page',
+          to: '/createPage'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Your Own Page List',
+          to: '/userPageList'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Readable Page List',
+          to: '/readablePageList'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Editable Page List',
+          to: '/editablePageList'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Message List',
+          to: '/messageList'
+        },
+      ]
+    }
+  },
+  data () {
+    return {
+      clipped: false,
+      drawer: false,
+      fixed: false,
+      items: [],
       miniVariant: false,
       right: true,
       rightDrawer: false,
       title: 'Vuetify.js'
     }
+  },
+  methods: {
+    logout() {
+      this.$store.commit("auth/logout")
+      this.$router.push('/');
+    },
   }
 }
 </script>

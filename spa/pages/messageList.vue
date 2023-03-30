@@ -2,21 +2,20 @@
   <v-container>
     <v-card>
       <v-card-title>
-        User List
+        Message List
         <v-spacer/>
       </v-card-title>
     </v-card>
     <v-row>
       <v-col>
-        <v-card v-if="users.length > 0">
+        <v-card>
           <v-data-table
             :headers="headers"
-            :items="users"
+            :items="messages"
             :items-per-page="10"
             sort-by="id"
             :sort-desc="true"
             class="elevation-1"
-            @click:row="handleClick"
           >
           </v-data-table>
         </v-card>
@@ -32,29 +31,23 @@ export default {
   data() {
     return {
       headers: [
-        {text: 'User name', value: 'userName'},
-        {text: 'Email', value: 'userEmail'},
+        {text: 'admin', value: 'admin'},
+        {text: 'Message', value: 'message'},
       ],
-      users: [],
-      user: "",
+      admin: "",
+      message: "",
+      messages: [],
       error: "",
     }
   },
   mounted() {
-    axios.get('/users')
-    .then((response) => {
-      this.users = response.data.users
-    }).catch((error) => {
+    axios.get('/page/admin/message')
+      .then((response) => {
+        console.log("response.data: ", response.data.message)
+        this.messages = response.data.message
+      }).catch((error) => {
+      console.log('There is error:' + error.response)
     })
-  },
-  methods: {
-    handleClick(row) {
-      this.$router.push({
-        path: '/userDetail', query: {
-          userEmail: row.userEmail,
-        }
-      });
-    },
   },
 }
 </script>

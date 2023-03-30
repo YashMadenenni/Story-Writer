@@ -1,6 +1,9 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  router: {
+    middleware: ['auth'],
+  },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -28,6 +31,10 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    {
+      src: '@/plugins/plugin',
+      mode: 'client'
+    }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -51,12 +58,25 @@ export default {
     proxy: true,
   },
   proxy: {
-    '/user/': 'http://localhost:8080',
-    '/users/': 'http://localhost:8080',
-    '/admin/': 'http://localhost:8080',
-    '/page/': 'http://localhost:8080',
-    '/userLogin/': 'http://localhost:8080',
-    '/adminLogin/': 'http://localhost:8080',
+    '/user': 'http://localhost:8080',
+    '/users': 'http://localhost:8080',
+    '/user/update': 'http://localhost:8080',
+    '/admin': 'http://localhost:8080',
+    '/page': 'http://localhost:8080',
+    '/page/admin': 'http://localhost:8080',
+    '/page/admin/message': 'http://localhost:8080',
+    '/page/info': 'http://localhost:8080',
+    '/page/content': 'http://localhost:8080',
+    '/page/access': 'http://localhost:8080',
+    '/page/access/user': 'http://localhost:8080',
+    '/page/access/my': 'http://localhost:8080',
+    '/page/access/mywrite': 'http://localhost:8080',
+    '/page/access/my/gui': 'http://localhost:8080',
+    '/page/access/mywrite/gui': 'http://localhost:8080',
+    '/page/access/user/gui': 'http://localhost:8080',
+    '/page/access/gui': 'http://localhost:8080',
+    '/userLogin': 'http://localhost:8080',
+    '/adminLogin': 'http://localhost:8080',
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

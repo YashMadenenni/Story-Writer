@@ -2,16 +2,16 @@
   <v-container>
     <v-card>
       <v-card-title>
-        User List
+        Page List
         <v-spacer/>
       </v-card-title>
     </v-card>
     <v-row>
       <v-col>
-        <v-card v-if="users.length > 0">
+        <v-card v-if="pages.length > 0">
           <v-data-table
             :headers="headers"
-            :items="users"
+            :items="pages"
             :items-per-page="10"
             sort-by="id"
             :sort-desc="true"
@@ -32,26 +32,35 @@ export default {
   data() {
     return {
       headers: [
-        {text: 'User name', value: 'userName'},
-        {text: 'Email', value: 'userEmail'},
+        {text: 'Admin', value: 'admin'},
+        {text: 'Title', value: 'title'},
       ],
-      users: [],
-      user: "",
+      userEmail: '',
+      role: '',
+      pages: [],
+      page: "",
       error: "",
     }
   },
   mounted() {
-    axios.get('/users')
-    .then((response) => {
-      this.users = response.data.users
+    this.userEmail = this.$store.getters["auth/userEmail"]
+    this.role = this.$store.getters["auth/role"]
+    axios.get("page/admin", {
+      params: {
+        "userEmail": this.userEmail,
+      },
+    }).then((response) => {
+      this.pages = response.data
     }).catch((error) => {
     })
   },
   methods: {
     handleClick(row) {
       this.$router.push({
-        path: '/userDetail', query: {
-          userEmail: row.userEmail,
+        path: '/pageDetail', query: {
+          userEmail: this.userEmail,
+          title: row.title,
+          content: row.content,
         }
       });
     },
