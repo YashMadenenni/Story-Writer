@@ -142,6 +142,11 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
+          title: 'Editable Page List',
+          to: '/editablePageList'
+        },
+        {
+          icon: 'mdi-chart-bubble',
           title: 'Message List',
           to: '/messageList'
         },

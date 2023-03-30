@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Readable Page List
+        Editable Page List
         <v-spacer/>
       </v-card-title>
     </v-card>
@@ -45,7 +45,7 @@ export default {
   mounted() {
     this.userEmail = this.$store.getters["auth/userEmail"]
     this.role = this.$store.getters["auth/role"]
-    axios.get("/page/access/my", {
+    axios.get("/page/access/mywrite", {
       params: {
         "userEmail": this.userEmail,
       },
@@ -53,6 +53,18 @@ export default {
       this.pages = response.data
     }).catch((error) => {
     })
+  },
+  methods: {
+    handleClick(row) {
+      this.$router.push({
+        path: '/pageDetail', query: {
+          userEmail: this.userEmail,
+          title: row.title,
+          content: row.content,
+          editAccessUser: row.editAccessUser,
+        }
+      });
+    },
   },
 }
 </script>
