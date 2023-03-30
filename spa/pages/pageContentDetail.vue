@@ -14,7 +14,15 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-textarea :readonly="true" v-model="content" outlined></v-textarea>
+          <v-textarea v-model="content" outlined></v-textarea>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn color="primary"
+                   :disabled="!this.title || !this.content" @click="updatePage()">
+              Update
+            </v-btn>
+          </v-col>
         </v-row>
       </v-container>
     </v-form>
@@ -30,7 +38,6 @@ export default {
       userEmail: '',
       title: '',
       content: '',
-      error: "",
     }
   },
   mounted() {
@@ -47,6 +54,24 @@ export default {
         position: "top-center"
       })
     })
+  },
+  methods: {
+    async updatePage() {
+      await axios.post('/page/content', {
+        "userEmail": this.userEmail,
+        "content": this.content,
+        "pageName": this.title,
+      }).then((response) => {
+        this.$toast.success("Success Update Page", {
+          position: "top-center"
+        })
+        this.$router.go(-1)
+      }).catch((error) => {
+        this.$toast.error(`Failed to update page: ${error}`, {
+          position: "top-center"
+        })
+      })
+    },
   },
 }
 

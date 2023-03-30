@@ -10,7 +10,7 @@
         </v-card>
         <v-row>
           <v-col>
-            <v-text-field label="Title" v-model="title"></v-text-field>
+            <v-text-field :readonly="true" label="Title" v-model="title"></v-text-field>
           </v-col>
         </v-row>
         <v-row>
@@ -78,9 +78,9 @@ export default {
         "title": this.$route.query.title,
       },
     }).then((response) => {
-      this.title = this.$route.query.title
-      this.content = this.$route.query.content
-      this.editAccessUsers = this.$route.query.editAccessUser
+      this.title = response.data.title
+      this.content = response.data.content
+      this.editAccessUsers = response.data.editAccessUser
     }).catch((error) => {
       this.$toast.error(`Failed to load page error: ${error}`, {
         position: "top-center"
