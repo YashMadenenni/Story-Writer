@@ -35,6 +35,11 @@ public class CommandLine {
 
     }
 
+    //Constructor
+    public CommandLine(){
+        login();
+    }
+
     /**
      * Helper method
      */
