@@ -13,11 +13,6 @@
             <v-text-field label="Title" v-model="title"></v-text-field>
           </v-col>
         </v-row>
-<!--        <v-row>-->
-<!--          <v-col>-->
-<!--            <v-textarea placeholder="Content" v-model="content" outlined></v-textarea>-->
-<!--          </v-col>-->
-<!--        </v-row>-->
         <v-row>
           <v-col>
             <v-btn color="primary"
@@ -40,7 +35,6 @@ export default {
     return {
       userEmail: '',
       title: '',
-      // content: '',
       error: "",
     }
   },
@@ -55,11 +49,14 @@ export default {
       await axios.post('/page', {
         "userEmail": this.userEmail,
         "pageName": this.title,
-        // "content": this.content,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Create Page", {
+          position: "top-center"
+        })
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to create page error: ${error}`, {
+          position: "top-center"
+        })
       })
     }
   },

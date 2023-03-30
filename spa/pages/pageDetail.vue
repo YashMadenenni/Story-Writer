@@ -88,9 +88,10 @@ export default {
       this.title = this.$route.query.title
       this.content = this.$route.query.content
       this.editAccessUsers = this.$route.query.editAccessUser
-      console.log("response.data: ", response.data)
     }).catch((error) => {
-      console.log('There is error:' + error.response)
+      this.$toast.error(`Failed to load page error: ${error}`, {
+        position: "top-center"
+      })
     }),
     axios.get('/users')
       .then((response) => {
@@ -98,7 +99,9 @@ export default {
           this.users.push(response.data.users[i].userEmail);
         }
       }).catch((error) => {
-      console.log('There is error:' + error.response)
+      this.$toast.error(`Failed to load page error: ${error}`, {
+        position: "top-center"
+      })
     })
   },
   methods: {
@@ -108,32 +111,28 @@ export default {
         "content": this.content,
         "pageName": this.title,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Update Page", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to update page: ${error}`, {
+          position: "top-center"
+        })
       })
-      // await axios.put('/page', null, {
-      //   params: {
-      //     "userEmail": this.userEmail,
-      //     "content": this.content,
-      //     "pageName": this.title,
-      //   },
-      // }).then((response) => {
-      //   console.log("response.data: ", response.data)
-      //   this.$router.go(-1)
-      // }).catch((error) => {
-      //   console.log('There is error:' + error.response)
-      // })
     },
     async deletePage() {
       await axios.delete('/page', {
         "pageName": this.title,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Delete Page", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to delete page: ${error}`, {
+          position: "top-center"
+        })
       })
     },
     async addUser() {
@@ -141,10 +140,14 @@ export default {
         "userEmail": this.user,
         "pageName": this.title,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success add user to the page", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to add user to the page error: ${error}`, {
+          position: "top-center"
+        })
       })
     },
     async deleteUser() {
@@ -154,10 +157,14 @@ export default {
           "pageName": this.title,
         },
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success delete user from the page", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to delete user from the page error: ${error}`, {
+          position: "top-center"
+        })
       })
     }
   },
