@@ -26,13 +26,6 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-btn color="primary" @click="deletePage()">
-              Delete
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
             <v-select v-model="user" :items="users" label="Read Access Users"></v-select>
           </v-col>
         </v-row>
@@ -117,20 +110,6 @@ export default {
         this.$router.go(-1)
       }).catch((error) => {
         this.$toast.error(`Failed to update page: ${error}`, {
-          position: "top-center"
-        })
-      })
-    },
-    async deletePage() {
-      await axios.delete('/page', {
-        "pageName": this.title,
-      }).then((response) => {
-        this.$toast.success("Success Delete Page", {
-          position: "top-center"
-        })
-        this.$router.go(-1)
-      }).catch((error) => {
-        this.$toast.error(`Failed to delete page: ${error}`, {
           position: "top-center"
         })
       })
