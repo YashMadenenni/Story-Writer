@@ -16,8 +16,14 @@
             sort-by="id"
             :sort-desc="true"
             class="elevation-1"
-            @click:row="handleClick"
           >
+            <template v-slot:body="{ items: pages }">
+              <tbody class="custom-body">
+              <tr v-for="page in pages">
+                <td>{{ page }}</td>
+              </tr>
+              </tbody>
+            </template>
           </v-data-table>
         </v-card>
       </v-col>
@@ -32,8 +38,8 @@ export default {
   data() {
     return {
       headers: [
-        {text: 'Admin', value: 'admin'},
-        {text: 'Title', value: 'title'},
+        // {text: 'Admin', value: 'admin'},
+        {text: 'Title', value: 'pages'},
       ],
       userEmail: '',
       role: '',
@@ -50,6 +56,7 @@ export default {
         "userEmail": this.userEmail,
       },
     }).then((response) => {
+      console.log("response.data:"+response.data)
       this.pages = response.data
     }).catch((error) => {
     })
