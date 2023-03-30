@@ -51,11 +51,9 @@ export default {
         "userEmail": this.userEmail,
       },
     }).then((response) => {
-      console.log("response.data: ", response.data)
       this.pages = response.data
     })
     .catch((error) => {
-      console.log('There is error:' + error.response)
     })
   },
   methods: {

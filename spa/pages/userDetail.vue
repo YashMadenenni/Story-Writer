@@ -61,10 +61,10 @@ export default {
     }).then((response) => {
       this.userName = response.data.userName
       this.userEmail = response.data.userEmail
-      // this.role = response.data.role
-      console.log("response.data: ", response.data)
     }).catch((error) => {
-      console.log('There is error:' + error.response)
+      this.$toast.error(`Failed to load user error: ${error}`, {
+        position: "top-center"
+      })
     })
   },
   methods: {
@@ -73,10 +73,14 @@ export default {
         "userEmail": this.userEmail,
         "currentRole": this.role,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Update User", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to update user error: ${error}`, {
+          position: "top-center"
+        })
       })
     },
     async deleteUser() {
@@ -85,10 +89,14 @@ export default {
           "userEmail": this.userEmail,
         },
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Delete User", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to delete user error: ${error}`, {
+          position: "top-center"
+        })
       })
     }
   },

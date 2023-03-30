@@ -65,10 +65,14 @@ export default {
       }).then((response) => {
         this.$store.commit("auth/login", payload)
         this.$store.commit("auth/setEmail", this.userEmail)
+        this.$toast.success("Success Login", {
+          position: "top-center"
+        })
         this.$router.push('/createPage')
-        console.log("response.data: ", response.data)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to login error: ${error}`, {
+          position: "top-center"
+        })
       })
     }
   },
