@@ -424,7 +424,13 @@ public class Model {
      */
     public void createNewPage(String userEmail,String title) throws JSONException, IOException {
 
-        User user = getUserObj(userEmail);
+        User user = null;
+
+        if(allAdmins.containsKey(userEmail)){
+            user = allAdmins.get(userEmail);
+        } else {
+            user = allUsers.get(userEmail);
+        }
         String pagePath = getPagePath();
         if(!getAllPageTitles().contains(title)) {
             InformationPage page = new InformationPage(title, user, pagePath);
@@ -432,6 +438,7 @@ public class Model {
         else{
             throw new IllegalArgumentException("Page with this tile already exists");
         }
+
     }
 
     /**
