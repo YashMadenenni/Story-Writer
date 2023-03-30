@@ -18,13 +18,6 @@
             class="elevation-1"
             @click:row="handleClick"
           >
-            <template v-slot:body="{ items: pages }">
-              <tbody class="custom-body">
-              <tr v-for="page in pages">
-                <td>{{ page }}</td>
-              </tr>
-              </tbody>
-            </template>
           </v-data-table>
         </v-card>
       </v-col>
@@ -39,11 +32,13 @@ export default {
   data() {
     return {
       headers: [
-        {text: 'Title'},
+        {text: 'Title', value: 'title'},
       ],
       userEmail: '',
       role: '',
-      pages: [],
+      pages: [{
+        title: ""
+      }],
       page: "",
       error: "",
     }
@@ -56,17 +51,18 @@ export default {
         "userEmail": this.userEmail,
       },
     }).then((response) => {
-      this.pages = response.data
+      for (var i in response.data) {
+        this.pages[i].title = response.data[i];
+      }
     }).catch((error) => {
     })
   },
   methods: {
     handleClick(row) {
-      console.log("row"+row)
       this.$router.push({
         path: '/pageDetail', query: {
           userEmail: this.userEmail,
-          title: row,
+          title: row.title,
         }
       });
     },

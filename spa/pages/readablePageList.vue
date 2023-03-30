@@ -59,7 +59,6 @@ export default {
   },
   methods: {
     handleClick(row) {
-      console.log("row:"+row)
       this.$router.push({
         path: '/pageDetail', query: {
           userEmail: this.userEmail,
