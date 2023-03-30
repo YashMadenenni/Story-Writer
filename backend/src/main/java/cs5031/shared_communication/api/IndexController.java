@@ -529,7 +529,7 @@ public class IndexController {
 
         try{
             String adminMessage = model.getAdminMessage();
-            return ResponseEntity.ok(adminMessage);
+            return ResponseEntity.ok(adminMessage.toString());
 
         }catch (Exception e){
 
