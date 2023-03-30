@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Your Own Page List
+        Readable Page List
         <v-spacer/>
       </v-card-title>
     </v-card>
@@ -45,15 +45,14 @@ export default {
   mounted() {
     this.userEmail = this.$store.getters["auth/userEmail"]
     this.role = this.$store.getters["auth/role"]
-    axios.get("/page", {
+    axios.get("/page/access/my", {
       params: {
         "userEmail": this.userEmail,
       },
     }).then((response) => {
       this.pages = response.data
+    }).catch((error) => {
     })
-      .catch((error) => {
-      })
   },
   methods: {
     handleClick(row) {
