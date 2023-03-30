@@ -365,21 +365,15 @@ public class IndexController {
         }
     }
 
-   
+
     /**API Endpoint to remove users access to edit page
-     * @param body has the request body 
+     * @param userEmail is the request params
+     * @param pageName is the request params
      * @return status code with status message
      * @throws JsonProcessingException
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access")
-    public ResponseEntity<String> editUserAccessRemove(@RequestBody String body) throws JsonProcessingException {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(body);
-
-        String userEmail = jsonNode.get("userEmail").asText();
-        String pageName = jsonNode.get("pageName").asText();
-
+    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access", params = { "userEmail", "pageName" })
+    public ResponseEntity<String> editUserAccessRemove(@RequestParam String userEmail, @RequestParam String pageName) {
 
         try{
             model.deleteUserEditAccess(pageName,userEmail);
@@ -419,27 +413,18 @@ public class IndexController {
     }
 
     /**API Endpoint to remove a user from read access list of a page
-     * @param body has the request body
+     * @param userEmail is the request params
+     * @param pageName is the request params
      * @return status code with status message
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access/user")
-    public ResponseEntity<String> readUserRemoveAdd(@RequestBody String body) throws JsonProcessingException {
-
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(body);
-
-        String userEmail = jsonNode.get("userEmail").asText();
-        String pageName = jsonNode.get("pageName").asText();
+    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access/user", params = { "userEmail", "pageName" })
+    public ResponseEntity<String> readUserRemoveAdd(@RequestParam String userEmail, @RequestParam String pageName) {
 
         try{
             model.deleteUserReadAccess(pageName,userEmail);
             return ResponseEntity.ok("Success");
-
-        }catch (Exception e){
-
+        } catch (Exception e){
             return ResponseEntity.status(400).body(e.getMessage());
-
         }
     }
 
