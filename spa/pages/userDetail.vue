@@ -15,7 +15,7 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field :readonly=true label="UserName" v-model="userName"></v-text-field>
+            <v-text-field :readonly=true label="UserEmail" v-model="userEmail"></v-text-field>
           </v-col>
         </v-row>
         <v-row>
