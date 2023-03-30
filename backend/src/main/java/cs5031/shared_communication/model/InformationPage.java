@@ -22,6 +22,13 @@ public class InformationPage {
     private ArrayList<User> writeUsers = new ArrayList<>();
     private LinkedHashMap<User,String> posts = new LinkedHashMap<>();
 
+    /**Pages class
+     * @param title - page title
+     * @param author - author
+     * @param pagePath - pages json file
+     * @throws JSONException
+     * @throws IOException
+     */
     public InformationPage(String title, User author,String pagePath) throws JSONException, IOException {
 
         this.pageTitle = title;
@@ -34,15 +41,24 @@ public class InformationPage {
 
     }
 
+    /**Get author
+     * @return page author
+     */
     public User getAuthor(){
 
         return this.author;
     }
+    /**Set author
+     * 
+     */
     public void registerToAuthor(){
 
         this.author.addMyPage(this);
     }
 
+    /**Add read user to page
+     * @param user
+     */
     public void addReadUser(User user){
 
         if(!readUsers.contains(user)) {
@@ -53,6 +69,9 @@ public class InformationPage {
         }
     }
 
+    /**Add write user
+     * @param user
+     */
     public void addWriteUser(User user){
 
         if(!writeUsers.contains(user)) {
@@ -67,15 +86,24 @@ public class InformationPage {
         }
     }
 
+    /**get read acces users
+     * @return list of users 
+     */
     public ArrayList<User> getPageReadUsers(){
 
         return this.readUsers;
     }
 
+    /**get list of write acess users
+     * @return - list of users
+     */
     public ArrayList<User> getPageWriteUsers(){
 
         return this.writeUsers;
     }
+    /**Remove read acess method
+     * @param user - list of users
+     */
     public void removeReadUser(User user){
 
         if(readUsers.contains(user)) {
@@ -92,6 +120,9 @@ public class InformationPage {
         }
     }
 
+    /**Remove write access method
+     * @param user - list of user
+     */
     public void removeWriteUser(User user){
 
         if(writeUsers.contains(user)) {
@@ -103,6 +134,10 @@ public class InformationPage {
     }
 
 
+    /**Method to add content
+     * @param user - user
+     * @param post - content
+     */
     public void addPost(User user, String post){
 
         if(writeUsers.contains(user) | this.author.userEquals(user) | (user.getRole().equals(Roles.SystemAdmin))){
@@ -119,11 +154,17 @@ public class InformationPage {
 
     }
 
+    /**Method get posts
+     * @return
+     */
     public LinkedHashMap<User,String> getPosts(){
 
         return this.posts;
     }
 
+    /**Method chage user access to editable
+     * @param user - user
+     */
     public void changeReadToWriteUser(User user){
 
         if(!writeUsers.contains(user)){
@@ -142,17 +183,27 @@ public class InformationPage {
     }
 
     // remo for commit
+    /**Helper method
+     * @param path
+     */
     public void setPagePath(String path){
 
         this.pagePath = path;
     }
     // remo for commit
+    /**Helper method
+     * @return
+     */
     public String getPagePath(){
 
         return this.pagePath;
     }
 
 
+    /**Method to Add pages to pages json file
+     * @throws IOException
+     * @throws JSONException
+     */
     private void addPageToJson() throws IOException, JSONException {
 
         JSONObject json = null;
@@ -186,6 +237,11 @@ public class InformationPage {
 
     }
 
+    /**Method to load pages
+     * @return JSONObject of pages
+     * @throws IOException
+     * @throws JSONException
+     */
     protected JSONObject loadPages()
             throws IOException, JSONException {
 

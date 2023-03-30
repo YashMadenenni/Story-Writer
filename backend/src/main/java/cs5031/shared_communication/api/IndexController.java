@@ -395,7 +395,7 @@ public class IndexController {
     
     /**API Endpoint to add user to a page
 
-     * @return
+     * @return staus response 
      */
     @RequestMapping(method = RequestMethod.POST, value = "/page/access/user")
     public ResponseEntity<String> readUserAccessAdd(@RequestBody String body) throws JsonProcessingException {
@@ -418,8 +418,8 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to remove user from a page
+     * @return status for successfull remove
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/page/access/user")
     public ResponseEntity<String> readUserRemoveAdd(@RequestBody String body) throws JsonProcessingException {
@@ -442,8 +442,8 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to get all user read pages
+     * @return read only pages 
      */
     @RequestMapping(method = RequestMethod.GET, value = "/page/access/my")
     public ResponseEntity<String> getMyReadPages(@RequestBody String body) throws JsonProcessingException {
@@ -466,8 +466,8 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to get all editable pages for a user
+     * @return editable pages
      */
     @RequestMapping(method = RequestMethod.GET, value = "/page/access/mywrite")
     public ResponseEntity<String> getMyWritePages(@RequestBody String body) throws JsonProcessingException {
@@ -490,8 +490,8 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to add message
+     * @return status for succesfull add
      */
     @RequestMapping(method = RequestMethod.POST, value = "/page/admin/message")
     public ResponseEntity<String> addAdminMessage(@RequestBody String body) throws JsonProcessingException {
@@ -514,8 +514,8 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to get admin message
+     * @return adminMessage
      */
     @RequestMapping(method = RequestMethod.GET, value = "/page/admin/message")
     public ResponseEntity<String> getAdminMessage() throws JsonProcessingException {

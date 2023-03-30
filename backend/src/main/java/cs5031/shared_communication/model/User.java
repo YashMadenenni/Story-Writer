@@ -11,12 +11,20 @@ import java.util.ArrayList;
 
 public class User{
 
+    /**
+     *@param email - user email
+     *@param password - user password
+     *@param userName- user name
+     *@param mePages - user pages
+     *@param role - user role
+     */
     private String email;
     private String password;
     private String userName;
     private ArrayList<InformationPage> myPages = new ArrayList<>();
     private Roles role;
 
+    //constructor
     public User(String email, String password, String userName,Roles role, String jsonPath) throws JSONException, IOException {
 
         this.email = email;
@@ -26,9 +34,16 @@ public class User{
         //addCredentialsToFile(jsonPath,email,userName,password); Changing the user file when called
     }
 
+    /**Method get password
+     * @return
+     */
     public String getPassword() {
         return this.password;
     }
+    /**Method validate password match
+     * @param password
+     * @return
+     */
     public boolean passMatch(String password){
 
         if(password.equals(this.password)){
@@ -38,6 +53,10 @@ public class User{
         return false;
     }
 
+    /**Method validate user names
+     * @param userName
+     * @return
+     */
     public boolean userNameMatch(String userName){
 
         if(userName.equals(this.userName)){
@@ -50,16 +69,30 @@ public class User{
         }
     }
 
+    /**Method get user name
+     * @return
+     */
     public String getUserName(){
 
         return this.userName;
     }
 
+    /**Method get email
+     * @return
+     */
     public String getEmail(){
 
         return this.email;
     }
 
+    /**Add user to file
+     * @param jsonPath - user file path
+     * @param email
+     * @param userName
+     * @param passWord
+     * @throws IOException
+     * @throws JSONException
+     */
     public void addCredentialsToFile(String jsonPath,String email, String userName,String passWord) throws IOException, JSONException {
 
         JSONObject json = null;
@@ -93,20 +126,34 @@ public class User{
         return new JSONObject(jsonBody);
     }
 
+    /** Method to get role
+     * @return
+     */
     public Roles getRole(){
 
         return this.role;
     }
 
+    /**Method to set role
+     * @param role
+     */
     public void setRole(Roles role){
 
         this.role = role;
     }
 
+    /**method to return email
+     * @return
+     */
     protected String getUserEmail(){
 
         return this.email;
     }
+
+    /**Helper method to comare email
+     * @param user
+     * @return
+     */
     public boolean userEquals(User user){
 
         if(this.email.equals(user.getUserEmail())){
@@ -117,11 +164,17 @@ public class User{
         }
     }
 
+    /**Get Pages method
+     * @return list of pages
+     */
     public ArrayList<InformationPage> getMyPages(){
 
         return this.myPages;
     }
 
+    /**Add page method
+     * @param page
+     */
     public void addMyPage(InformationPage page){
 
         this.myPages.add(page);
