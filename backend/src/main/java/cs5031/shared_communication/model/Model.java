@@ -719,7 +719,12 @@ public class Model {
 
     public void addPostToPage(String title,String userEmail, String post) throws IOException, JSONException{
 
-        User user = getUserObj(userEmail);
+        User user = null;
+        if(allAdmins.containsKey(userEmail)){
+            user = allAdmins.get(userEmail);
+        } else {
+            user = allUsers.get(userEmail);
+        }
         addPostToPage(title,user,post);
 
     }
@@ -752,7 +757,7 @@ public class Model {
                 JSONObject page = jsonPages.getJSONObject(foundKey);
                 //String content = page.getString("content");
                 //ArrayList<String> currentContent = new ArrayList<>(List.of(content.split(",")));
-                if(getPageEditUsers(title).contains(user.getEmail())){
+                if(getPageEditUsers(title).contains(user.getEmail()) | allAdmins.containsKey(user.getEmail())){
                     String newContent;
                     newContent = post;
                     page.put("content",newContent);
