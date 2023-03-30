@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Information page class
+ */
 public class InformationPage {
     private String pageTitle;
     private User author;
@@ -22,10 +25,11 @@ public class InformationPage {
     private ArrayList<User> writeUsers = new ArrayList<>();
     private LinkedHashMap<User,String> posts = new LinkedHashMap<>();
 
-    /**Pages class
-     * @param title - page title
-     * @param author - author
-     * @param pagePath - pages json file
+    /**
+     * Constructor method for the information page class
+     * @param title title of the page
+     * @param author author of the page
+     * @param pagePath path of the file where page information is to be stored
      * @throws JSONException
      * @throws IOException
      */
@@ -41,23 +45,26 @@ public class InformationPage {
 
     }
 
-    /**Get author
-     * @return page author
+    /**
+     * Get author of the page
+     * @return user object who is author of the page
      */
     public User getAuthor(){
 
         return this.author;
     }
-    /**Set author
-     * 
+
+    /**
+     * Method to add page to the user object
      */
     public void registerToAuthor(){
 
         this.author.addMyPage(this);
     }
 
-    /**Add read user to page
-     * @param user
+    /**
+     * Method to add a user which can read contents of the page
+     * @param user user to be granted read access
      */
     public void addReadUser(User user){
 
@@ -69,8 +76,9 @@ public class InformationPage {
         }
     }
 
-    /**Add write user
-     * @param user
+    /**
+     * Method to add a user which can write to the page
+     * @param user user which can write to the page
      */
     public void addWriteUser(User user){
 
@@ -86,23 +94,27 @@ public class InformationPage {
         }
     }
 
-    /**get read acces users
-     * @return list of users 
+    /**
+     * Method to get list of users which can read the page
+     * @return list of users
      */
     public ArrayList<User> getPageReadUsers(){
 
         return this.readUsers;
     }
 
-    /**get list of write acess users
-     * @return - list of users
+    /**
+     * Method to get list of users which can write to the page
+     * @return list of users
      */
     public ArrayList<User> getPageWriteUsers(){
 
         return this.writeUsers;
     }
-    /**Remove read acess method
-     * @param user - list of users
+
+    /**
+     * Method to remove read access of the user
+     * @param user users whose access is to be removed
      */
     public void removeReadUser(User user){
 
@@ -120,8 +132,9 @@ public class InformationPage {
         }
     }
 
-    /**Remove write access method
-     * @param user - list of user
+    /**
+     * Method to remove write access of the user
+     * @param user user whose write access is to be removed
      */
     public void removeWriteUser(User user){
 
@@ -133,6 +146,11 @@ public class InformationPage {
         }
     }
 
+    /**
+     * Method to add a post to the page
+     * @param user user to add the post
+     * @param post post content
+     */
 
     /**Method to add content
      * @param user - user
@@ -154,16 +172,18 @@ public class InformationPage {
 
     }
 
-    /**Method get posts
-     * @return
+    /**
+     * Method to get posts stored in the form of a hasmap
+     * @return posts information
      */
     public LinkedHashMap<User,String> getPosts(){
 
         return this.posts;
     }
 
-    /**Method chage user access to editable
-     * @param user - user
+    /**
+     * Method to change user from read to write access
+     * @param user user to be changed
      */
     public void changeReadToWriteUser(User user){
 
@@ -182,23 +202,31 @@ public class InformationPage {
         }
     }
 
-    // remo for commit
-    /**Helper method
-     * @param path
+
+    /**
+     * Method to set path of json file to store page info
+     * @param path path of the file
      */
     public void setPagePath(String path){
 
         this.pagePath = path;
     }
-    // remo for commit
-    /**Helper method
-     * @return
+
+
+    /**
+     * Method to get the path of the file
+     * @return return path of the file
      */
     public String getPagePath(){
 
         return this.pagePath;
     }
 
+    /**
+     * Method to add page to a json file
+     * @throws IOException
+     * @throws JSONException
+     */
 
     /**Method to Add pages to pages json file
      * @throws IOException
@@ -237,8 +265,9 @@ public class InformationPage {
 
     }
 
-    /**Method to load pages
-     * @return JSONObject of pages
+    /**
+     * Method to load all the pages stored in a json
+     * @return s JSONObject storing all the files
      * @throws IOException
      * @throws JSONException
      */

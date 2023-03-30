@@ -41,11 +41,19 @@ public class Model {
 
     String adminMessagePath = "src/main/resources/static/usermessage.json";
 
-    //constructor
+    /**
+     * Constructor method for Model class object
+     * @param jsonPath path of the json file required to initiate the model
+     */
     public Model(String jsonPath) {
         this.path = jsonPath;
     }
-    //overided
+
+    /**
+     * Constructor for model class to initiate model with bunch of json files
+     * @param userJsonPath path to json storing user details
+     * @param adminJsonPath path to json storing admin details
+     */
     public Model(String userJsonPath, String adminJsonPath) {
         this.userPath = userJsonPath;
         this.adminPath = adminJsonPath;
@@ -393,11 +401,12 @@ public class Model {
 
         }
     }
-    
 
-    /**helper method to get user
-     * @param userEmail
-     * @return
+
+    /***
+     * Method to get an object of User class using user's email address
+     * @param userEmail email address of the user
+     * @return an object of class USer
      */
     public User getUserObj(String userEmail){
 
@@ -407,8 +416,9 @@ public class Model {
 
 
     /**
-     * @param userEmail
-     * @param title
+     * Method to create a new page using email address of creator user and title for the new page
+     * @param userEmail email address of the creator
+     * @param title title for the page
      * @throws JSONException
      * @throws IOException
      */
@@ -425,7 +435,8 @@ public class Model {
     }
 
     /**
-     * @return
+     * Method to get all the page titles from the system
+     * @return list of titles in the system.
      * @throws IOException
      * @throws JSONException
      */
@@ -444,24 +455,28 @@ public class Model {
         return pageTitles;
 
     }
-    /**Helper method for page
-     * @param path
+
+    /**
+     * Method to set path of pages json file
+     * @param path path to be used for storing pages data
      */
     public void setPagePath(String path){
 
         this.pagePath = path;
     }
 
-    /**Helper method for page
-     * @return
+    /**
+     * Method to get path of the page json
+     * @return string object containing path of the page
      */
     public String getPagePath(){
 
         return this.pagePath;
     }
 
-    /**Method to load pages
-     * @return list of pages
+    /**
+     * Method to load information of all the pages
+     * @return a json object containing information of all the pages
      * @throws IOException
      */
     public JSONObject loadPages() throws IOException {
@@ -477,9 +492,10 @@ public class Model {
         return json;
     }
 
-    /**Method to get page information
-     * @param title - title of page
-     * @return - page information
+    /**
+     * Method to get information about  page using page title
+     * @param title title of the page
+     * @return page in the form of a json object
      * @throws IOException
      * @throws JSONException
      */
@@ -509,9 +525,10 @@ public class Model {
 
     }
 
-    /**Method to get all edit users for a page
-     * @param title - page name
-     * @return - list of all users
+    /**
+     * Method to get users which can edit a page
+     * @param title title of the page
+     * @return list of user email address who can edit a page
      * @throws IOException
      * @throws JSONException
      */
@@ -548,10 +565,10 @@ public class Model {
         return userList;
     }
 
-
-    /**Method to get all read users for a page
-     * @param title - page title
-     * @return
+    /**
+     * Method to get list of users which have read access of a page
+     * @param title title of the page
+     * @return list of users email address
      * @throws IOException
      * @throws JSONException
      */
@@ -587,9 +604,10 @@ public class Model {
         return userList;
     }
 
-    /**Method to get all pages in the system
-     * @param userEmail - admin email
-     * @return array of all pages 
+    /**
+     * Method to get a jason array of all the pages, only to be used by admin
+     * @param userEmail string containing email address
+     * @return a json array containing all the pages
      * @throws IOException
      * @throws JSONException
      */
@@ -614,9 +632,10 @@ public class Model {
 
     }
 
-    /**Method to get users pages
-     * @param userEmail - email of this user
-     * @return - array of pages created by this user
+    /**
+     * Method to get list of pages created by a user
+     * @param userEmail email of the user
+     * @return json array having all the pages created by a user
      * @throws IOException
      * @throws JSONException
      */
@@ -647,6 +666,14 @@ public class Model {
 
     }
 
+    /**
+     * Method to get post of the page
+     * @param title title of the page
+     * @return list of posts created by user
+     * @throws IOException
+     * @throws JSONException
+     */
+
     public ArrayList<String> getPagePosts(String title) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -675,22 +702,26 @@ public class Model {
     }
 
     /**
-     * @param title
-     * @param userEmail
-     * @param post
+     * Method to add a post to a page
+     * @param title title of the page
+     * @param userEmail email of the user adding the post
+     * @param post post to eb added
      * @throws IOException
      * @throws JSONException
      */
+
     public void addPostToPage(String title,String userEmail, String post) throws IOException, JSONException{
 
         User user = getUserObj(userEmail);
         addPostToPage(title,user,post);
 
     }
+
     /**
-     * @param title
-     * @param user
-     * @param post
+     * Method to add a post to a page
+     * @param title title of the page
+     * @param user user object of the user adding the post
+     * @param post post to eb added
      * @throws IOException
      * @throws JSONException
      */
@@ -740,9 +771,10 @@ public class Model {
     }
 
 
-    /**Method to delete users edit access
-     * @param title - page title
-     * @param user -  user email to be deleted
+    /**
+     * Method to revode edit access of a user from a page
+     * @param title title of the page
+     * @param user users whoe access is to be revoked
      * @throws IOException
      * @throws JSONException
      */
@@ -795,12 +827,14 @@ public class Model {
 
     }
 
-    /**Method to delete user from page
-     * @param title - page name
-     * @param user - user to be deleted form page
+    /**
+     * MEthod to revoke read access of a user from a page
+     * @param title title of the page
+     * @param user user whose access is to be revoked
      * @throws IOException
      * @throws JSONException
      */
+
     public void deleteUserReadAccess(String title, String user) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -856,10 +890,11 @@ public class Model {
 
     }
 
-    /**Method to add users edit access to a page
-     * @param title - page title
-     * @param userEmail - user to be added
-     * @return true if success
+    /**
+     * Method to add edit access to a page
+     * @param title title of the page to which access is to be added
+     * @param userEmail email to be rewarded edit access
+     * @return boolean indicating is successfully done
      * @throws IOException
      * @throws JSONException
      */
@@ -918,10 +953,11 @@ public class Model {
         return false;
     }
 
-    /**Method to add user to a page
-     * @param title - page name
-     * @param userEmail - user to be added
-     * @return true if success
+    /**
+     * Method to add read access to a page
+     * @param title title of the page
+     * @param userEmail email of the user to be rewarded access
+     * @return boolean insidcating if access is rewarded
      * @throws IOException
      * @throws JSONException
      */
@@ -976,10 +1012,11 @@ public class Model {
         return false;
     }
 
-    /**Add admin message
-     * @param email - admin email
-     * @param Message - message
-     * @return
+    /**
+     * Method to add message by admin to the system
+     * @param email email of the amdin
+     * @param Message message to be added by admin
+     * @return boolean indicating if process was successful
      * @throws IOException
      * @throws JSONException
      */
@@ -1010,8 +1047,9 @@ public class Model {
 
     }
 
-    /**Method to get admin message
-     * @return message
+    /**
+     * Method to get messages shared by amdin
+     * @return messages by admin
      * @throws IOException
      */
     public String getAdminMessage() throws IOException {
@@ -1028,9 +1066,10 @@ public class Model {
 
     }
 
-    /**Method to get read access pages for user
-     * @param userEmail - user
-     * @return lsit of pages
+    /***
+     * Method for a user to identify which pages they can read
+     * @param userEmail email of the user
+     * @return list of titles of the page they can read
      * @throws IOException
      * @throws JSONException
      */
@@ -1057,9 +1096,10 @@ public class Model {
 
     }
 
-    /**Method to get editable access pages for a user 
-     * @param userEmail - user 
-     * @return list of pages
+    /**
+     * MEthod to get list of pages a user can write to
+     * @param userEmail email of the user
+     * @return list of pages titles where a user can write.
      * @throws IOException
      * @throws JSONException
      */

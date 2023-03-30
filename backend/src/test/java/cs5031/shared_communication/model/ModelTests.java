@@ -19,6 +19,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+/**
+ * Teest cases for model
+ */
 public class ModelTests {
 
     User userA = new User("abc@example.com", "passA", "userA", Roles.StandardUser, "./src/main/resources/static/test.json");
@@ -38,6 +41,11 @@ public class ModelTests {
     public ModelTests() throws JSONException, IOException {
     }
 
+    /**
+     * Setting environment after each test run
+     * @throws IOException
+     * @throws JSONException
+     */
     @AfterEach
     public void resetCreds() throws IOException, JSONException {
 
@@ -87,7 +95,11 @@ public class ModelTests {
 
     }
 
-
+    /**
+     * Tes tot check page creation by user
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testSuccesfulPageCreaion() throws JSONException, IOException {
 
@@ -106,6 +118,11 @@ public class ModelTests {
         }
         }
 
+    /**
+     * Test to ensure page creation fail when creating same page
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testFailedPageCreation() throws JSONException, IOException {
 
@@ -121,17 +138,26 @@ public class ModelTests {
 
     }
 
+    /**
+     * Environment setup before running model tests
+     */
     @BeforeEach
     public void setup(){
         testModel = new Model("src/test/resources/userTest.json","src/test/resources/adminTest.json");
 
     }
 
+    /**
+     * Test case for checking error when trying to open invalid json
+     */
     @Test
     public void shouldNotOpenJson(){
         NoSuchFileException thrown = assertThrowsExactly(NoSuchFileException.class, ()->{Model.loadInitialState("wrongpath.json");});
     }
 
+    /**
+     * Test case for successful opening of a json file
+     */
     @Test
     public void shouldOpenJson(){
         org.json.JSONObject result = null;
@@ -145,18 +171,30 @@ public class ModelTests {
         // assertEquals(pageObj.get("admin"),userC.getEmail());
     }
 
+    /**
+     * Test to check correct json page path returned
+     */
     @Test
     public void testGetPagePath(){
 
         assertEquals(testModel.getPagePath(),"./src/main/resources/static/pages.json");
     }
 
+    /**
+     * Test to set correct json path is set
+     */
     @Test
     public void testSetPagePath(){
 
         testModel.setPagePath("new_path");
         assertEquals(testModel.getPagePath(),"new_path");
     }
+
+    /**
+     * Test to check successful loading of json file
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testLoadingPageSuccessful() throws JSONException, IOException {
 
@@ -166,6 +204,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Test to check loading fails of invalid file
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testLoadingPageFailed() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/notvalid.json");
@@ -180,6 +223,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Test to get page users
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testGetPageUsers() throws JSONException, IOException {
 
@@ -188,6 +236,11 @@ public class ModelTests {
         assertTrue(users.contains("abcB@example.com"));
     }
 
+    /**
+     * Test to get page title
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testGetPageTitle() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -196,6 +249,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Failed test to get page title
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testGetPageTitleFailed() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -204,6 +262,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Successful page title retrieval
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testGetAllPageTitlesSuccessfully() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -212,6 +275,11 @@ public class ModelTests {
         assertTrue(titles.contains("Title"));
     }
 
+    /**
+     * Test to get all page titles from a list
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testGetAllPageTitlesNotInList() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -220,6 +288,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Test to check post can be added to page
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testAddPost() throws JSONException, IOException {
 
@@ -229,6 +302,11 @@ public class ModelTests {
         assertTrue(testModel.getPagePosts("Title").contains("First post by B"));
     }
 
+    /**
+     * Test to check adding new post fails
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testAddPostFailed() throws JSONException, IOException {
 
@@ -241,6 +319,11 @@ public class ModelTests {
                 });
     }
 
+    /**
+     * Test to get information of a page
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testGetPageInfo() throws JSONException, IOException {
 
@@ -249,6 +332,11 @@ public class ModelTests {
         page.has("title");
     }
 
+    /**
+     * Tes to check error when loading non-existing page
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testGetPageInfoFailed() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -261,6 +349,11 @@ public class ModelTests {
     }
 
 
+    /**
+     * Test to add users to a page
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testAddPageUsers() throws JSONException, IOException {
 
@@ -274,6 +367,11 @@ public class ModelTests {
         assertTrue(currUsers.contains(userC.getEmail()));
     }
 
+    /**
+     * Test to delete page users
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testDeletePageUsers() throws JSONException, IOException {
 
@@ -290,6 +388,10 @@ public class ModelTests {
         currUsers = testModel.getPageEditUsers("Title101");
         assertFalse(currUsers.contains(userC.getEmail()));
     }
+
+    /**
+     * Test case for not allowing to open invalid Admin json
+     */
     public void shouldOpenAdminJson(){
         org.json.JSONObject result = null;
         try {
@@ -300,54 +402,99 @@ public class ModelTests {
         assertNotNull(result);
     }
 
+    /**
+     * Test case to check fucntionality of registering an admin
+     * @throws JSONException
+     */
     @Test
     public void testAdminRegister() throws JSONException{
         assertTrue(testModel.registerUser("newAdmin","adminNew@gmail.com","adminpassword","admin"));
     }
 
+    /**
+     * Test case to check admin registration fails when invalid details are provided
+     * @throws JSONException
+     */
     @Test
     public void testAdminRegisterFail() throws JSONException{
         assertTrue(testModel.registerUser("adminTest1","admin1@gmail.com","adminpassword","admin"));
         assertFalse(testModel.registerUser("adminTest2","admin1@gmail.com","adminpassword","admin"));
     }
+
+    /**
+     * Test case to check admin able to login successfully
+     */
     @Test
     public void testAdminLoginSuccess(){
         assertTrue(testModel.userLogin("admin@gmail.com","adminpassword","admin"));
     }
 
+    /**
+     * Test case to check admin unable to login
+     */
     @Test
     public void testAdminLoginFail(){
         assertFalse(testModel.userLogin("admin2@gmail.com","adminwrong","Admin2"));
     }
+
+    /**
+     * Test case check user registration method
+     * @throws JSONException
+     */
     @Test
     public void testUserRegister() throws JSONException{
         assertTrue(testModel.registerUser("newUser","userNew@gmail.com","userpassword","user"));
     }
 
+    /**
+     * Test case to check user registration fails
+     * @throws JSONException
+     */
     @Test
     public void testUserRegisterFail() throws JSONException{
         assertTrue(testModel.registerUser("userTest1","user1@gmail.com","userTest","user"));
         assertFalse(testModel.registerUser("userTest2","user1@gmail.com","userTest","user"));
     }
+
+    /**
+     * Test case to ensure user is able to login successfully
+     */
     @Test
     public void testUserLoginSuccess(){
         assertTrue(testModel.userLogin("user@gmail.com","userpassword","user"));
     }
 
+    /**
+     * Test case to ensure use login fails
+     */
     @Test
     public void testUserLoginFail(){
         assertFalse(testModel.userLogin("User2@gmail.com","userwrong","user"));
     }
 
+    /**
+     * Test case to remove user from the system
+     * @throws JSONException
+     */
     @Test
     public void removeUserFromSystem() throws JSONException{
         assertTrue(testModel.deleteUserSystem("user3@gmail.com"));
     }
 
+    /**
+     * Test case to remove user from system fails
+     * @throws JSONException
+     */
     @Test
     public void removeUserFromSystemFail() throws JSONException{
         assertFalse(testModel.deleteUserSystem("user5@gmail.com"));
     }
+
+    /**
+     * Tes to check posts added and replaced
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testGetPagePosts() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -360,6 +507,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Test user object returned when asked for an email address
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testgetUserObject() throws JSONException, IOException {
 
@@ -367,6 +519,11 @@ public class ModelTests {
         assertEquals(user.getUserEmail(),"test@gmail.com");
     }
 
+    /**
+     * Test to check if read access users of a paage can be retrieved
+     * @throws JSONException
+     * @throws IOException
+     */
 
     @Test
     public void testReadAccess() throws JSONException, IOException {
@@ -375,6 +532,12 @@ public class ModelTests {
         users.contains("abc@example.com");
 
     }
+
+    /**
+     * Test to check only read access is working
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testOnlyReadAccess() throws JSONException, IOException {
 
@@ -384,6 +547,11 @@ public class ModelTests {
     }
 
 
+    /**
+     * Test to add message by admin
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testaddAdminMessage() throws JSONException, IOException {
 
@@ -397,6 +565,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Test to ensure messages by admin are retrieved
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testRetrieveAdminMessage() throws JSONException, IOException {
 
@@ -409,6 +582,12 @@ public class ModelTests {
 
     }
 
+    /**
+     * Test to get messages of amdin from file
+     * @throws JSONException
+     * @throws IOException
+     */
+
     @Test
     public void testGetAdminMessage() throws JSONException, IOException {
 
@@ -419,6 +598,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Testing if reading access working on edge cases
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testAddingReadAccess() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -432,6 +616,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Testing if write access working on edge cases
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testAddingWriteAccess() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -446,6 +635,12 @@ public class ModelTests {
 
     }
 
+    /**
+     * Testing is read and write are working on edge cases
+     * @throws JSONException
+     * @throws IOException
+     */
+
     @Test
     public void testAddingWriteAddReadAccess() throws JSONException, IOException {
 
@@ -458,6 +653,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Testing page creation on edge cases
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testUserCreatedPages() throws JSONException, IOException {
 
@@ -467,6 +667,11 @@ public class ModelTests {
 
     }
 
+    /**
+     * Testing getting all the pages only by admin
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testGetallPagesSuccesful() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -474,6 +679,11 @@ public class ModelTests {
         assertEquals(pages.length(),5);
     }
 
+    /**
+     * Testing getting all the pages only by admin
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testGetallPagesFailed() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -485,6 +695,11 @@ public class ModelTests {
                 });
     }
 
+    /**
+     * Test to check user's self read pages can be retrieved
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testMyReadPages() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -493,6 +708,11 @@ public class ModelTests {
         assertEquals(pages.size(),2);
     }
 
+    /**
+     * Test to check if there sre zero read pages
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testMyReadZeroPages() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -501,6 +721,11 @@ public class ModelTests {
         assertEquals(pages.size(),0);
     }
 
+    /**
+     * Test to get write pages for the user
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testMyWritePages() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
@@ -509,6 +734,11 @@ public class ModelTests {
         assertEquals(pages.size(),2);
     }
 
+    /**
+     * Testing edge care of write pages retrieval
+     * @throws JSONException
+     * @throws IOException
+     */
     @Test
     public void testMyWriteZeroPages() throws JSONException, IOException {
         testModel.setPagePath("./src/main/resources/static/pagetestmodel.json");
