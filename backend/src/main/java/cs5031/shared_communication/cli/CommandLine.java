@@ -14,6 +14,10 @@ import org.springframework.web.client.RestTemplate;
 
 public class CommandLine {
     static Model model;
+    /**
+     *@param globalUserEmail- stores the users that logged in to identify globally
+     *@param admin - checks if the admin was logged in - helper variable
+     */
     static String globalUserEmail;
     static String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
     static String ANSI_GREEN_BACKGROUND = "\u001B[42m";
@@ -22,18 +26,27 @@ public class CommandLine {
     static String ANSI_RED = "\u001B[31m";
     static Boolean admin = false;
 
+    /**Main method of CLI invokes login
+     * @param args
+     */
     public static void main(String args[]) {
 
         login();
 
     }
 
+    /**
+     * Helper method
+     */
     public static void space() {
         System.out.println("");
         System.out.println("");
         System.out.println("");
     }
 
+    /**
+     * Helper Method to log/register in
+     */
     public static void login() {
 
         space();
@@ -54,6 +67,9 @@ public class CommandLine {
         }
     }
 
+    /**Method to register user
+     * 
+     */
     private static void registerUser() {
         String userEmail;
         String password;
@@ -117,6 +133,9 @@ public class CommandLine {
         }
     }
 
+    /**
+     * Method to goin in user
+     */
     public static void loginUser() {
 
         String userEmail;
@@ -142,9 +161,12 @@ public class CommandLine {
                 String json = restTemplate.postForObject("http://localhost:8080/userLogin", request, String.class);
                 space();
                 if (json.equals("Success")) {
+                    System.out.println(ANSI_GREEN_BACKGROUND + "Success" + ANSI_RESET);
                     globalUserEmail = userEmail;
                     mainPage(userEmail);
 
+                } else {
+                    login();
                 }
             } catch (Exception e) {
                 System.out.println(ANSI_RED + "Fail" + ANSI_RESET);
@@ -153,15 +175,22 @@ public class CommandLine {
             }
 
         } else if (option == 2) {
-            space();
+            try {
+                space();
 
-            HttpEntity<HashMap<String, Object>> request = new HttpEntity<>(requestBody);
-            String json = restTemplate.postForObject("http://localhost:8080/adminLogin", request, String.class);
-            space();
-            if (json.equals("Success")) {
-                globalUserEmail=userEmail;
-                adminView(userEmail);
-            } else {
+                HttpEntity<HashMap<String, Object>> request = new HttpEntity<>(requestBody);
+                String json = restTemplate.postForObject("http://localhost:8080/adminLogin", request, String.class);
+                space();
+
+                if (json.equals("Success")) {
+                    System.out.println(ANSI_GREEN_BACKGROUND + "Success" + ANSI_RESET);
+                    globalUserEmail = userEmail;
+                    adminView(userEmail);
+                } else {
+                    System.out.println(ANSI_RED + "Fail" + ANSI_RESET);
+                    login();
+                }
+            } catch (Exception e) {
                 System.out.println(ANSI_RED + "Fail" + ANSI_RESET);
                 login();
             }
@@ -171,6 +200,9 @@ public class CommandLine {
         }
     }
 
+    /**Method to view admins view
+     * @param userEmail - admin email
+     */
     public static void adminView(String userEmail) {
         try {
 
@@ -179,8 +211,8 @@ public class CommandLine {
             Scanner sc = new Scanner(System.in);
             int option2 = sc.nextInt();
             if (option2 == 1) {
-                 mainPage(userEmail);
-                
+                mainPage(userEmail);
+
                 exitMethod();
             } else if (option2 == 2) {
                 getSystemUsers();
@@ -191,20 +223,28 @@ public class CommandLine {
             login();
         }
     }
-public static void allPagesInSystem(String userEmail){
-   try {
-     RestTemplate restTemplate = new RestTemplate();
-    
-        HashMap<String, String> allPages = new HashMap<>();
-        String jsonResponse = restTemplate.getForObject("http://localhost:8080/page/admin?userEmail="+userEmail,
-        String.class);
 
-        System.out.println(jsonResponse);
-   } catch (Exception e) {
-    System.out.println(ANSI_RED+"Error"+ANSI_RESET);
-   }
+    /**Method to display all pages in the system for admin
+     * @param userEmail - admin email
+     */
+    public static void allPagesInSystem(String userEmail) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
 
-}
+            HashMap<String, String> allPages = new HashMap<>();
+            String jsonResponse = restTemplate.getForObject("http://localhost:8080/page/admin?userEmail=" + userEmail,
+                    String.class);
+
+            System.out.println(jsonResponse);
+        } catch (Exception e) {
+            System.out.println(ANSI_RED + "Error" + ANSI_RESET);
+        }
+
+    }
+
+    /**Method to display for users main page
+     * @param userEmail 
+     */
     public static void mainPage(String userEmail) {
 
         RestTemplate restTemplate = new RestTemplate();
@@ -222,18 +262,22 @@ public static void allPagesInSystem(String userEmail){
         String json;
         try {
             space();
-           if(!admin){
-             json = restTemplate.getForObject("http://localhost:8080/page?userEmail=" + userEmail, String.class);
-           }else{
-             json = restTemplate.getForObject("http://localhost:8080/page/admin?userEmail="+userEmail,
-        String.class);
-           }
-            space();
+            if (!admin) {
+
+                json = restTemplate.getForObject("http://localhost:8080/page?userEmail=" + userEmail, String.class);
+                space();
+                System.out.println(ANSI_YELLOW_BACKGROUND + " YOUR PAGES " + ANSI_RESET);
+            } else {
+
+                json = restTemplate.getForObject("http://localhost:8080/page/admin?userEmail=" + userEmail,
+                        String.class);
+                space();
+                System.out.println(ANSI_YELLOW_BACKGROUND + " ALL PAGES " + ANSI_RESET);
+            }
 
             JSONArray pages = new JSONArray(json);
             // space();
 
-            System.out.println(ANSI_YELLOW_BACKGROUND + " YOUR PAGES " + ANSI_RESET);
             for (int i = 0; i < pages.length(); i++) {
                 JSONObject adminObject = pages.getJSONObject(i);
                 pageTitle = adminObject.getString("title");
@@ -244,7 +288,7 @@ public static void allPagesInSystem(String userEmail){
                 allPages.put(pageTitle, pageContent);
                 allEditUsers.put(pageTitle, editAccessUser);
                 allReadAccessUser.put(pageTitle, readAccessUser);
-                System.out.println(ANSI_GREEN_BACKGROUND + " Title : " + pageTitle+"   " + ANSI_RESET);
+                System.out.println(ANSI_GREEN_BACKGROUND + " Title : " + pageTitle + "   " + ANSI_RESET);
 
             }
             System.out.println("");
@@ -261,6 +305,14 @@ public static void allPagesInSystem(String userEmail){
 
     }
 
+    /**Helper method to display pages 
+     * @param pageToviewUser - page title 
+     * @param allPages - constains all pages and content
+     * @param userEmail - user that is logged in
+     * @param allReadAccessUser- the read access list
+     * @param allEditUsers- the edit access list
+     * @throws JSONException
+     */
     private static void displayPages(String pageToviewUser, HashMap<String, String> allPages, String userEmail,
             HashMap<String, String> allReadAccessUser, HashMap<String, String> allEditUsers) throws JSONException {
 
@@ -270,13 +322,13 @@ public static void allPagesInSystem(String userEmail){
 
         if (allPages.containsKey(pageToviewUser)) {
             int option;
-            if(!admin){
+            if (!admin) {
                 System.out.println(ANSI_YELLOW_BACKGROUND + "Enter 1 to view page 2 to create new page" + ANSI_RESET);
-                 option = sc.nextInt();
-            }else{
-                option =1;
+                option = sc.nextInt();
+            } else {
+                option = 1;
             }
-            
+
             if (option == 1) {
 
                 space();
@@ -286,31 +338,31 @@ public static void allPagesInSystem(String userEmail){
                 System.out.println("");
                 if (!admin) {
                     System.out.println("Enter 1 to edit content ");
-                System.out.println("Enter 2 to see users that have access ");
-                System.out.println("Enter 3 to give access to a user");
-                }else{
+                    System.out.println("Enter 2 to see users that have access ");
+                    System.out.println("Enter 3 to give access to a user");
+                } else {
                     System.out.println("Enter 1 to see users that have access ");
                 }
 
                 int option2 = sc.nextInt();
-                if (option2 == 1&&!admin) {
+                if (option2 == 1 && !admin) {
 
                     System.out.println(ANSI_YELLOW_BACKGROUND + "EDIT PAGE" + ANSI_RESET);
 
                     String addedContent = console.readLine(allPages.get(pageToviewUser) + " ");
                     newContent = newContent + addedContent;
                     System.out.println("");
-                    System.out.println("New Content");
+                    System.out.println(ANSI_YELLOW_BACKGROUND + "New Content" + ANSI_RESET);
 
                     System.out.println(newContent);
                     postToPage(pageToviewUser, newContent, userEmail);
 
-                } else if ((option2 == 2)||(option2==1&&admin)) {
+                } else if ((option2 == 2) || (option2 == 1 && admin)) {
                     System.out.println(ANSI_YELLOW_BACKGROUND + "USERS PAGE" + ANSI_RESET);
                     displayUserAccess(pageToviewUser, allReadAccessUser, allEditUsers);
                     exitMethod();
-                } else if (option2 == 3&&!admin) {
-                    System.out.println(ANSI_YELLOW_BACKGROUND +"EDIT USER ACCESS PAGE"+ANSI_RESET);
+                } else if (option2 == 3 && !admin) {
+                    System.out.println(ANSI_YELLOW_BACKGROUND + "EDIT USER ACCESS PAGE" + ANSI_RESET);
                     addUser(pageToviewUser);
                     exitMethod();
 
@@ -331,22 +383,12 @@ public static void allPagesInSystem(String userEmail){
         }
     }
 
-    public static void exitMethod() {
-        Scanner sc = new Scanner(System.in);
-        space();
-
-        if(!admin){
-            System.out.println("Enter 1 to exit 0 to continue");
-        if (sc.nextInt() == 0) {
-            mainPage(globalUserEmail);
-        } else {
-            System.exit(0);
-        }
-        }else{
-            adminView(globalUserEmail);
-        }
-    }
-
+    
+    /**Helper Method to display all users that have display access to a page
+     * @param pageToviewUser
+     * @param allReadAccessUser
+     * @param allEditUsers
+     */
     public static void displayUserAccess(String pageToviewUser, HashMap<String, String> allReadAccessUser,
             HashMap<String, String> allEditUsers) {
         try {
@@ -358,12 +400,25 @@ public static void allPagesInSystem(String userEmail){
             if (option3 == 1) {
                 System.out.println(ANSI_YELLOW_BACKGROUND + "Users that have access to page" + ANSI_RESET);
                 JSONArray usersJson = new JSONArray(allReadAccessUser.get(pageToviewUser));
-                System.out.println(usersJson);
+                // System.out.println(usersJson);
+
+                if (usersJson.length() > 0) {
+                    for (int i = 0; i < usersJson.length(); i++) {
+                        String str = usersJson.getString(i);
+                        System.out.println(str);
+                    }
+                }
 
             } else if (option3 == 2) {
                 System.out.println(ANSI_YELLOW_BACKGROUND + "Users that have edit access" + ANSI_RESET);
                 JSONArray usersJson = new JSONArray(allEditUsers.get(pageToviewUser));
-                System.out.println(usersJson);
+                if (usersJson.length() > 0) {
+                    for (int i = 0; i < usersJson.length(); i++) {
+                        String str = usersJson.getString(i);
+                        System.out.println(str);
+                    }
+                }
+
             } else {
                 System.out.println(ANSI_RED + "error" + ANSI_RESET);
                 exitMethod();
@@ -374,6 +429,9 @@ public static void allPagesInSystem(String userEmail){
         }
     }
 
+    /**Method to add user
+     * @param pageToviewUser - page to which user is to be added
+     */
     public static void addUser(String pageToviewUser) {
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -402,12 +460,16 @@ public static void allPagesInSystem(String userEmail){
         }
     }
 
+    /**Method to create new pagee
+     * @param userEmail - user 
+     * @param allPages - has all exsisting pages
+     */
     public static void createNewPage(String userEmail, HashMap<String, String> allPages) {
         try {
             System.out.println(ANSI_YELLOW_BACKGROUND + " CREATE PAGE " + ANSI_RESET);
             Console console = System.console();
             RestTemplate restTemplate = new RestTemplate();
-            
+
             System.out.println("Enter New page name");
             String newPageName = console.readLine();
             HashMap<String, Object> requestBody = new HashMap<>();
@@ -440,6 +502,11 @@ public static void allPagesInSystem(String userEmail){
         }
     }
 
+    /**Method to add content to a page
+     * @param pageToviewUser - page title
+     * @param newContent - added content
+     * @param userEmail - user that added
+     */
     private static void postToPage(String pageToviewUser, String newContent, String userEmail) {
 
         RestTemplate restTemplate = new RestTemplate();
@@ -466,6 +533,9 @@ public static void allPagesInSystem(String userEmail){
 
     }
 
+    /**Method to get ass users in the system
+     * helper method for admin
+     */
     public static void getSystemUsers() {
         space();
         System.out.println(ANSI_YELLOW_BACKGROUND + "Users" + ANSI_RESET);
@@ -494,7 +564,7 @@ public static void allPagesInSystem(String userEmail){
 
             }
             System.out.println("");
-            System.out.println(" Enter userEmail to update profile to admin");
+            System.out.println(ANSI_YELLOW_BACKGROUND+" Enter userEmail to update profile to admin"+ANSI_RESET);
             String userEmailToUpdate = sc.nextLine();
             if (emails.contains(userEmailToUpdate)) {
                 updateProfileUser(userEmailToUpdate, "user");
@@ -510,6 +580,10 @@ public static void allPagesInSystem(String userEmail){
         }
     }
 
+    /**Method to update user to admin by admin
+     * @param userEmail - user to be updated 
+     * @param role - currnet role
+     */
     public static void updateProfileUser(String userEmail, String role) {
 
         if (userEmail != "") {
@@ -554,5 +628,25 @@ public static void allPagesInSystem(String userEmail){
             }
         }
     }
+
+    /**Helper method to exit 
+     * 
+     */
+    public static void exitMethod() {
+        Scanner sc = new Scanner(System.in);
+        space();
+
+        if (!admin) {
+            System.out.println("Enter 1 to exit 0 to continue");
+            if (sc.nextInt() == 0) {
+                mainPage(globalUserEmail);
+            } else {
+                System.exit(0);
+            }
+        } else {
+            adminView(globalUserEmail);
+        }
+    }
+
 
 }
