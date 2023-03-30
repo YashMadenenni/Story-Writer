@@ -49,7 +49,7 @@ export default {
       userName: '',
       userEmail: '',
       password: '',
-      error: "",
+      currentRole: "",
     }
   },
   mounted() {
@@ -61,6 +61,11 @@ export default {
     }).then((response) => {
       this.userName = response.data.userName
       this.userEmail = response.data.userEmail
+      if (response.data.role == "StandardUser") {
+        this.currentRole = "user"
+      } else {
+        this.currentRole = "admin"
+      }
     }).catch((error) => {
       this.$toast.error(`Failed to load user error: ${error}`, {
         position: "top-center"
@@ -71,7 +76,7 @@ export default {
     async updateUser() {
       await axios.post('/user/update', {
         "userEmail": this.userEmail,
-        "currentRole": this.role,
+        "currentRole": this.currentRole,
       }).then((response) => {
         this.$toast.success("Success Update User", {
           position: "top-center"
