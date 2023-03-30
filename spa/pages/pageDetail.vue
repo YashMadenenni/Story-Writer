@@ -10,7 +10,7 @@
         </v-card>
         <v-row>
           <v-col>
-            <v-text-field label="Title" v-model="title"></v-text-field>
+            <v-text-field :readonly="true" label="Title" v-model="title"></v-text-field>
           </v-col>
         </v-row>
         <v-row>
@@ -26,34 +26,43 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-btn color="primary" @click="deletePage()">
-              Delete
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-select v-model="user" :items="users" label="Read Access Users"></v-select>
+            <v-select v-model="readAccessUser" :items="users" label="Read Access Users"></v-select>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.user" @click="addUser()">
-              Add user to editAccessUser
+                   :disabled="!this.readAccessUser" @click="addReadAccessUser()">
+              Add read access user
             </v-btn>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <v-select v-model="editAccessUser" :items="editAccessUsers" label="Edit Access Users"></v-select>
+            <v-btn color="primary"
+                   :disabled="!this.readAccessUser" @click="deleteReadAccessUser()">
+              Delete read access user
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-select v-model="editAccessUser" :items="users" label="Edit Access Users"></v-select>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
             <v-btn color="primary"
-                   :disabled="!this.editAccessUser" @click="deleteUser()">
-              Delete user from editAccessUser
+                   :disabled="!this.editAccessUser" @click="addEditAccessUser()">
+              Add edit access user
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn color="primary"
+                   :disabled="!this.editAccessUser" @click="deleteEditAccessUser()">
+              Delete edit access user
             </v-btn>
           </v-col>
         </v-row>
@@ -71,11 +80,9 @@ export default {
       userEmail: '',
       title: '',
       content: '',
-      error: "",
-      editAccessUsers: [],
-      editAccessUser: '',
       users: [],
-      user: '',
+      readAccessUser: '',
+      editAccessUser: '',
     }
   },
   mounted() {
@@ -85,12 +92,12 @@ export default {
         "title": this.$route.query.title,
       },
     }).then((response) => {
-      this.title = this.$route.query.title
-      this.content = this.$route.query.content
-      this.editAccessUsers = this.$route.query.editAccessUser
-      console.log("response.data: ", response.data)
+      this.title = response.data.title
+      this.content = response.data.content
     }).catch((error) => {
-      console.log('There is error:' + error.response)
+      this.$toast.error(`Failed to load page error: ${error}`, {
+        position: "top-center"
+      })
     }),
     axios.get('/users')
       .then((response) => {
@@ -98,7 +105,9 @@ export default {
           this.users.push(response.data.users[i].userEmail);
         }
       }).catch((error) => {
-      console.log('There is error:' + error.response)
+      this.$toast.error(`Failed to load page error: ${error}`, {
+        position: "top-center"
+      })
     })
   },
   methods: {
@@ -108,58 +117,80 @@ export default {
         "content": this.content,
         "pageName": this.title,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Update Page", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to update page: ${error}`, {
+          position: "top-center"
+        })
       })
-      // await axios.put('/page', null, {
-      //   params: {
-      //     "userEmail": this.userEmail,
-      //     "content": this.content,
-      //     "pageName": this.title,
-      //   },
-      // }).then((response) => {
-      //   console.log("response.data: ", response.data)
-      //   this.$router.go(-1)
-      // }).catch((error) => {
-      //   console.log('There is error:' + error.response)
-      // })
     },
-    async deletePage() {
-      await axios.delete('/page', {
+    async addReadAccessUser() {
+      await axios.post('/page/access/user', {
+        "userEmail": this.readAccessUser,
         "pageName": this.title,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success add user to the page", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to add user to the page error: ${error}`, {
+          position: "top-center"
+        })
       })
     },
-    async addUser() {
+    async deleteReadAccessUser() {
+      await axios.delete('/page/access/user/gui', {
+        params: {
+          "userEmail": this.readAccessUser,
+          "pageName": this.title,
+        },
+      }).then((response) => {
+        this.$toast.success("Success delete user from the page", {
+          position: "top-center"
+        })
+        this.$router.go(-1)
+      }).catch((error) => {
+        this.$toast.error(`Failed to delete user from the page error: ${error}`, {
+          position: "top-center"
+        })
+      })
+    },
+    async addEditAccessUser() {
       await axios.post('/page/access', {
-        "userEmail": this.user,
+        "userEmail": this.editAccessUser,
         "pageName": this.title,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success add user to the page", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to add user to the page error: ${error}`, {
+          position: "top-center"
+        })
       })
     },
-    async deleteUser() {
-      await axios.delete('/page/access', {
+    async deleteEditAccessUser() {
+      await axios.delete('/page/access/gui', {
         params: {
           "userEmail": this.editAccessUser,
           "pageName": this.title,
         },
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success delete user from the page", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to delete user from the page error: ${error}`, {
+          position: "top-center"
+        })
       })
-    }
+    },
   },
 }
 

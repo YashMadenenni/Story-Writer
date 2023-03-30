@@ -1,4 +1,4 @@
-package com.shared_communication.backend;
+package cs5031.shared_communication.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +11,9 @@ import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Test case for Information page class
+ *
+ */
 class InformationPageTest {
 
 
@@ -32,27 +35,29 @@ class InformationPageTest {
     InformationPageTest() throws JSONException, IOException {
     }
 
-
+    /**
+     * Test to check if user detaisl are not null
+     */
     @Test
     public void testUserRegistrationnotNull() {
 
         assertEquals(pageUser.getAuthor(), userA);
     }
 
-    @Test
-    public void testGetAuthorNotNull() {
-
-        assertEquals(pageUser.getAuthor(), userA);
-
-    }
 
 
+    /**
+     * Test to check if user detaisl are not null
+     */
     @Test
     public void testPageWiterUsersZeroInitially() {
 
         assertEquals(pageExample.getPageWriteUsers().size(), 0);
     }
 
+    /**
+     * Test to check if initially users are zero or not
+     */
     @Test
     public void testPageReaderUsersZeroInitially() {
 
@@ -60,7 +65,9 @@ class InformationPageTest {
     }
 
 
-
+    /**
+     * Test to check edge case of again tryng to add user
+     */
     @Test
     public void testAddingWriteUserErrorAlreadyAdded() {
         pageExample.addWriteUser(userA);
@@ -70,6 +77,9 @@ class InformationPageTest {
                 });
     }
 
+    /***
+     * Test to check if again tryng to add user throws or not
+     */
     @Test
     public void testAddingReadUserErrorAlreadyAdded() {
         pageExample.addReadUser(userA);
@@ -79,6 +89,9 @@ class InformationPageTest {
                 });
     }
 
+    /**
+     * Test to check removing user from list
+     */
     @Test
     public void testRemovingReadUserErrorNotInList() {
 
@@ -88,6 +101,9 @@ class InformationPageTest {
                 });
     }
 
+    /**
+     * Test to check removing user from edit list
+     */
     @Test
     public void testRemovingWriteUserErrorNotInList() {
 
@@ -97,6 +113,9 @@ class InformationPageTest {
                 });
     }
 
+    /**
+     * Test to check successful removal of user form edit list
+     */
     @Test
     public void testRemovingWriteUserSuccessfully() {
 
@@ -104,7 +123,19 @@ class InformationPageTest {
         pageExample.removeWriteUser(userA);
         assertEquals(pageExample.getPageWriteUsers().size(), 0);
     }
+    /**
+     * Test to check if user is not null
+     */
+    @Test
+    public void testGetAuthorNotNull() {
 
+        assertEquals(pageUser.getAuthor(), userA);
+
+    }
+
+    /**
+     * Test to check removal of read user successfully
+     */
     @Test
     public void testRemovingReadSuccessfully() {
 
@@ -113,12 +144,18 @@ class InformationPageTest {
         assertEquals(pageExample.getPageReadUsers().size(), 0);
     }
 
+    /**
+     * Test to check intiail posts are zero
+     */
     @Test
     public void getPostsSuccessfullyInitialZero() {
 
         assertEquals(pageExample.getPosts().size(), 0);
     }
 
+    /***
+     * Test to check adding same post
+     */
     @Test
     public void testAddingPostError() {
 
@@ -130,6 +167,9 @@ class InformationPageTest {
                 });
     }
 
+    /**
+     * Test to allow adding post when done by admin
+     */
 
     @Test
     public void testAddingPostSuccessfulAdmin() {
@@ -141,6 +181,9 @@ class InformationPageTest {
 
     }
 
+    /**
+     * Test to check adding post by author
+     */
     @Test
     public void testAddingPostSuccessfulAuthor() {
 
@@ -152,6 +195,9 @@ class InformationPageTest {
 
     }
 
+    /**
+     * Test to check adding post by page user
+     */
     @Test
     public void testAddingPostSuccessfulPageUser() {
 
@@ -163,6 +209,9 @@ class InformationPageTest {
 
     }
 
+    /**
+     * Test to check duplicate post by user not allowed
+     */
     @Test
     public void testNotAllowedDuplicatePostsBySameUser() {
 
@@ -181,6 +230,9 @@ class InformationPageTest {
 
     }
 
+    /**
+     * Test to not allow duplicate posts
+     */
     @Test
     public void testNotAllowedDuplicatePostsByOtherUser() {
 
@@ -197,6 +249,9 @@ class InformationPageTest {
 
     }
 
+    /**
+     * Test to write users successfully
+     */
     @Test
     public void testPageWriteUsersSuccesfullAdded(){
 
@@ -204,6 +259,9 @@ class InformationPageTest {
         assertEquals(pageUser.getPageWriteUsers().size(),1);
     }
 
+    /**
+     * Test to add read user succesfully
+     */
     @Test
     public void testPageReadUsersSuccesfullAdded(){
 
@@ -211,6 +269,9 @@ class InformationPageTest {
         assertEquals(pageUser.getPageReadUsers().size(),1);
     }
 
+    /**
+     * Test to check add edit user
+     */
     @Test
     public void testPageWriteUsersSuccesfulWrite(){
 
@@ -220,6 +281,9 @@ class InformationPageTest {
         assertEquals(pageUser.getPosts().size(),1);
     }
 
+    /**
+     * Test to check same post can't be added
+     */
     @Test
     public void testPageWriteUsersFail(){
 
@@ -233,6 +297,9 @@ class InformationPageTest {
     }
 
 
+    /**
+     * Test to check read user can't write
+     */
     @Test
     public void testPageReadUsersFailWhileWrite(){
 
@@ -246,6 +313,9 @@ class InformationPageTest {
 
     }
 
+    /**
+     * Tess to change read to write user
+     */
     @Test
     public void testChangeUserReadToWriteSuccesful(){
 
@@ -264,6 +334,11 @@ class InformationPageTest {
 
     }
 
+    /**
+     * Test to write json succesfully
+     * @throws JSONException
+     * @throws IOException
+     */
 
     @Test
     public void testWritingJsonSuccesful() throws JSONException, IOException {
@@ -291,6 +366,10 @@ class InformationPageTest {
 
 
     }
+
+    /**
+     * Test to check json path is valid
+     */
     @Test
     public void testSetJsonPathSuccessfull(){
 
@@ -298,6 +377,9 @@ class InformationPageTest {
         assertEquals(pageUser.getPagePath(),"test/path");
     }
 
+    /**
+     * Test to check json path macthes
+     */
     @Test
     public void testGetJsonPathSuccessfull(){
 

@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Page List
+        Readable Page List
         <v-spacer/>
       </v-card-title>
     </v-card>
@@ -32,12 +32,13 @@ export default {
   data() {
     return {
       headers: [
-        {text: 'Admin', value: 'admin'},
         {text: 'Title', value: 'title'},
       ],
       userEmail: '',
       role: '',
-      pages: [],
+      pages: [{
+        title: ""
+      }],
       page: "",
       error: "",
     }
@@ -45,22 +46,23 @@ export default {
   mounted() {
     this.userEmail = this.$store.getters["auth/userEmail"]
     this.role = this.$store.getters["auth/role"]
-    axios.get("page/admin", {
+    axios.get("/page/access/my/gui", {
       params: {
         "userEmail": this.userEmail,
       },
     }).then((response) => {
-      this.pages = response.data
+      for (var i in response.data) {
+        this.pages[i].title = response.data[i];
+      }
     }).catch((error) => {
     })
   },
   methods: {
     handleClick(row) {
       this.$router.push({
-        path: '/pageDetail', query: {
+        path: '/readOnlyPageDetail', query: {
           userEmail: this.userEmail,
           title: row.title,
-          content: row.content,
         }
       });
     },

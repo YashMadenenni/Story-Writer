@@ -1,8 +1,9 @@
-package com.shared_communication.backend;
+package cs5031.shared_communication.api;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import cs5031.shared_communication.model.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
@@ -364,9 +365,9 @@ public class IndexController {
         }
     }
 
-   
+
     /**API Endpoint to remove users access to edit page
-     * @param body has the request body 
+     * @param body has the request body
      * @return status code with status message
      * @throws JsonProcessingException
      */
@@ -392,9 +393,9 @@ public class IndexController {
     }
 
     
-    /**API Endpoint to add user to a page
-
-     * @return
+    /**API Endpoint to add user to a read access list of the page
+     * * @param body has the request body
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.POST, value = "/page/access/user")
     public ResponseEntity<String> readUserAccessAdd(@RequestBody String body) throws JsonProcessingException {
@@ -417,8 +418,9 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to remove a user from read access list of a page
+     * @param body has the request body
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/page/access/user")
     public ResponseEntity<String> readUserRemoveAdd(@RequestBody String body) throws JsonProcessingException {
@@ -441,8 +443,10 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+
+    /**API Endpoint to get all the pages a user can read from
+     * @param body has the request body
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.GET, value = "/page/access/my")
     public ResponseEntity<String> getMyReadPages(@RequestBody String body) throws JsonProcessingException {
@@ -465,8 +469,10 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+
+    /**API Endpoint to get all the pages a user can write to
+     * @param body has the request body
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.GET, value = "/page/access/mywrite")
     public ResponseEntity<String> getMyWritePages(@RequestBody String body) throws JsonProcessingException {
@@ -489,8 +495,10 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+
+    /**API Endpoint to add a message byy admin to a json file which can be shared with all the users
+     * @param body has the request body
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.POST, value = "/page/admin/message")
     public ResponseEntity<String> addAdminMessage(@RequestBody String body) throws JsonProcessingException {
@@ -513,15 +521,15 @@ public class IndexController {
         }
     }
 
-    /**API Endpoint to add user to a page
-     * @return
+    /**API Endpoint to get message shared by admin
+     * @return status code with status message
      */
     @RequestMapping(method = RequestMethod.GET, value = "/page/admin/message")
     public ResponseEntity<String> getAdminMessage() throws JsonProcessingException {
 
         try{
             String adminMessage = model.getAdminMessage();
-            return ResponseEntity.ok(adminMessage);
+            return ResponseEntity.ok(adminMessage.toString());
 
         }catch (Exception e){
 
@@ -531,4 +539,76 @@ public class IndexController {
     }
 
 
+    /**API Endpoint to remove users access to edit page
+     * @param userEmail is the request params
+     * @param pageName is the request params
+     * @return status code with status message
+     * @throws JsonProcessingException
+     */
+    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access/gui", params = { "userEmail", "pageName" })
+    public ResponseEntity<String> editUserAccessRemoveGui(@RequestParam String userEmail, @RequestParam String pageName) {
+
+        try{
+            model.deleteUserEditAccess(pageName,userEmail);
+            return ResponseEntity.ok("Success");
+
+        }catch (Exception e){
+
+            return ResponseEntity.status(400).body(e.getMessage());
+
+        }
+    }
+
+    /**API Endpoint to remove a user from read access list of a page
+     * @param userEmail is the request params
+     * @param pageName is the request params
+     * @return status code with status message
+     */
+    @RequestMapping(method = RequestMethod.DELETE, value = "/page/access/user/gui", params = { "userEmail", "pageName" })
+    public ResponseEntity<String> readUserRemoveAddGui(@RequestParam String userEmail, @RequestParam String pageName) {
+
+        try{
+            model.deleteUserReadAccess(pageName,userEmail);
+            return ResponseEntity.ok("Success");
+        } catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    /**API Endpoint to get all the pages a user can read from
+     * @param userEmail has the request params
+     * @return status code with status message
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/page/access/my/gui", params = { "userEmail" })
+    public ResponseEntity<ArrayList<String>> getMyReadPagesGui(@RequestParam String userEmail) {
+
+        try{
+            ArrayList<String> result = model.getMyReadPages(userEmail);
+            return ResponseEntity.status(200).body(result);
+        } catch(Exception e){
+            ArrayList<String> a = new ArrayList<>();
+            a.add(e.getMessage());
+            return ResponseEntity.status(400).body(a); // conflit status code
+        }
+    }
+
+
+    /**API Endpoint to get all the pages a user can write to
+     * @param userEmail has the request params
+     * @return status code with status message
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/page/access/mywrite/gui", params = { "userEmail" })
+    public ResponseEntity<ArrayList<String>> getMyWritePagesGui(@RequestParam String userEmail) {
+
+        try{
+            ArrayList<String> result = model.getMyWritePages(userEmail);
+            return ResponseEntity.status(200).body(result);
+        } catch(Exception e){
+            ArrayList<String> a = new ArrayList<>();
+            a.add(e.getMessage());
+            return ResponseEntity.status(400).body(a); // conflit status code
+        }
+    }
+
+    
 }

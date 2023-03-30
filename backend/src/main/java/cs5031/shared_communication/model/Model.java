@@ -1,4 +1,4 @@
-package com.shared_communication.backend;
+package cs5031.shared_communication.model;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,18 +14,25 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
-
+/*
+ * Model class is the main backend class which server interacts
+ * 
+ */
 
 public class Model {
     String path;
     String pagePath = "./src/main/resources/static/pages.json";
 
+    /**
+     *@param allUsers strores all users for current model
+     *@param allAdmin stores all admins for current model 
+     *@param userJson stores users latest details from file users.json
+     * @param adminJson stores admin latest details from file admin.json
+     */
     String userPath;
     String adminPath;
     private HashMap<String, User> allUsers;
     private HashMap<String, User> allAdmins;
-
-    private HashMap<String, InformationPage> allPages;
     JSONObject userJson = null;
     JSONObject adminJson = null;
 
@@ -34,10 +41,19 @@ public class Model {
 
     String adminMessagePath = "src/main/resources/static/usermessage.json";
 
+    /**
+     * Constructor method for Model class object
+     * @param jsonPath path of the json file required to initiate the model
+     */
     public Model(String jsonPath) {
         this.path = jsonPath;
     }
 
+    /**
+     * Constructor for model class to initiate model with bunch of json files
+     * @param userJsonPath path to json storing user details
+     * @param adminJsonPath path to json storing admin details
+     */
     public Model(String userJsonPath, String adminJsonPath) {
         this.userPath = userJsonPath;
         this.adminPath = adminJsonPath;
@@ -53,13 +69,19 @@ public class Model {
                 allUsers = processUsersJson(userJson);
                 allAdmins = processAdminJson(adminJson);
             } catch (JSONException | IOException e) {
-                // TODO Auto-generated catch block
+                
                 e.printStackTrace();
             }
 
         }
     }
 
+    /**Method to parse through users json and store the data in allUser
+     * @param userJson stores users latest details from file users.json
+     * @return allUsers
+     * @throws JSONException
+     * @throws IOException
+     */
     private HashMap<String, User> processUsersJson(JSONObject userJson) throws JSONException, IOException {
         HashMap<String, User> allUser = new HashMap<>();
 
@@ -81,6 +103,12 @@ public class Model {
         return allUser;
     }
 
+    /**
+     * @param adminJson stores users latest details from file admin.json
+     * @return allAdmins
+     * @throws JSONException
+     * @throws IOException
+     */
     private HashMap<String, User> processAdminJson(JSONObject adminJson) throws JSONException, IOException {
         HashMap<String, User> allAdmin = new HashMap<>();
 
@@ -102,23 +130,33 @@ public class Model {
         return allAdmin;
     }
 
-    protected static JSONObject loadInitialState(String jsonPath)
+    /**Helper method to read json file
+     * @param jsonPath path of the json file
+     * @return JSONObject
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static JSONObject loadInitialState(String jsonPath)
             throws IOException, JSONException {
 
         String jsonBody = new String(Files.readAllBytes(Paths.get(jsonPath)));
         return new JSONObject(jsonBody);
     }
 
-    // userregister
+    
+    /**Method to register user 
+     * @param userName -stores user name
+     * @param email - stores user email
+     * @param password - stores user password
+     * @param role - stores role of user "admin"/"user"
+     * @return true if success else faliled 
+     * @throws JSONException
+     */
     public Boolean registerUser(String userName, String email, String password, String role) throws JSONException {
         JSONObject newUser = new JSONObject();
         
         newUser.put("userName", userName);
         newUser.put("password", password);
-        //JSONObject pages = new JSONObject();
-        
-        //System.out.println(" Password" + password);
-        //System.out.println(" ");
         User user = null;
         try {
 
@@ -141,7 +179,6 @@ public class Model {
 
                 newUser.put("userEmail", email);
                 newUser.put("role", "user");
-                //newUser.put("pages", pages);
 
                 JSONArray jsonUsers = userJson.getJSONArray("users");
                 jsonUsers.put(newUser);
@@ -150,16 +187,8 @@ public class Model {
 
                 }
             }
-
-            // for (User users : allUsers.values()) {
-            //     System.out.println("After regi ");
-            //     System.out.println(users.getUserEmail());
-            //     System.out.println(users.getPassword());
-            //     System.out.println(" ");
-            // }
-
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            
             e.printStackTrace();
         }
 
@@ -171,38 +200,29 @@ public class Model {
 
     }
 
-    // userLogin
+    
+    /**Method for user login.
+     * @param email - stores user email
+     * @param password - stores user password
+     * @return true if success else failed
+     */
     public Boolean userLogin(String email, String password, String role) {
 
-        // System.out.println("Model");
-        // System.out.println(email);
-        //     System.out.println(password);
-
-        //     for (User users : allUsers.values()) {
-        //         System.out.println(users.getUserEmail());
-        //     }
 
         boolean check = false;
         if (role == "user") {
             
             if (allUsers.containsKey(email)) {
-                // System.out.println("user in");
+
                 User user = allUsers.get(email);
-                // System.out.println("verify");
-                // System.out.println(user.getPassword());
-                // System.out.println(password);
                 if ((user.getPassword()).equals(password)) {
-                   // System.out.println("user in 2");
                     check = true;
                 }
             }
         } else if (role == "admin") {
-           // System.out.println("Admin in");
             if (allAdmins.containsKey(email)) {
-               // System.out.println("Admin in 2");
                 User user = allAdmins.get(email);
                 if ((user.getPassword()).equals(password)) {
-                  //  System.out.println("Admin in 3");
                     check = true;
                 }
             }
@@ -210,8 +230,13 @@ public class Model {
 
         return check;
     }
-    // deleteUser
+    
 
+    /** Method to delete user from system
+     * @param email - stores email of the user to be deleted
+     * @return true if success else failed
+     * @throws JSONException
+     */
     public Boolean deleteUserSystem(String email) throws JSONException {
 
         boolean check = false;
@@ -233,6 +258,11 @@ public class Model {
         return check;
     }
 
+    /**Method TO Delete user and  update json file that stores data
+     * @param userType
+     * @param email - emial of the user to delete
+     * @throws JSONException
+     */
     private void deleteFromJsonPage(String userType, String email) throws JSONException {
         if(userType=="user"){
             JSONArray jsonUsers = userJson.getJSONArray("users");
@@ -259,7 +289,11 @@ public class Model {
         }
     }
 
-        // getUser
+        
+        /**Method to get the user details
+         * @param email - stores the email of user to fetch
+         * @return user JSONObject
+         */
         public JSONObject getUser(String email) {
 
             boolean check = false;
@@ -294,7 +328,13 @@ public class Model {
             return userJson;
         }
 
-    // updateUser
+    
+    /**Method to update user
+     * @param email - email of user to update
+     * @param role - current role of this user
+     * @return true if success
+     * @throws JSONException
+     */
     public Boolean updateUser(String email, String role) throws JSONException {
 
         
@@ -344,6 +384,10 @@ public class Model {
         return check;
     }
 
+    /**Method to change data in file 
+     * @param initialFilePath - path of file
+     * @param jsonDataToWrite - json data to overwrite
+     */
     public static void changeDataInFile(String initialFilePath, JSONObject jsonDataToWrite) {
         File myObj = new File(initialFilePath);
         if (myObj.delete()) {
@@ -357,8 +401,13 @@ public class Model {
 
         }
     }
-    //User methods
 
+
+    /***
+     * Method to get an object of User class using user's email address
+     * @param userEmail email address of the user
+     * @return an object of class USer
+     */
     public User getUserObj(String userEmail){
 
        return allUsers.get(userEmail);
@@ -366,9 +415,22 @@ public class Model {
     }
 
 
+    /**
+     * Method to create a new page using email address of creator user and title for the new page
+     * @param userEmail email address of the creator
+     * @param title title for the page
+     * @throws JSONException
+     * @throws IOException
+     */
     public void createNewPage(String userEmail,String title) throws JSONException, IOException {
 
-        User user = getUserObj(userEmail);
+        User user = null;
+
+        if(allAdmins.containsKey(userEmail)){
+            user = allAdmins.get(userEmail);
+        } else {
+            user = allUsers.get(userEmail);
+        }
         String pagePath = getPagePath();
         if(!getAllPageTitles().contains(title)) {
             InformationPage page = new InformationPage(title, user, pagePath);
@@ -376,8 +438,15 @@ public class Model {
         else{
             throw new IllegalArgumentException("Page with this tile already exists");
         }
+
     }
 
+    /**
+     * Method to get all the page titles from the system
+     * @return list of titles in the system.
+     * @throws IOException
+     * @throws JSONException
+     */
     public ArrayList<String> getAllPageTitles() throws IOException, JSONException {
 
         String jsonPath = new String(Files.readAllBytes(Paths.get(this.pagePath)));
@@ -393,15 +462,30 @@ public class Model {
         return pageTitles;
 
     }
+
+    /**
+     * Method to set path of pages json file
+     * @param path path to be used for storing pages data
+     */
     public void setPagePath(String path){
 
         this.pagePath = path;
     }
 
+    /**
+     * Method to get path of the page json
+     * @return string object containing path of the page
+     */
     public String getPagePath(){
 
         return this.pagePath;
     }
+
+    /**
+     * Method to load information of all the pages
+     * @return a json object containing information of all the pages
+     * @throws IOException
+     */
     public JSONObject loadPages() throws IOException {
 
         String jsonBody = new String(Files.readAllBytes(Paths.get(this.pagePath)));
@@ -415,6 +499,13 @@ public class Model {
         return json;
     }
 
+    /**
+     * Method to get information about  page using page title
+     * @param title title of the page
+     * @return page in the form of a json object
+     * @throws IOException
+     * @throws JSONException
+     */
     public JSONObject getPageInfo(String title) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -441,6 +532,13 @@ public class Model {
 
     }
 
+    /**
+     * Method to get users which can edit a page
+     * @param title title of the page
+     * @return list of user email address who can edit a page
+     * @throws IOException
+     * @throws JSONException
+     */
     public ArrayList<String> getPageEditUsers(String title) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -474,7 +572,13 @@ public class Model {
         return userList;
     }
 
-
+    /**
+     * Method to get list of users which have read access of a page
+     * @param title title of the page
+     * @return list of users email address
+     * @throws IOException
+     * @throws JSONException
+     */
     public ArrayList<String> getPageReadUsers(String title) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -506,6 +610,14 @@ public class Model {
         }
         return userList;
     }
+
+    /**
+     * Method to get a jason array of all the pages, only to be used by admin
+     * @param userEmail string containing email address
+     * @return a json array containing all the pages
+     * @throws IOException
+     * @throws JSONException
+     */
     public JSONArray getAllPages(String userEmail) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -527,6 +639,13 @@ public class Model {
 
     }
 
+    /**
+     * Method to get list of pages created by a user
+     * @param userEmail email of the user
+     * @return json array having all the pages created by a user
+     * @throws IOException
+     * @throws JSONException
+     */
     public JSONArray getUserCreatedPages(String userEmail) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -542,23 +661,6 @@ public class Model {
                 }
             }
         }
-/*
-        for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
-
-            String key = (String) it.next();
-            System.out.println((String) it.next());
-
-            JSONObject temp = jsonPages.getJSONObject(key);
-            System.out.println(temp.toString());
-
-            if(temp.getString("admin").equals(userEmail)){
-                System.out.println(userEmail+"vwvwev");
-                resultAllPages.put(temp);
-            }
-
-        }
-
- */
         if(resultAllPages.length()!=0){
 
             return resultAllPages;
@@ -570,6 +672,14 @@ public class Model {
 
 
     }
+
+    /**
+     * Method to get post of the page
+     * @param title title of the page
+     * @return list of posts created by user
+     * @throws IOException
+     * @throws JSONException
+     */
 
     public ArrayList<String> getPagePosts(String title) throws IOException, JSONException {
 
@@ -598,12 +708,35 @@ public class Model {
         return null;
     }
 
+    /**
+     * Method to add a post to a page
+     * @param title title of the page
+     * @param userEmail email of the user adding the post
+     * @param post post to eb added
+     * @throws IOException
+     * @throws JSONException
+     */
+
     public void addPostToPage(String title,String userEmail, String post) throws IOException, JSONException{
 
-        User user = getUserObj(userEmail);
+        User user = null;
+        if(allAdmins.containsKey(userEmail)){
+            user = allAdmins.get(userEmail);
+        } else {
+            user = allUsers.get(userEmail);
+        }
         addPostToPage(title,user,post);
 
     }
+
+    /**
+     * Method to add a post to a page
+     * @param title title of the page
+     * @param user user object of the user adding the post
+     * @param post post to eb added
+     * @throws IOException
+     * @throws JSONException
+     */
     public void addPostToPage(String title,User user, String post) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -624,7 +757,7 @@ public class Model {
                 JSONObject page = jsonPages.getJSONObject(foundKey);
                 //String content = page.getString("content");
                 //ArrayList<String> currentContent = new ArrayList<>(List.of(content.split(",")));
-                if(getPageEditUsers(title).contains(user.getEmail())){
+                if(getPageEditUsers(title).contains(user.getEmail()) | allAdmins.containsKey(user.getEmail())){
                     String newContent;
                     newContent = post;
                     page.put("content",newContent);
@@ -650,6 +783,13 @@ public class Model {
     }
 
 
+    /**
+     * Method to revode edit access of a user from a page
+     * @param title title of the page
+     * @param user users whoe access is to be revoked
+     * @throws IOException
+     * @throws JSONException
+     */
     public void deleteUserEditAccess(String title, String user) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
@@ -698,6 +838,14 @@ public class Model {
 
 
     }
+
+    /**
+     * MEthod to revoke read access of a user from a page
+     * @param title title of the page
+     * @param user user whose access is to be revoked
+     * @throws IOException
+     * @throws JSONException
+     */
 
     public void deleteUserReadAccess(String title, String user) throws IOException, JSONException {
 
@@ -754,6 +902,14 @@ public class Model {
 
     }
 
+    /**
+     * Method to add edit access to a page
+     * @param title title of the page to which access is to be added
+     * @param userEmail email to be rewarded edit access
+     * @return boolean indicating is successfully done
+     * @throws IOException
+     * @throws JSONException
+     */
     public boolean addUserEditAccess(String title, String userEmail) throws IOException, JSONException {
         JSONObject jsonPages = loadPages();
         if(jsonPages != null) {
@@ -809,6 +965,14 @@ public class Model {
         return false;
     }
 
+    /**
+     * Method to add read access to a page
+     * @param title title of the page
+     * @param userEmail email of the user to be rewarded access
+     * @return boolean insidcating if access is rewarded
+     * @throws IOException
+     * @throws JSONException
+     */
     public boolean addUserReadAccess(String title, String userEmail) throws IOException, JSONException {
         JSONObject jsonPages = loadPages();
 
@@ -860,6 +1024,15 @@ public class Model {
         return false;
     }
 
+    /**
+     * Method to add message by admin to the system
+     * @param email email of the amdin
+     * @param Message message to be added by admin
+     * @return boolean indicating if process was successful
+     * @throws IOException
+     * @throws JSONException
+     */
+
     public boolean addAdminMessage(String email,String Message) throws IOException, JSONException {
 
         String jsonBody = new String(Files.readAllBytes(Paths.get(this.adminMessagePath)));
@@ -871,11 +1044,29 @@ public class Model {
 
             throw new IllegalArgumentException("File with this name doesn't exists.");
         }
+
+
+
+
         if(json!=null) {
 
-            json.put(email, Message);
+            JSONArray messageArray = json.getJSONArray("message");
+            for (int i = 0; i < messageArray.length(); i++) {
+                JSONObject element = messageArray.getJSONObject(i);
+
+                if(element.get("admin").equals(email)){
+
+                    messageArray.remove(i);
+                }
+            }
+            JSONObject newMessage = new JSONObject();
+            newMessage.put("admin",email);
+            newMessage.put("message",Message);
+            messageArray.put(newMessage);
+            JSONObject newMessagefile = new JSONObject();
+            newMessagefile.put("message",messageArray);
             FileWriter file = new FileWriter(this.adminMessagePath);
-            file.write(json.toString());
+            file.write(newMessagefile.toString());
             file.flush();
             file.close();
             return true;
@@ -887,6 +1078,11 @@ public class Model {
 
     }
 
+    /**
+     * Method to get messages shared by amdin
+     * @return messages by admin
+     * @throws IOException
+     */
     public String getAdminMessage() throws IOException {
 
         String jsonBody = new String(Files.readAllBytes(Paths.get(this.adminMessagePath)));
@@ -901,13 +1097,19 @@ public class Model {
 
     }
 
+    /***
+     * Method for a user to identify which pages they can read
+     * @param userEmail email of the user
+     * @return list of titles of the page they can read
+     * @throws IOException
+     * @throws JSONException
+     */
     public ArrayList<String> getMyReadPages(String userEmail) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();
         ArrayList<String> myReadPages = new ArrayList<String>();
         if (jsonPages != null) {
 
-            String foundKey = null;
             for (Iterator it = jsonPages.keys(); it.hasNext(); ) {
                 String key = (String) it.next();
 
@@ -925,6 +1127,13 @@ public class Model {
 
     }
 
+    /**
+     * MEthod to get list of pages a user can write to
+     * @param userEmail email of the user
+     * @return list of pages titles where a user can write.
+     * @throws IOException
+     * @throws JSONException
+     */
     public ArrayList<String> getMyWritePages(String userEmail) throws IOException, JSONException {
 
         JSONObject jsonPages = loadPages();

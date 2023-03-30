@@ -15,7 +15,7 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field :readonly=true label="UserName" v-model="userName"></v-text-field>
+            <v-text-field :readonly=true label="UserEmail" v-model="userEmail"></v-text-field>
           </v-col>
         </v-row>
         <v-row>
@@ -49,7 +49,7 @@ export default {
       userName: '',
       userEmail: '',
       password: '',
-      error: "",
+      currentRole: "",
     }
   },
   mounted() {
@@ -61,22 +61,31 @@ export default {
     }).then((response) => {
       this.userName = response.data.userName
       this.userEmail = response.data.userEmail
-      // this.role = response.data.role
-      console.log("response.data: ", response.data)
+      if (response.data.role == "StandardUser") {
+        this.currentRole = "user"
+      } else {
+        this.currentRole = "admin"
+      }
     }).catch((error) => {
-      console.log('There is error:' + error.response)
+      this.$toast.error(`Failed to load user error: ${error}`, {
+        position: "top-center"
+      })
     })
   },
   methods: {
     async updateUser() {
       await axios.post('/user/update', {
         "userEmail": this.userEmail,
-        "currentRole": this.role,
+        "currentRole": this.currentRole,
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Update User", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to update user error: ${error}`, {
+          position: "top-center"
+        })
       })
     },
     async deleteUser() {
@@ -85,10 +94,14 @@ export default {
           "userEmail": this.userEmail,
         },
       }).then((response) => {
-        console.log("response.data: ", response.data)
+        this.$toast.success("Success Delete User", {
+          position: "top-center"
+        })
         this.$router.go(-1)
       }).catch((error) => {
-        console.log('There is error:' + error.response)
+        this.$toast.error(`Failed to delete user error: ${error}`, {
+          position: "top-center"
+        })
       })
     }
   },

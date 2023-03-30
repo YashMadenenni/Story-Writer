@@ -112,6 +112,16 @@ export default {
           title: 'User List',
           to: '/userList'
         },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Create Message',
+          to: '/createMessage'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Message List',
+          to: '/messageList'
+        },
       ]
     } else {
       this.items = [
@@ -122,8 +132,23 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'Page List',
-          to: '/pageList'
+          title: 'Your Own Page List',
+          to: '/userPageList'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Readable Page List',
+          to: '/readablePageList'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Editable Page List',
+          to: '/editablePageList'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Message List',
+          to: '/messageList'
         },
       ]
     }

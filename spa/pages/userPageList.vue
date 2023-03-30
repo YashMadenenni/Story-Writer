@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Page List
+        Your Own Page List
         <v-spacer/>
       </v-card-title>
     </v-card>
@@ -45,7 +45,7 @@ export default {
   mounted() {
     this.userEmail = this.$store.getters["auth/userEmail"]
     this.role = this.$store.getters["auth/role"]
-    axios.get("page/admin", {
+    axios.get("/page", {
       params: {
         "userEmail": this.userEmail,
       },
