@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Page List
+        Editable Page List
         <v-spacer/>
       </v-card-title>
     </v-card>
@@ -32,12 +32,13 @@ export default {
   data() {
     return {
       headers: [
-        {text: 'Admin', value: 'admin'},
         {text: 'Title', value: 'title'},
       ],
       userEmail: '',
       role: '',
-      pages: [],
+      pages: [{
+        title: ""
+      }],
       page: "",
       error: "",
     }
@@ -45,14 +46,15 @@ export default {
   mounted() {
     this.userEmail = this.$store.getters["auth/userEmail"]
     this.role = this.$store.getters["auth/role"]
-    axios.get("page/admin", {
+    axios.get("/page/access/mywrite", {
       params: {
         "userEmail": this.userEmail,
       },
     }).then((response) => {
-      this.pages = response.data
-    })
-    .catch((error) => {
+      for (var i in response.data) {
+        this.pages[i].title = response.data[i];
+      }
+    }).catch((error) => {
     })
   },
   methods: {
@@ -61,8 +63,6 @@ export default {
         path: '/pageDetail', query: {
           userEmail: this.userEmail,
           title: row.title,
-          content: row.content,
-          editAccessUser: row.editAccessUser,
         }
       });
     },
